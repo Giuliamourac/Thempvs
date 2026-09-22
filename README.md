@@ -96,10 +96,10 @@ Os quatro pilares acima não são só referência estética — são o **DNA** d
 <div align="center">
 
 <!-- Exemplo de badges — substitua pelas tecnologias efetivamente usadas no projeto -->
-[![HTML](https://img.shields.io/badge/TECNOLOGIA-XXXXX-black?style=for-the-badge&labelColor=000000&color=FFD700)](#)
-[![CSS](https://img.shields.io/badge/TECNOLOGIA-XXXXX-black?style=for-the-badge&labelColor=000000&color=FF3B3B)](#)
-[![Node.js](https://img.shields.io/badge/TECNOLOGIA-XXXXX-black?style=for-the-badge&labelColor=000000&color=00E5FF)](#)
-[![MySQL](https://img.shields.io/badge/TECNOLOGIA-XXXXX-black?style=for-the-badge&labelColor=000000&color=00E5FF)](#)
+[![HTML](https://img.shields.io/badge/TECNOLOGIA-HTML-black?style=for-the-badge&labelColor=000000&color=FFD700)](#)
+[![CSS](https://img.shields.io/badge/TECNOLOGIA-CSS-black?style=for-the-badge&labelColor=000000&color=FF3B3B)](#)
+[![Node.js](https://img.shields.io/badge/TECNOLOGIA-NODE.Js-black?style=for-the-badge&labelColor=000000&color=00E5FF)](#)
+[![MySQL](https://img.shields.io/badge/TECNOLOGIA-MySQL-black?style=for-the-badge&labelColor=000000&color=00E5FF)](#)
 
 </div>
 
