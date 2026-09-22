@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root
+{
+    --WhiteMainColor: #FFFF;
+    --ContrastGrey: #484848;
+    --PureBlack: #000000;
+}
+
+* 
+{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+header
+{
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+}
+
+header div:first-child
+{
+    background-color: var(--PureBlack);
+    font-size: 10px;
+    color: var(--WhiteMainColor);
+}
+
+header nav
+{
+   display: flex;
+   flex-wrap: nowrap;
+   align-items: center;
+   justify-content: space-between;
+   margin: 9.5px 20px 9.5px 20px;
+   
+}
+
+header ul
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    list-style: none;
+}
+
+header nav div
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 45px;
+}
+
+header nav div input
+{
+    width: 302px;
+    height: 41px;
+}
+
+header a
+{
+    text-decoration: none;
+    color: var(--PureBlack);
+}
+
+#avatarNavbar
+{
+    width: 55px;
+    height: 55px;
+    border-radius: 100%;
+}
