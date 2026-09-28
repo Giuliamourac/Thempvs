@@ -8,33 +8,378 @@
     <link rel="stylesheet" href="Assets/CSS/index.css">
 </head>
 <body>
-    <main>
-        <header>
-            <div>
-                FRETE GRATIS ACIMA DE: R$ 199,90    |   CUPOM PARA PRIMEIRA COMPRA: PRIMEIRA20 
-            </div>
-            <nav>
-                <img src="Assets/Imagens/Logo1.png" alt="Logo">
+    <header>
+        <div>
+            FRETE GRATIS ACIMA DE: R$ 199,90 &nbsp;|&nbsp; CUPOM PARA PRIMEIRA COMPRA: PRIMEIRA20 &nbsp;|&nbsp;
+        </div>
+        <nav>
+            <img src="Assets/Imagens/Logo1.png" alt="Logo">
 
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="Pages/produto.html">Produtos</a></li>
-                    <li><a href="Pages/sale.html">Sale</a></li>
-                    <li><a href="Pages/lojas.html">Lojas</a></li>
-                    <li><a href="Pages/contato.html">Contato</a></li>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="Pages/produto.html">Produtos</a></li>
+                <li><a href="Pages/sale.html">Sale</a></li>
+                <li><a href="Pages/lojas.html">Lojas</a></li>
+                <li><a href="Pages/contato.html">Contato</a></li>
+            </ul>
+
+            <div>
+                <input type="text" placeholder="Digite o que você procura!">
+                <a href="Pages/carrinho.html" id="carrinho">
+                    <img src="Assets/Imagens/iconCart.png" alt="Carrinho">
+                </a>
+                <a href="Pages/perfil.html">
+                    <img id="avatarNavbar" src="https://placehold.co/55x55/0d1525/4a5e80?text=G" alt="Perfil">
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <img src="https://placehold.co/1440x548/484848/ffffff?text=Banner" alt="hero">
+        </section>
+
+        <section class="vitrine">
+            <h2>Lançamentos</h2>
+
+            <div class="carrossel">
+
+                <button type="button" class="seta" aria-label="Anterior"><</button>
+
+                <ul class="listaProdutos">
+
+                    <li>
+                        <article class="cardProduto">
+
+                            <a href="Pages/produto.html">
+                                <img src="https://placehold.co/313x420/e8e8e8/484848?text=Produto" alt="Camiseta Baisebol lisa">
+                                <h3>Camiseta Baisebol lisa...</h3>
+                                <p>R$182,90</p>
+                            </a>
+
+                            <div class="tamanhos">
+
+                                <input type="radio" id="produto1P" name="produto1Tamanho" value="P">
+                                <label for="produto1P">P</label>
+
+                                <input type="radio" id="produto1M" name="produto1Tamanho" value="M">
+                                <label for="produto1M">M</label>
+
+                                <input type="radio" id="produto1G" name="produto1Tamanho" value="G">
+                                <label for="produto1G">G</label>
+
+                                <input type="radio" id="produto1GG" name="produto1Tamanho" value="GG">
+                                <label for="produto1GG">GG</label>
+
+                            </div>
+
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="cardProduto">
+
+                            <a href="Pages/produto.html">
+                                <img src="https://placehold.co/313x420/e8e8e8/484848?text=Produto" alt="Camiseta de botão">
+                                <h3>Camiseta de botão...</h3>
+                                <p>R$125,90</p>
+                            </a>
+
+                            <div class="tamanhos">
+
+                                <input type="radio" id="produto2P" name="produto2Tamanho" value="P">
+                                <label for="produto2P">P</label>
+
+                                <input type="radio" id="produto2M" name="produto2Tamanho" value="M">
+                                <label for="produto2M">M</label>
+
+                                <input type="radio" id="produto2G" name="produto2Tamanho" value="G">
+                                <label for="produto2G">G</label>
+
+                                <input type="radio" id="produto2GG" name="produto2Tamanho" value="GG">
+                                <label for="produto2GG">GG</label>
+
+                            </div>
+
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="cardProduto">
+
+                            <a href="Pages/produto.html">
+                                <img src="https://placehold.co/313x420/e8e8e8/484848?text=Produto" alt="Calça Jean reta">
+                                <h3>Calça Jean reta...</h3>
+                                <p>R$210,00</p>
+                            </a>
+
+                            <div class="tamanhos">
+
+                                <input type="radio" id="produto3P" name="produto3Tamanho" value="P">
+                                <label for="produto3P">P</label>
+
+                                <input type="radio" id="produto3M" name="produto3Tamanho" value="M">
+                                <label for="produto3M">M</label>
+
+                                <input type="radio" id="produto3G" name="produto3Tamanho" value="G">
+                                <label for="produto3G">G</label>
+
+                                <input type="radio" id="produto3GG" name="produto3Tamanho" value="GG">
+                                <label for="produto3GG">GG</label>
+
+                            </div>
+
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="cardProduto">
+
+                            <a href="Pages/produto.html">
+                                <img src="https://placehold.co/313x420/e8e8e8/484848?text=Produto" alt="Camiseta Thempvs dance">
+                                <h3>Camiseta Thempvs dance...</h3>
+                                <p>R$85,90</p>
+                            </a>
+
+                            <div class="tamanhos">
+
+                                <input type="radio" id="produto4P" name="produto4Tamanho" value="P">
+                                <label for="produto4P">P</label>
+
+                                <input type="radio" id="produto4M" name="produto4Tamanho" value="M">
+                                <label for="produto4M">M</label>
+
+                                <input type="radio" id="produto4G" name="produto4Tamanho" value="G">
+                                <label for="produto4G">G</label>
+
+                                <input type="radio" id="produto4GG" name="produto4Tamanho" value="GG">
+                                <label for="produto4GG">GG</label>
+
+                            </div>
+
+                        </article>
+                    </li>
+
                 </ul>
 
-                <div>
-                    <input type="text">
-                    <a href="Pages/carrinho.html" id="carrinho"><img src="Assets/Imagens/iconCart.png" alt=""></a>
-                    <a href="Pages/perfil.html"> <img id="avatarNavbar" src="https://placehold.co/36x36/0d1525/4a5e80?text=G" alt="Perfil"></a>
-                </div>
-            </nav>
-        </header>
+                <button type="button" class="seta" aria-label="Próximo">></button>
 
-        <section>
+            </div>
+        </section>
+
+
+        <section class="categorias">
+
+            <h2>Categorias</h2>
+
+            <ul>
+
+                <li>
+                    <a href="Pages/produto.html">
+                        <img src="https://placehold.co/470x450/4a4a4a/ffffff?text=Categoria" alt="">
+                        <h3>Dança</h3>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Pages/produto.html">
+                        <img src="https://placehold.co/470x450/4a4a4a/ffffff?text=Categoria" alt="">
+                        <h3>Camisetas</h3>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Pages/produto.html">
+                        <img src="https://placehold.co/470x450/4a4a4a/ffffff?text=Categoria" alt="">
+                        <h3>Conjuntos</h3>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Pages/produto.html">
+                        <img src="https://placehold.co/470x450/4a4a4a/ffffff?text=Categoria" alt="">
+                        <h3>Calças</h3>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Pages/produto.html">
+                        <img src="https://placehold.co/470x450/4a4a4a/ffffff?text=Categoria" alt="">
+                        <h3>Acessorios</h3>
+                    </a>
+                </li>
+
+            </ul>
 
         </section>
+
+
+        <section class="vitrine">
+
+            <h2>Destaques</h2>
+
+            <div class="carrossel">
+
+                <button type="button" class="seta" aria-label="Anterior">&#8249;</button>
+
+                <ul class="listaProdutos">
+
+                    <li>
+                        <article class="cardProduto">
+
+                            <a href="Pages/produto.html">
+                                <img src="https://placehold.co/313x420/e8e8e8/484848?text=Produto" alt="Colete bombap">
+                                <h3>Colete bombap...</h3>
+                                <p>R$180,90</p>
+                            </a>
+
+                            <div class="tamanhos">
+
+                                <input type="radio" id="produto5P" name="produto5Tamanho" value="P">
+                                <label for="produto5P">P</label>
+
+                                <input type="radio" id="produto5M" name="produto5Tamanho" value="M">
+                                <label for="produto5M">M</label>
+
+                                <input type="radio" id="produto5G" name="produto5Tamanho" value="G">
+                                <label for="produto5G">G</label>
+
+                                <input type="radio" id="produto5GG" name="produto5Tamanho" value="GG">
+                                <label for="produto5GG">GG</label>
+
+                            </div>
+
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="cardProduto">
+
+                            <a href="Pages/produto.html">
+                                <img src="https://placehold.co/313x420/e8e8e8/484848?text=Produto" alt="Calça cargo preta">
+                                <h3>Calça cargo preta...</h3>
+                                <p>R$ 135,00</p>
+                            </a>
+
+                            <div class="tamanhos">
+
+                                <input type="radio" id="produto6P" name="produto6Tamanho" value="P">
+                                <label for="produto6P">P</label>
+
+                                <input type="radio" id="produto6M" name="produto6Tamanho" value="M">
+                                <label for="produto6M">M</label>
+
+                                <input type="radio" id="produto6G" name="produto6Tamanho" value="G">
+                                <label for="produto6G">G</label>
+
+                                <input type="radio" id="produto6GG" name="produto6Tamanho" value="GG">
+                                <label for="produto6GG">GG</label>
+
+                            </div>
+
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="cardProduto">
+
+                            <a href="Pages/produto.html">
+                                <img src="https://placehold.co/313x420/e8e8e8/484848?text=Produto" alt="Baby-te Blooklyn">
+                                <h3>Baby-te Blooklyn...</h3>
+                                <p>R$65,00</p>
+                            </a>
+
+                            <div class="tamanhos">
+
+                                <input type="radio" id="produto7P" name="produto7Tamanho" value="P">
+                                <label for="produto7P">P</label>
+
+                                <input type="radio" id="produto7M" name="produto7Tamanho" value="M">
+                                <label for="produto7M">M</label>
+
+                                <input type="radio" id="produto7G" name="produto7Tamanho" value="G">
+                                <label for="produto7G">G</label>
+
+                                <input type="radio" id="produto7GG" name="produto7Tamanho" value="GG">
+                                <label for="produto7GG">GG</label>
+
+                            </div>
+
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="cardProduto">
+
+                            <a href="Pages/produto.html">
+                                <img src="https://placehold.co/313x420/e8e8e8/484848?text=Produto" alt="Jaqueta Jean Ravena">
+                                <h3>Jaqueta Jean Ravena...</h3>
+                                <p>R$ 360,00</p>
+                            </a>
+
+                            <div class="tamanhos">
+
+                                <input type="radio" id="produto8P" name="produto8Tamanho" value="P">
+                                <label for="produto8P">P</label>
+
+                                <input type="radio" id="produto8M" name="produto8Tamanho" value="M">
+                                <label for="produto8M">M</label>
+
+                                <input type="radio" id="produto8G" name="produto8Tamanho" value="G">
+                                <label for="produto8G">G</label>
+
+                                <input type="radio" id="produto8GG" name="produto8Tamanho" value="GG">
+                                <label for="produto8GG">GG</label>
+
+                            </div>
+
+                        </article>
+                    </li>
+
+                </ul>
+
+                <button type="button" class="seta" aria-label="Próximo">&#8250;</button>
+
+            </div>
+
+        </section>
+
+
+        <section class="sobre">
+
+            <img src="https://placehold.co/1280x440/e8e8e8/484848?text=Banner+Thempvs" alt="Equipe Thempvs">
+
+            <h2>Conheça a Thempvs</h2>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur massa mauris, suscipit ac elit vitae, imperdiet auctor dui. In hac habitasse platea dictumst. Ut a tempus enim. Praesent tempor eros a lectus vehicula, quis accumsan tortor vulputate. Fusce a nunc convallis, malesuada est ut, tincidunt sem. Vestibulum sit amet consequat lorem, vitae lacinia tellus. Integer quis mauris quis ex pretium volutpat et sed ex. Sed interdum leo ut lorem placerat, a congue justo euismod. Quisque quis quam at erat lacinia luctus. Nulla facilisi. Nullam tempor eget mauris ut posuere. In luctus facilisis accumsan. Phasellus aliquam odio a eros iaculis sodales a sit amet ligula. Nullam egestas risus et pharetra fermentum. Fusce ac ex semper, ultricies dolor ac, hendrerit eros. Proin sodales aliquam odio aliquam suscipit. Praesent porttitor, lorem sed varius laoreet, lectus mi posuere eros, sit amet iaculis libero nibh sit amet nisi. Nam sagittis mi massa, vel pulvinar arcu tempor sed. Cras vitae magna nulla. Morbi posuere eget enim sed facilisis.</p>
+
+            <ul class="redesSociais">
+
+                <li>
+                    <a href="#" aria-label="Instagram">
+                        <img src="https://placehold.co/60x60/3b2a20/ffffff?text=IG" alt="">
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" aria-label="Facebook">
+                        <img src="https://placehold.co/60x60/3b2a20/ffffff?text=FB" alt="">
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" aria-label="Tiktok">
+                        <img src="https://placehold.co/60x60/3b2a20/ffffff?text=TK" alt="">
+                    </a>
+                </li>
+
+            </ul>
+
+        </section>
+
     </main>
+
 </body>
 </html>

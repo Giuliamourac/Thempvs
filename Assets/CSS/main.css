@@ -2,9 +2,10 @@
 
 :root
 {
-    --WhiteMainColor: #FFFF;
+    --WhiteMainColor: #FFFFFF;
     --ContrastGrey: #484848;
     --PureBlack: #000000;
+    --BrownSocial: #3b2a20;
 }
 
 * 
@@ -14,10 +15,22 @@
     margin: 0;
 }
 
-header
+body
 {
     font-family: "Inter", sans-serif;
-    font-size: 20px;
+}
+
+img
+{
+    display: block;
+    max-width: 100%;
+}
+
+/* ---------- Header ---------- */
+
+header
+{
+    font-size: 16px;
 }
 
 header div:first-child
@@ -25,6 +38,10 @@ header div:first-child
     background-color: var(--PureBlack);
     font-size: 10px;
     color: var(--WhiteMainColor);
+    text-align: center;
+    padding: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 header nav
@@ -34,7 +51,12 @@ header nav
    align-items: center;
    justify-content: space-between;
    margin: 9.5px 20px 9.5px 20px;
-   
+}
+
+header nav > img
+{
+    height: 40px;
+    width: auto;
 }
 
 header ul
@@ -58,6 +80,11 @@ header nav div input
 {
     width: 302px;
     height: 41px;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
 }
 
 header a
@@ -66,9 +93,36 @@ header a
     color: var(--PureBlack);
 }
 
+#carrinho img
+{
+    height: 30px;
+    width: auto;
+}
+
 #avatarNavbar
 {
     width: 55px;
     height: 55px;
     border-radius: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 900px)
+{
+    header nav
+    {
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    header nav div
+    {
+        gap: 20px;
+    }
+
+    header nav div input
+    {
+        width: 200px;
+    }
 }
