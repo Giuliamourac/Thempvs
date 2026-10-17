@@ -107,6 +107,98 @@ header a
     object-fit: cover;
 }
 
+/* footwer */
+
+
+.footer {
+    background-color: #4a4a4a; 
+    color: #ffffff;
+    padding: 40px 20px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-col h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 6px;
+}
+
+.footer-col ul li a, 
+.footer-col p {
+    color: #d1d1d1;
+    text-decoration: none;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.footer-col ul li a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.email-link {
+    text-decoration: underline;
+    color: #d1d1d1;
+}
+
+.logo-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo .icon {
+    font-size: 1.8rem;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    padding: 2px 8px;
+}
+
+.logo h2 {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+.tagline {
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: #cccccc;
+}
+
+.map-col {
+    width: 200px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
 @media (max-width: 900px)
 {
     header nav
