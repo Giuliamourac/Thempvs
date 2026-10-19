@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - Thempvs</title>
+    <link rel="stylesheet" href="../Assets/CSS/main.css">
+    <link rel="stylesheet" href="../Assets/CSS/index.css">
+    <link rel="stylesheet" href="../Assets/CSS/catálogo.css">
+</head>
+<body>
+    <header>
+        <div>
+            FRETE GRATIS ACIMA DE: R$ 199,90 &nbsp;|&nbsp; CUPOM PARA PRIMEIRA COMPRA: PRIMEIRA20 &nbsp;|&nbsp;
+        </div>
+        <nav>
+            <img src="../Assets/Imagens/Logo1.png" alt="Logo">
+
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../Pages/produtos.html">Produtos</a></li>
+                <li><a href="../Pages/sale.html">Sale</a></li>
+                <li><a href="../Pages/lojas.html">Lojas</a></li>
+                <li><a href="../Pages/contato.html">Contato</a></li>
+            </ul>
+
+            <div>
+                <input type="text" id="buscaProdutos" placeholder="Digite o que você procura!" aria-label="Buscar produtos">
+                <a href="../Pages/carrinho.html" id="carrinho">
+                    <img src="../Assets/Imagens/iconCart.png" alt="Carrinho">
+                </a>
+                <a href="../Pages/perfil.html">
+                    <img id="avatarNavbar" src="https://placehold.co/55x55/0d1525/4a5e80?text=G" alt="Perfil">
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <img src="https://placehold.co/1440x548/484848/ffffff?text=Banner" alt="hero">
+        </section>
+
+        <section class="vitrine">
+            <h2 class="titulo-secao">Lançamentos</h2>
+
+            <div class="vitrine-container">
+                
+                <aside class="barra-filtros" id="barraFiltros">
+                    <h3>Filtrar por</h3>
+
+                    <div class="grupo-filtro">
+                        <h4>Peça</h4>
+                        <label><input type="checkbox" name="peca" value="camisetas"> Camisetas</label>
+                        <label><input type="checkbox" name="peca" value="shorts"> Shorts</label>
+                        <label><input type="checkbox" name="peca" value="bermudas"> Bermudas</label>
+                        <label><input type="checkbox" name="peca" value="calcas"> Calças</label>
+                        <label><input type="checkbox" name="peca" value="casacos"> Casacos</label>
+                        <label><input type="checkbox" name="peca" value="conjuntos"> Conjuntos</label>
+                    </div>
+
+                    <div class="grupo-filtro">
+                        <h4>Cor</h4>
+                        <label><input type="checkbox" name="cor" value="preto"> Preto</label>
+                        <label><input type="checkbox" name="cor" value="branco"> Branco</label>
+                        <label><input type="checkbox" name="cor" value="azul"> Azul</label>
+                        <label><input type="checkbox" name="cor" value="verde"> Verde</label>
+                        <label><input type="checkbox" name="cor" value="offwhite"> Off White</label>
+                        <label><input type="checkbox" name="cor" value="cinza"> Cinza</label>
+                    </div>
+
+                    <div class="grupo-filtro">
+                        <h4>Tamanho</h4>
+                        <label><input type="checkbox" name="tamanho" value="pp"> PP</label>
+                        <label><input type="checkbox" name="tamanho" value="m"> M</label>
+                        <label><input type="checkbox" name="tamanho" value="g"> G</label>
+                        <label><input type="checkbox" name="tamanho" value="gg"> GG</label>
+                        <label><input type="checkbox" name="tamanho" value="p-infantil"> P Infantil</label>
+                        <label><input type="checkbox" name="tamanho" value="m-infantil"> M Infantil</label>
+                        <label><input type="checkbox" name="tamanho" value="g-infantil"> G Infantil</label>
+                        <label><input type="checkbox" name="tamanho" value="gg-infantil"> GG Infantil</label>
+                    </div>
+                </aside>
+
+                <div class="conteudo-produtos">
+                    <div class="grade-produtos" id="gradeProdutos">
+                        <!-- cards botar dps em js kk -->
+                    </div>
+
+                    <div class="container-carregar-mais" id="containerCarregarMais">
+                        <button type="button" class="botao-carregar-mais" id="botaoCarregarMais">Carregar mais produtos</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-col logo-col">
+                    <div class="logo">
+                        <img src="../Assets/Imagens/Logo1.png" alt="Logo">
+                    </div>
+                    <p class="tagline">Thempvs é dança</p>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Produtos</h3>
+                    <ul>
+                        <li><a href="#">Camiseta</a></li>
+                        <li><a href="#">Calça</a></li>
+                        <li><a href="#">Boné</a></li>
+                        <li><a href="#">Casaco</a></li>
+                        <li><a href="#">Jaquetas</a></li>
+                        <li><a href="#">Bermudas</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Redes</h3>
+                    <ul>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">WhatsApp</a></li>
+                        <li><a href="#">Twitter</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Sac</h3>
+                    <p><a href="mailto:sac_thempvs@gmail.com.br" class="email-link">sac_thempvs@gmail.com.br</a></p>
+                    <p>(13) 97537-4873</p>
+                </div>
+
+                <div class="footer-col map-col">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3645.718873730303!2d-46.3340!3d-23.9680!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDU4JzA0LjgiUyA0NsKwMjAnMDIuNCJX!5e0!3m2!1spt-PT!2spt!4v1600000000000"
+                        width="100%"
+                        height="120"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script src="../Assets/Scripts/produtos.js" defer></script>
+</body>
+</html>

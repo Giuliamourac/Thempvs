@@ -1,0 +1,260 @@
+/* container geral */
+.vitrine 
+{
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: Arial, sans-serif;
+}
+
+.titulo-secao 
+{
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 40px;
+    color: #111;
+}
+
+/* container dos Produtos e filtros */
+.vitrine-container 
+{
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* container dos filtros laterais */
+.barra-filtros 
+{
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.barra-filtros h3 
+{
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #111;
+}
+
+/* grupo de filtros */
+.grupo-filtro 
+{
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.grupo-filtro h4 
+{
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.grupo-filtro label 
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #555;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.grupo-filtro input[type="checkbox"] 
+{
+    width: 16px;
+    height: 16px;
+    accent-color: #333;
+    cursor: pointer;
+}
+
+/* layout do conteuo de produtos */
+.conteudo-produtos 
+{
+    flex-grow: 1;
+}
+
+.grade-produtos 
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.cartao-produto 
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.imagem-produto 
+{
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background-color: #f5f5f5;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.imagem-produto img 
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.cartao-produto:hover .imagem-produto img 
+{
+    transform: scale(1.03);
+}
+
+.info-produto 
+{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.titulo-produto 
+{
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #222;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preco-produto 
+{
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #111;
+}
+
+.tamanhos-produto 
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 6px;
+}
+
+.tamanho-produto 
+{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #444;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.tamanho-produto:hover 
+{
+    background-color: #000;
+    border-color: #000;
+    color: #fff;
+}
+
+.tamanho-produto.selecionado 
+{
+    background-color: #000;
+    border-color: #000;
+    color: #fff;
+}
+
+.tamanho-produto:focus-visible 
+{
+    outline: 2px solid #000;
+    outline-offset: 2px;
+}
+
+.container-carregar-mais 
+{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.botao-carregar-mais 
+{
+    background-color: #2e435d;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+.botao-carregar-mais:hover 
+{
+    background-color: #1e2c3d;
+}
+
+.container-carregar-mais[hidden] 
+{
+    display: none;
+}
+
+.estado-vazio 
+{
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.link-produto 
+{
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Garante que os tamanhos fiquem fora do link para não acionar clique acidental */
+.tamanhos-produto 
+{
+    display: flex;
+    gap: 5px;
+    margin-top: 6px;
+}
+
+/* Animação suave de hover no link do produto */
+.link-produto:hover .titulo-produto 
+{
+    text-decoration: underline;
+    color: #000;
+}
+@media (max-width: 850px) 
+{
+    .vitrine-container 
+    {
+        flex-direction: column;
+    }
+
+    .barra-filtros 
+    {
+        width: 100%;
+    }
+
+    .grade-produtos 
+    {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
