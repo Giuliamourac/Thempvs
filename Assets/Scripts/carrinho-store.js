@@ -1,18 +1,4 @@
-/*
- * Thempvs — estado e cálculos do carrinho.
- *
- * Este arquivo cuida somente dos DADOS do carrinho (itens, quantidades,
- * totais). Não toca no DOM. Pode ser carregado em qualquer página do site
- * (ex.: perfil-produto.html para "Adicionar ao carrinho") e é usado pela
- * página carrinho.html.
- *
- * Armazenamento: localStorage do navegador (não há backend ainda).
- * Quando existir API/banco de dados, basta trocar as funções
- * ler()/gravar() abaixo — a interface continua a mesma.
- *
- * Valores monetários são guardados em CENTAVOS (inteiros) para evitar
- * erros de arredondamento.
- */
+
 (function (global) {
     "use strict";
 
@@ -22,10 +8,8 @@
     var QUANTIDADE_MINIMA = 1;
     var QUANTIDADE_MAXIMA = 99;
 
-    // Regra já existente no projeto (barra promocional): frete grátis acima de R$ 199,90.
     var FRETE_GRATIS_MINIMO_CENTAVOS = 19990;
 
-    // ---------- Utilidades ----------
 
     function formatarMoeda(centavos) {
         var valor = (Number(centavos) || 0) / 100;
@@ -51,7 +35,6 @@
         return Math.min(QUANTIDADE_MAXIMA, Math.max(QUANTIDADE_MINIMA, numero));
     }
 
-    // Aceita apenas itens bem formados (protege contra dados corrompidos no storage).
     function sanearItem(bruto) {
         if (!bruto || typeof bruto !== "object") return null;
 
@@ -182,7 +165,6 @@
                 return soma + item.precoCentavos * item.quantidade;
             }, 0);
 
-            // Não existe sistema de cupons ainda: desconto fixo em zero.
             var descontos = 0;
             var total = Math.max(0, subtotal - descontos);
 
@@ -191,7 +173,6 @@
                 subtotalCentavos: subtotal,
                 descontosCentavos: descontos,
                 totalCentavos: total,
-                // Só existe regra para "frete grátis"; abaixo disso o valor não é definido.
                 freteGratis: subtotal >= FRETE_GRATIS_MINIMO_CENTAVOS
             };
         }
@@ -200,7 +181,6 @@
             ouvintes.push(ouvinte);
         }
 
-        // Mantém várias abas sincronizadas.
         global.addEventListener("storage", function (evento) {
             if (evento.key === chave) {
                 itens = ler();
