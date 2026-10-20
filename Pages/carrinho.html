@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho - Thempvs</title>
+    <link rel="stylesheet" href="../Assets/CSS/main.css">
+    <link rel="stylesheet" href="../Assets/CSS/carrinho.css">
+</head>
+<body class="pagina-checkout">
+
+    <header>
+        <div>
+            FRETE GRATIS ACIMA DE: R$ 199,90 &nbsp;|&nbsp; CUPOM PARA PRIMEIRA COMPRA: PRIMEIRA20 &nbsp;|&nbsp;
+        </div>
+        <nav>
+            <img src="../Assets/Imagens/Logo1.png" alt="Logo">
+
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="sale.html">Sale</a></li>
+                <li><a href="lojas.html">Lojas</a></li>
+                <li><a href="contato.html">Contato</a></li>
+            </ul>
+
+            <div>
+                <input type="text" placeholder="Digite o que você procura!">
+                <a href="carrinho.html" id="carrinho">
+                    <img src="../Assets/Imagens/iconCart.png" alt="Carrinho">
+                </a>
+                <a href="perfil.html">
+                    <img id="avatarNavbar" src="https://placehold.co/55x55/0d1525/4a5e80?text=G" alt="Perfil">
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="banner-checkout">
+        <img src="https://placehold.co/1440x130/484848/ffffff?text=Banner+Thempvs" alt="">
+    </section>
+
+    <main class="checkout">
+
+        <h1 class="checkout-titulo">Informações de Entrega</h1>
+
+        <!-- Indicadores de etapa (acompanham a seção aberta) -->
+        <ol class="etapas" id="indicadoresEtapas" aria-label="Etapas do checkout">
+            <li class="etapas-item ativa" data-etapa="email" aria-current="step">
+                <button type="button" class="etapas-circulo" aria-label="Etapa 1: Seu Email">
+                    <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="6" y="6" width="36" height="36" rx="8"/>
+                        <circle cx="16" cy="17" r="3"/>
+                        <circle cx="16" cy="31" r="3"/>
+                        <path d="M23 17h13M23 31h13"/>
+                    </svg>
+                </button>
+            </li>
+            <li class="etapas-linha" aria-hidden="true"></li>
+            <li class="etapas-item" data-etapa="endereco">
+                <button type="button" class="etapas-circulo" aria-label="Etapa 2: Endereço">
+                    <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 11l12-4 14 4 12-4v30l-12 4-14-4-12 4z"/>
+                        <path d="M17 7v30M31 11v30"/>
+                    </svg>
+                </button>
+            </li>
+            <li class="etapas-linha" aria-hidden="true"></li>
+            <li class="etapas-item" data-etapa="pagamento">
+                <button type="button" class="etapas-circulo" aria-label="Etapa 3: Pagamento">
+                    <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="11" width="38" height="28" rx="5"/>
+                        <path d="M5 19h38"/>
+                        <path d="M30 29h8"/>
+                    </svg>
+                </button>
+            </li>
+            <li class="etapas-linha" aria-hidden="true"></li>
+            <li class="etapas-item" data-etapa="avaliacao">
+                <button type="button" class="etapas-circulo" aria-label="Etapa 4: Avaliação e Feedback">
+                    <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 22h8v18H6z"/>
+                        <path d="M14 24l9-17c3 0 5 2 5 5v6h11c2 0 4 2 3.5 4.500l-3 14c-.4 1.800-2 3-3.800 3H14"/>
+                    </svg>
+                </button>
+            </li>
+        </ol>
+
+        <div class="checkout-colunas">
+
+            <!-- Coluna esquerda: etapas expansíveis (somente uma aberta por vez) -->
+            <div class="checkout-formularios" id="etapasCheckout">
+
+                <!-- ETAPA 1 — SEU EMAIL -->
+                <section class="etapa aberta" data-etapa="email">
+                    <h2 class="etapa-titulo">
+                        <button type="button" class="etapa-botao" id="botaoEtapaEmail"
+                                aria-expanded="true" aria-controls="painelEtapaEmail">Seu Email</button>
+                    </h2>
+                    <div class="etapa-painel" id="painelEtapaEmail" role="region" aria-labelledby="botaoEtapaEmail">
+                        <div class="etapa-painel-interno">
+                            <form class="etapa-form" id="formEmail" novalidate>
+                                <div class="campo">
+                                    <label for="campoEmail" class="campo-rotulo">Email</label>
+                                    <input type="email" id="campoEmail" name="email" class="campo-input"
+                                           placeholder="Endereço de email" autocomplete="email"
+                                           aria-describedby="ajudaEmail erroEmail">
+                                    <p class="campo-ajuda" id="ajudaEmail">
+                                        Você receberá recibos e notificações por este email
+                                        <span class="icone-info" title="Usaremos este email para enviar atualizações do seu pedido." aria-hidden="true">i</span>
+                                    </p>
+                                    <p class="campo-erro" id="erroEmail" role="alert"></p>
+                                </div>
+
+                                <label class="checkbox">
+                                    <input type="checkbox" id="campoNewsletter" name="newsletter">
+                                    <span class="checkbox-caixa" aria-hidden="true"></span>
+                                    <span class="checkbox-texto">Inscreva-se para receber notícias e atualizações</span>
+                                </label>
+
+                                <button type="submit" class="botao-principal">Avançar</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ETAPA 2 — ENDEREÇO -->
+                <section class="etapa" data-etapa="endereco">
+                    <h2 class="etapa-titulo">
+                        <button type="button" class="etapa-botao" id="botaoEtapaEndereco"
+                                aria-expanded="false" aria-controls="painelEtapaEndereco">Endereço</button>
+                    </h2>
+                    <div class="etapa-painel" id="painelEtapaEndereco" role="region" aria-labelledby="botaoEtapaEndereco">
+                        <div class="etapa-painel-interno">
+                            <form class="etapa-form" id="formEndereco" novalidate>
+                                <div class="campos-grade">
+                                    <div class="campo campo-cep">
+                                        <label for="campoCep" class="campo-rotulo">CEP</label>
+                                        <input type="text" id="campoCep" name="cep" class="campo-input" inputmode="numeric"
+                                               placeholder="00000-000" maxlength="9" autocomplete="postal-code" aria-describedby="erroCep">
+                                        <p class="campo-erro" id="erroCep" role="alert"></p>
+                                    </div>
+
+                                    <div class="campo campo-largo">
+                                        <label for="campoDestinatario" class="campo-rotulo">Nome do destinatário</label>
+                                        <input type="text" id="campoDestinatario" name="destinatario" class="campo-input"
+                                               placeholder="Nome completo" autocomplete="name" aria-describedby="erroDestinatario">
+                                        <p class="campo-erro" id="erroDestinatario" role="alert"></p>
+                                    </div>
+
+                                    <div class="campo campo-largo">
+                                        <label for="campoRua" class="campo-rotulo">Rua ou logradouro</label>
+                                        <input type="text" id="campoRua" name="rua" class="campo-input"
+                                               placeholder="Rua, avenida, travessa..." autocomplete="address-line1" aria-describedby="erroRua">
+                                        <p class="campo-erro" id="erroRua" role="alert"></p>
+                                    </div>
+
+                                    <div class="campo campo-curto">
+                                        <label for="campoNumero" class="campo-rotulo">Número</label>
+                                        <input type="text" id="campoNumero" name="numero" class="campo-input"
+                                               placeholder="Ex.: 120" maxlength="10" autocomplete="off" aria-describedby="erroNumero">
+                                        <p class="campo-erro" id="erroNumero" role="alert"></p>
+                                    </div>
+
+                                    <div class="campo">
+                                        <label for="campoComplemento" class="campo-rotulo">Complemento <span class="campo-opcional">(opcional)</span></label>
+                                        <input type="text" id="campoComplemento" name="complemento" class="campo-input"
+                                               placeholder="Apto, bloco..." autocomplete="address-line2">
+                                    </div>
+
+                                    <div class="campo">
+                                        <label for="campoBairro" class="campo-rotulo">Bairro</label>
+                                        <input type="text" id="campoBairro" name="bairro" class="campo-input"
+                                               placeholder="Bairro" autocomplete="off" aria-describedby="erroBairro">
+                                        <p class="campo-erro" id="erroBairro" role="alert"></p>
+                                    </div>
+
+                                    <div class="campo">
+                                        <label for="campoCidade" class="campo-rotulo">Cidade</label>
+                                        <input type="text" id="campoCidade" name="cidade" class="campo-input"
+                                               placeholder="Cidade" autocomplete="address-level2" aria-describedby="erroCidade">
+                                        <p class="campo-erro" id="erroCidade" role="alert"></p>
+                                    </div>
+
+                                    <div class="campo campo-curto">
+                                        <label for="campoEstado" class="campo-rotulo">Estado</label>
+                                        <select id="campoEstado" name="estado" class="campo-input" autocomplete="address-level1" aria-describedby="erroEstado">
+                                            <option value="">UF</option>
+                                            <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                                            <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+                                            <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                                            <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                                            <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                                            <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                                            <option>SP</option><option>SE</option><option>TO</option>
+                                        </select>
+                                        <p class="campo-erro" id="erroEstado" role="alert"></p>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="botao-principal">Avançar</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ETAPA 3 — PAGAMENTO -->
+                <section class="etapa" data-etapa="pagamento">
+                    <h2 class="etapa-titulo">
+                        <button type="button" class="etapa-botao" id="botaoEtapaPagamento"
+                                aria-expanded="false" aria-controls="painelEtapaPagamento">Pagamento</button>
+                    </h2>
+                    <div class="etapa-painel" id="painelEtapaPagamento" role="region" aria-labelledby="botaoEtapaPagamento">
+                        <div class="etapa-painel-interno">
+                            <form class="etapa-form" id="formPagamento" novalidate>
+
+                                <p class="aviso-demo">Interface de demonstração. Nenhum pagamento é processado e nenhum dado de cartão é guardado. Não digite dados reais.</p>
+
+                                <fieldset class="metodos">
+                                    <legend class="campo-rotulo">Forma de pagamento</legend>
+
+                                    <label class="metodo">
+                                        <input type="radio" name="metodoPagamento" value="cartao">
+                                        <span class="metodo-caixa">Cartão de crédito</span>
+                                    </label>
+                                    <label class="metodo">
+                                        <input type="radio" name="metodoPagamento" value="pix">
+                                        <span class="metodo-caixa">Pix</span>
+                                    </label>
+                                    <label class="metodo">
+                                        <input type="radio" name="metodoPagamento" value="boleto">
+                                        <span class="metodo-caixa">Boleto</span>
+                                    </label>
+                                </fieldset>
+                                <p class="campo-erro" id="erroMetodo" role="alert"></p>
+
+                                <div class="metodo-detalhe" id="detalheCartao" hidden>
+                                    <div class="campos-grade">
+                                        <div class="campo campo-largo">
+                                            <label for="campoCartaoNumero" class="campo-rotulo">Número do cartão (fictício)</label>
+                                            <input type="text" id="campoCartaoNumero" class="campo-input" inputmode="numeric"
+                                                   placeholder="0000 0000 0000 0000" maxlength="23" autocomplete="off" aria-describedby="erroCartaoNumero">
+                                            <p class="campo-erro" id="erroCartaoNumero" role="alert"></p>
+                                        </div>
+                                        <div class="campo campo-largo">
+                                            <label for="campoCartaoNome" class="campo-rotulo">Nome impresso no cartão</label>
+                                            <input type="text" id="campoCartaoNome" class="campo-input"
+                                                   placeholder="Como aparece no cartão" autocomplete="off" aria-describedby="erroCartaoNome">
+                                            <p class="campo-erro" id="erroCartaoNome" role="alert"></p>
+                                        </div>
+                                        <div class="campo">
+                                            <label for="campoCartaoValidade" class="campo-rotulo">Validade</label>
+                                            <input type="text" id="campoCartaoValidade" class="campo-input" inputmode="numeric"
+                                                   placeholder="MM/AA" maxlength="5" autocomplete="off" aria-describedby="erroCartaoValidade">
+                                            <p class="campo-erro" id="erroCartaoValidade" role="alert"></p>
+                                        </div>
+                                        <div class="campo">
+                                            <label for="campoCartaoCvv" class="campo-rotulo">Código de segurança</label>
+                                            <input type="text" id="campoCartaoCvv" class="campo-input" inputmode="numeric"
+                                                   placeholder="CVV" maxlength="4" autocomplete="off" aria-describedby="erroCartaoCvv">
+                                            <p class="campo-erro" id="erroCartaoCvv" role="alert"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="metodo-detalhe" id="detalhePix" hidden>
+                                    <p class="metodo-texto">Na versão final, o código Pix seria exibido depois da conclusão do pedido. Nesta demonstração nenhum código é gerado.</p>
+                                </div>
+
+                                <div class="metodo-detalhe" id="detalheBoleto" hidden>
+                                    <p class="metodo-texto">Na versão final, o boleto seria gerado depois da conclusão do pedido. Nesta demonstração nenhum boleto é emitido.</p>
+                                </div>
+
+                                <button type="submit" class="botao-principal">Avançar</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ETAPA 4 — AVALIAÇÃO E FEEDBACK -->
+                <section class="etapa" data-etapa="avaliacao">
+                    <h2 class="etapa-titulo">
+                        <button type="button" class="etapa-botao" id="botaoEtapaAvaliacao"
+                                aria-expanded="false" aria-controls="painelEtapaAvaliacao">Avaliação e Feedback</button>
+                    </h2>
+                    <div class="etapa-painel" id="painelEtapaAvaliacao" role="region" aria-labelledby="botaoEtapaAvaliacao">
+                        <div class="etapa-painel-interno">
+                            <form class="etapa-form" id="formAvaliacao" novalidate>
+
+                                <p class="campo-rotulo">Resumo das suas informações</p>
+                                <dl class="resumo-dados" id="resumoDados"></dl>
+
+                                <fieldset class="avaliacao">
+                                    <legend class="campo-rotulo">Como foi sua experiência neste checkout? <span class="campo-opcional">(opcional)</span></legend>
+                                    <div class="estrelas">
+                                        <input type="radio" name="nota" id="nota5" value="5"><label for="nota5" title="5 estrelas"><span class="sr-only">5 estrelas</span></label>
+                                        <input type="radio" name="nota" id="nota4" value="4"><label for="nota4" title="4 estrelas"><span class="sr-only">4 estrelas</span></label>
+                                        <input type="radio" name="nota" id="nota3" value="3"><label for="nota3" title="3 estrelas"><span class="sr-only">3 estrelas</span></label>
+                                        <input type="radio" name="nota" id="nota2" value="2"><label for="nota2" title="2 estrelas"><span class="sr-only">2 estrelas</span></label>
+                                        <input type="radio" name="nota" id="nota1" value="1"><label for="nota1" title="1 estrela"><span class="sr-only">1 estrela</span></label>
+                                    </div>
+                                </fieldset>
+
+                                <div class="campo">
+                                    <label for="campoComentario" class="campo-rotulo">Comentário <span class="campo-opcional">(opcional)</span></label>
+                                    <textarea id="campoComentario" class="campo-input campo-textarea" rows="3" maxlength="300"
+                                              placeholder="Conte o que achou"></textarea>
+                                    <p class="campo-ajuda">Demonstração: a avaliação não é enviada nem armazenada.</p>
+                                </div>
+
+                                <p class="campo-erro" id="erroConclusao" role="alert"></p>
+
+                                <button type="submit" class="botao-principal">Concluir demonstração</button>
+
+                                <p class="mensagem-sucesso" id="mensagemSucesso" role="status" hidden></p>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Coluna direita: resumo do pedido (renderizado por carrinho.js) -->
+            <aside class="resumo" aria-labelledby="tituloResumo">
+                <h2 class="resumo-titulo" id="tituloResumo">Resumo do Pedido</h2>
+
+                <ul class="resumo-itens" id="listaItens"></ul>
+
+                <div class="resumo-vazio" id="carrinhoVazio" hidden>
+                    <p>Seu carrinho está vazio.</p>
+                    <a href="produtos.html" class="resumo-link-produtos">Ver produtos</a>
+                </div>
+
+                <dl class="resumo-total">
+                    <div class="resumo-linha resumo-linha-total">
+                        <dt>Total</dt>
+                        <dd id="valorTotal">R$ 0,00</dd>
+                    </div>
+                </dl>
+
+                <dl class="resumo-extras">
+                    <div class="resumo-linha">
+                        <dt>Descontos</dt>
+                        <dd id="valorDescontos">R$ 0,00</dd>
+                    </div>
+                    <div class="resumo-linha">
+                        <dt>Frete</dt>
+                        <dd id="valorFrete">A calcular</dd>
+                    </div>
+                </dl>
+
+                <p class="resumo-aviso" id="avisoDemo" hidden>Modo demonstração: itens de exemplo, separados do seu carrinho real.</p>
+            </aside>
+        </div>
+
+        <!-- Área decorativa da marca (placeholder até existir o arquivo original) -->
+        <div class="checkout-decoracao" aria-hidden="true">
+            <img src="https://placehold.co/460x240/ffffff/2e435d?text=DANCER" alt="">
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col logo-col">
+                <div class="logo">
+                    <img src="../Assets/Imagens/Logo1.png" alt="Logo">
+                </div>
+                <p class="tagline">Thempvs é dança</p>
+            </div>
+            <div class="footer-col">
+                <h3>Produtos</h3>
+                <ul>
+                    <li><a href="#">Camiseta</a></li>
+                    <li><a href="#">Calça</a></li>
+                    <li><a href="#">Boné</a></li>
+                    <li><a href="#">Casaco</a></li>
+                    <li><a href="#">Jaquetas</a></li>
+                    <li><a href="#">Bermudas</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Redes</h3>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">WhatsApp</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Sac</h3>
+                <p><a href="mailto:sac_thempvs@gmail.com.br" class="email-link">sac_thempvs@gmail.com.br</a></p>
+                <p>(13) 97537-4873</p>
+            </div>
+            <div class="footer-col map-col">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3645.718873730303!2d-46.3340!3d-23.9680!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDU4JzA0LjgiUyA0NsKwMjAnMDIuNCJX!5e0!3m2!1spt-PT!2spt!4v1600000000000" width="100%" height="120" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../Assets/Scripts/carrinho-store.js"></script>
+    <script src="../Assets/Scripts/carrinho.js"></script>
+</body>
+</html>

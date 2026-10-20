@@ -146,6 +146,16 @@
     transform: scale(0.99);
 }
 
+.aviso-carrinho {
+    margin: -20px 0 24px 0;
+    font-size: 0.82rem;
+    color: #2e435d;
+}
+
+.aviso-carrinho[hidden] {
+    display: none;
+}
+
 .especificacoes h3, 
 .tabela-medidas-container h3 {
     font-size: 1rem;

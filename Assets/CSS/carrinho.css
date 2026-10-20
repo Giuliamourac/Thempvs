@@ -1,0 +1,1042 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+/*
+ * Página de carrinho / checkout.
+ * Cabeçalho e rodapé vêm do main.css (mesmo padrão das outras páginas).
+ * Tudo aqui é escopado em .pagina-checkout para não afetar o resto do site.
+ */
+
+.pagina-checkout
+{
+    --AzulCheckout: #2e435d;
+    --AzulCheckoutEscuro: #1e2c3d;
+    --BordaCheckout: #c9c9c9;
+    --CinzaTexto: #6b6b6b;
+    --ErroCheckout: #b3261e;
+}
+
+.pagina-checkout main,
+.pagina-checkout .checkout input,
+.pagina-checkout .checkout select,
+.pagina-checkout .checkout textarea,
+.pagina-checkout .checkout button
+{
+    font-family: "Montserrat", "Inter", sans-serif;
+}
+
+.sr-only
+{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ---------- Banner ---------- */
+
+.banner-checkout
+{
+    width: 100%;
+    height: 130px;
+    background-color: var(--ContrastGrey);
+}
+
+.banner-checkout img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ---------- Estrutura ---------- */
+
+.checkout
+{
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 36px 60px 0 60px;
+    color: var(--PureBlack);
+}
+
+.checkout-titulo
+{
+    font-size: 32px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* ---------- Indicadores de etapa ---------- */
+
+.etapas
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 26px 0 56px 0;
+    list-style: none;
+}
+
+.etapas-item
+{
+    display: flex;
+}
+
+.etapas-circulo
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 78px;
+    height: 78px;
+    padding: 0;
+    color: var(--AzulCheckout);
+    background-color: var(--WhiteMainColor);
+    border: 2px solid var(--AzulCheckout);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.etapas-circulo svg
+{
+    width: 46px;
+    height: 46px;
+}
+
+.etapas-item.ativa .etapas-circulo
+{
+    color: var(--WhiteMainColor);
+    background-color: var(--AzulCheckout);
+}
+
+/* etapa já preenchida e validada */
+.etapas-item.concluida:not(.ativa) .etapas-circulo
+{
+    box-shadow: inset 0 0 0 4px #dfe6ee;
+}
+
+.etapas-circulo:focus-visible
+{
+    outline: 3px solid #7d9cc4;
+    outline-offset: 3px;
+}
+
+.etapas-linha
+{
+    width: 75px;
+    height: 2px;
+    margin: 0 8px;
+    background-color: var(--AzulCheckout);
+}
+
+/* ---------- Duas colunas ---------- */
+
+.checkout-colunas
+{
+    display: grid;
+    grid-template-columns: minmax(0, 600px) minmax(0, 600px);
+    justify-content: space-between;
+    align-items: start;
+    gap: 40px;
+}
+
+/* ---------- Etapas expansíveis ---------- */
+
+.checkout-formularios
+{
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+.etapa
+{
+    background-color: var(--WhiteMainColor);
+    border: 1px solid var(--BordaCheckout);
+}
+
+.etapa-titulo
+{
+    font-size: 26px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.etapa-botao
+{
+    display: block;
+    width: 100%;
+    padding: 20px 42px;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 30px;
+    text-align: left;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+.etapa-botao:hover
+{
+    background-color: #f6f7f9;
+}
+
+.etapa-botao:focus-visible
+{
+    outline: 3px solid #7d9cc4;
+    outline-offset: -3px;
+}
+
+/* Abre/fecha com animação suave, sem depender da altura do conteúdo */
+.etapa-painel
+{
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.etapa-painel-interno
+{
+    min-height: 0;
+    overflow: hidden;
+}
+
+.etapa.aberta .etapa-painel
+{
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.3s ease, visibility 0s;
+}
+
+.etapa.aberta .etapa-botao
+{
+    padding-top: 46px;
+    padding-bottom: 6px;
+}
+
+.etapa.aberta .etapa-botao:hover
+{
+    background: none;
+}
+
+.etapa-form
+{
+    padding: 12px 42px 42px 42px;
+}
+
+/* ---------- Campos ---------- */
+
+.campo
+{
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.campo-rotulo
+{
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--CinzaTexto);
+}
+
+.campo-opcional
+{
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.campo-input
+{
+    width: 100%;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 12px;
+    color: var(--PureBlack);
+    background-color: var(--WhiteMainColor);
+    border: 1px solid #5a6c85;
+    border-radius: 3px;
+}
+
+.campo-input::placeholder
+{
+    color: #a5a5a5;
+}
+
+.campo-input:focus
+{
+    outline: 2px solid #7d9cc4;
+    outline-offset: 1px;
+}
+
+.campo-input.invalido
+{
+    border-color: var(--ErroCheckout);
+}
+
+.campo-textarea
+{
+    height: auto;
+    min-height: 72px;
+    padding: 8px;
+    resize: vertical;
+}
+
+.campo-ajuda
+{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 10px;
+    color: var(--CinzaTexto);
+}
+
+.icone-info
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    font-size: 8px;
+    font-weight: 600;
+    font-style: normal;
+    border: 1px solid var(--CinzaTexto);
+    border-radius: 50%;
+    cursor: help;
+}
+
+.campo-erro
+{
+    min-height: 0;
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--ErroCheckout);
+}
+
+.campo-erro:empty
+{
+    display: none;
+}
+
+.campos-grade
+{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+}
+
+.campo-largo
+{
+    grid-column: 1 / -1;
+}
+
+/* ---------- Checkbox ---------- */
+
+.checkbox
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 26px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.checkbox input
+{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.checkbox-caixa
+{
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background-color: var(--WhiteMainColor);
+    border: 1px solid #5a6c85;
+    border-radius: 3px;
+}
+
+.checkbox input:checked + .checkbox-caixa
+{
+    background-color: var(--AzulCheckout);
+    border-color: var(--AzulCheckout);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.500l3.200 3.200L15 6.800' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.checkbox input:focus-visible + .checkbox-caixa
+{
+    outline: 3px solid #7d9cc4;
+    outline-offset: 2px;
+}
+
+/* ---------- Botões ---------- */
+
+.botao-principal
+{
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    height: 47px;
+    margin-top: 32px;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--WhiteMainColor);
+    background-color: var(--AzulCheckout);
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.botao-principal:hover
+{
+    background-color: var(--AzulCheckoutEscuro);
+}
+
+.botao-principal:active
+{
+    transform: scale(0.99);
+}
+
+.botao-principal:focus-visible
+{
+    outline: 3px solid #7d9cc4;
+    outline-offset: 2px;
+}
+
+/* ---------- Pagamento ---------- */
+
+.aviso-demo
+{
+    margin-bottom: 20px;
+    padding: 10px 12px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #5b4a12;
+    background-color: #fbf3d6;
+    border: 1px solid #e6d58a;
+}
+
+.metodos
+{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    border: 0;
+}
+
+.metodos .campo-rotulo
+{
+    grid-column: 1 / -1;
+    padding: 0;
+}
+
+.metodo
+{
+    display: block;
+    cursor: pointer;
+}
+
+.metodo input
+{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.metodo-caixa
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 6px;
+    font-size: 12px;
+    text-align: center;
+    background-color: var(--WhiteMainColor);
+    border: 1px solid #5a6c85;
+    border-radius: 3px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.metodo:hover .metodo-caixa
+{
+    background-color: #f1f4f8;
+}
+
+.metodo input:checked + .metodo-caixa
+{
+    color: var(--WhiteMainColor);
+    background-color: var(--AzulCheckout);
+    border-color: var(--AzulCheckout);
+}
+
+.metodo input:focus-visible + .metodo-caixa
+{
+    outline: 3px solid #7d9cc4;
+    outline-offset: 2px;
+}
+
+.metodo-detalhe
+{
+    margin-top: 20px;
+}
+
+.metodo-detalhe[hidden]
+{
+    display: none;
+}
+
+.metodo-texto
+{
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--CinzaTexto);
+}
+
+/* ---------- Avaliação ---------- */
+
+.resumo-dados
+{
+    margin-bottom: 22px;
+    font-size: 12px;
+}
+
+.resumo-dados div
+{
+    display: flex;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid #ececec;
+}
+
+.resumo-dados dt
+{
+    flex: 0 0 96px;
+    color: var(--CinzaTexto);
+}
+
+.resumo-dados dd
+{
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.avaliacao
+{
+    margin-bottom: 18px;
+    border: 0;
+}
+
+.avaliacao legend
+{
+    margin-bottom: 8px;
+}
+
+/* estrelas: ordem invertida no HTML para o "hover" preencher da esquerda */
+.estrelas
+{
+    display: inline-flex;
+    flex-direction: row-reverse;
+    gap: 4px;
+}
+
+.estrelas input
+{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.estrelas label
+{
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    background-color: #c4ccd8;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.500l2.900 6.100 6.600.8-4.900 4.600 1.300 6.600L12 17.300 6.100 20.600l1.300-6.600L2.500 9.400l6.600-.8z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.500l2.900 6.100 6.600.8-4.900 4.600 1.300 6.600L12 17.300 6.100 20.600l1.300-6.600L2.500 9.400l6.600-.8z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.estrelas input:checked ~ label,
+.estrelas label:hover,
+.estrelas label:hover ~ label
+{
+    background-color: var(--AzulCheckout);
+}
+
+.estrelas input:focus-visible + label
+{
+    outline: 2px solid #7d9cc4;
+}
+
+.mensagem-sucesso
+{
+    margin-top: 20px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #14532d;
+    background-color: #e4f4ea;
+    border: 1px solid #a7d7b6;
+}
+
+.mensagem-sucesso[hidden]
+{
+    display: none;
+}
+
+/* ---------- Resumo do pedido ---------- */
+
+.resumo
+{
+    padding: 36px 38px 34px 38px;
+    border: 1px solid var(--BordaCheckout);
+}
+
+.resumo-titulo
+{
+    margin-bottom: 18px;
+    font-size: 26px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.resumo-itens
+{
+    list-style: none;
+}
+
+.resumo-item
+{
+    display: flex;
+    gap: 14px;
+    padding-bottom: 14px;
+}
+
+.resumo-miniatura
+{
+    flex-shrink: 0;
+    width: 66px;
+    height: 70px;
+    overflow: hidden;
+    background-color: #e0e0e0;
+}
+
+.resumo-miniatura img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.resumo-miniatura-vazia
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 9px;
+    color: #777;
+    text-align: center;
+}
+
+.resumo-item-dados
+{
+    flex: 1;
+    min-width: 0;
+}
+
+.resumo-item-topo
+{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.resumo-item-nome
+{
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.resumo-item-preco
+{
+    flex-shrink: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.resumo-item-corpo
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.resumo-item-detalhes
+{
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.resumo-item-detalhes span
+{
+    font-weight: 500;
+}
+
+.resumo-item-unit
+{
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--CinzaTexto);
+}
+
+.resumo-item-acoes
+{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.quantidade
+{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.quantidade-botao
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 31px;
+    height: 31px;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--PureBlack);
+    background-color: var(--WhiteMainColor);
+    border: 1px solid #8d8d8d;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.quantidade-botao:hover:not(:disabled)
+{
+    background-color: #f1f4f8;
+}
+
+.quantidade-botao:disabled
+{
+    color: #b5b5b5;
+    border-color: #d5d5d5;
+    cursor: not-allowed;
+}
+
+.quantidade-botao:focus-visible
+{
+    outline: 3px solid #7d9cc4;
+    outline-offset: 2px;
+}
+
+.quantidade-valor
+{
+    min-width: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.resumo-remover
+{
+    padding: 0;
+    font-size: 11px;
+    color: var(--PureBlack);
+    background: none;
+    border: 0;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.resumo-remover:hover
+{
+    color: var(--ErroCheckout);
+}
+
+.resumo-vazio
+{
+    padding: 10px 0 24px 0;
+    font-size: 14px;
+    color: var(--CinzaTexto);
+}
+
+.resumo-vazio[hidden]
+{
+    display: none;
+}
+
+.resumo-link-produtos
+{
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--AzulCheckout);
+}
+
+.resumo-total,
+.resumo-extras
+{
+    margin: 0;
+}
+
+.resumo-total
+{
+    margin-top: 6px;
+    padding: 12px 0;
+    border-top: 1px solid var(--BordaCheckout);
+    border-bottom: 1px solid var(--BordaCheckout);
+}
+
+.resumo-linha
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.resumo-linha-total
+{
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.resumo-linha-total dd
+{
+    font-weight: 600;
+}
+
+.resumo-extras
+{
+    padding-top: 14px;
+}
+
+.resumo-extras .resumo-linha
+{
+    font-size: 19px;
+    line-height: 1.4;
+}
+
+.resumo-aviso
+{
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--CinzaTexto);
+}
+
+.resumo-aviso[hidden]
+{
+    display: none;
+}
+
+/* ---------- Área decorativa ---------- */
+
+.checkout-decoracao
+{
+    display: flex;
+    justify-content: flex-end;
+    margin: 70px 0 110px 0;
+    padding-right: 80px;
+}
+
+.checkout-decoracao img
+{
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    aspect-ratio: 460 / 240;
+    background-color: var(--WhiteMainColor);
+}
+
+/* ---------- Rodapé (logo é preto; no fundo escuro precisa ficar branco) ---------- */
+
+.pagina-checkout .footer .logo img
+{
+    filter: brightness(0) invert(1);
+}
+
+/* ---------- Responsividade ---------- */
+
+@media (max-width: 1000px)
+{
+    .checkout
+    {
+        padding: 28px 24px 0 24px;
+    }
+
+    .checkout-colunas
+    {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+    }
+
+    .checkout-decoracao
+    {
+        justify-content: center;
+        margin: 50px 0 70px 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 600px)
+{
+    .banner-checkout
+    {
+        height: 90px;
+    }
+
+    .checkout
+    {
+        padding: 24px 16px 0 16px;
+    }
+
+    .checkout-titulo
+    {
+        font-size: 24px;
+    }
+
+    .etapas
+    {
+        margin: 20px 0 32px 0;
+    }
+
+    .etapas-circulo
+    {
+        width: 52px;
+        height: 52px;
+    }
+
+    .etapas-circulo svg
+    {
+        width: 30px;
+        height: 30px;
+    }
+
+    .etapas-linha
+    {
+        width: 22px;
+        margin: 0 4px;
+    }
+
+    .etapa-botao,
+    .resumo-titulo
+    {
+        font-size: 21px;
+    }
+
+    .etapa-botao
+    {
+        padding: 18px 20px;
+    }
+
+    .etapa.aberta .etapa-botao
+    {
+        padding-top: 28px;
+    }
+
+    .etapa-form
+    {
+        padding: 12px 20px 28px 20px;
+    }
+
+    .campos-grade
+    {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .campo-input
+    {
+        height: 40px;
+        font-size: 16px; /* evita zoom automático no iOS */
+    }
+
+    .campo-textarea
+    {
+        height: auto;
+    }
+
+    .metodos
+    {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .botao-principal
+    {
+        max-width: none;
+    }
+
+    .resumo
+    {
+        padding: 24px 18px;
+    }
+
+    .resumo-item-corpo
+    {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .resumo-item-acoes
+    {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .resumo-linha-total
+    {
+        font-size: 18px;
+    }
+
+    .resumo-extras .resumo-linha
+    {
+        font-size: 16px;
+    }
+
+    .checkout-decoracao img
+    {
+        max-width: 300px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce)
+{
+    .etapa-painel,
+    .etapas-circulo,
+    .botao-principal
+    {
+        transition: none;
+    }
+}

@@ -98,7 +98,13 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
+                <button type="button" class="btn-adicionar-carrinho"
+                        data-produto-id="camiseta-de-botao"
+                        data-nome="Camiseta de botão"
+                        data-preco-centavos="21000"
+                        data-cor="Branco"
+                        data-imagem="">Adicionar ao carrinho</button>
+                <p class="aviso-carrinho" id="avisoCarrinho" role="status" hidden></p>
 
                 <div class="especificacoes">
                     <h3>Especificações</h3>
@@ -327,6 +333,7 @@
         </div>
     </footer>
 
+    <script src="../Assets/Scripts/carrinho-store.js"></script>
     <script src="../Assets/Scripts/produto.js"></script>
 </body>
 </html>
