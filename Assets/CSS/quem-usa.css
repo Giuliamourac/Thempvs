@@ -1,0 +1,450 @@
+.quemBanner
+{
+    height: 507px;
+    background-color: var(--ContrastGrey);
+}
+
+.quemBanner img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.quemUsa
+{
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 52px 52px 90px 68px;
+    font-family: "Montserrat", "Inter", sans-serif;
+    color: var(--PureBlack);
+}
+
+.quemTitulo
+{
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 36px;
+    text-align: center;
+}
+
+/* ---------- Blocos foto + texto ---------- */
+
+.quemBloco
+{
+    display: flex;
+    align-items: center;
+    gap: 52px;
+    margin-top: 116px;
+}
+
+.quemFotoRedonda
+{
+    flex-shrink: 0;
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.quemTexto
+{
+    flex: 1;
+    min-width: 0;
+}
+
+.quemTexto p
+{
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.quemTextoDireita
+{
+    text-align: right;
+}
+
+.quemRedes
+{
+    display: flex;
+    gap: 27px;
+    margin-top: 30px;
+    list-style: none;
+}
+
+.quemTextoDireita .quemRedes
+{
+    justify-content: flex-end;
+}
+
+.quemRedes a
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 65px;
+    height: 65px;
+    color: var(--WhiteMainColor);
+    background-color: var(--ContrastGrey);
+    border-radius: 8px;
+    transition: opacity 0.2s ease;
+}
+
+.quemRedes a:hover
+{
+    opacity: 0.8;
+}
+
+.quemRedes a:focus-visible
+{
+    outline: 3px solid #7d9cc4;
+    outline-offset: 3px;
+}
+
+.quemRedes svg
+{
+    width: 46px;
+    height: 46px;
+}
+
+/* ---------- Mosaico ---------- */
+
+.quemMosaico
+{
+    display: grid;
+    grid-template-columns: 425fr 425fr 460fr;
+    gap: 19px;
+    aspect-ratio: 1348 / 705;
+    margin: 121px 13px 101px -41px;
+}
+
+.quemMosaico img
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mosaicoColuna
+{
+    display: grid;
+    grid-template-rows: 177fr 370fr 125fr;
+    gap: 17px;
+    min-height: 0;
+}
+
+.mosaicoColuna img
+{
+    min-height: 0;
+}
+
+.mosaicoDireita
+{
+    display: grid;
+    grid-template-columns: 254fr 187fr;
+    grid-template-rows: 275fr 273fr 125fr;
+    gap: 16px 19px;
+    min-height: 0;
+}
+
+.mosaicoDireita img
+{
+    min-height: 0;
+}
+
+.mosaicoD1 { grid-column: 1; grid-row: 1; }
+.mosaicoD2 { grid-column: 1; grid-row: 2; }
+.mosaicoD3 { grid-column: 2; grid-row: 1 / span 2; }
+.mosaicoD4 { grid-column: 1 / span 2; grid-row: 3; }
+
+.quemBlocoInvertido
+{
+    margin-top: 0;
+}
+
+.quemChamada
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 110px;
+    text-align: center;
+}
+
+.quemChamada h2
+{
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 46px;
+    color: #1f1f1f;
+}
+
+.quemWordmark
+{
+    width: 335px;
+    height: 52px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.quemWordmark img
+{
+    max-width: none;
+    width: 388px;
+    height: auto;
+    margin-left: -53px;
+    filter: brightness(0) invert(22%) sepia(25%) saturate(1100%) hue-rotate(176deg) brightness(95%);
+}
+
+.quemEventos
+{
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 30px;
+}
+
+.quemEvento
+{
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+    padding-right: 95px;
+}
+
+.quemEvento > img
+{
+    flex: 0 0 240px;
+    width: 240px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.quemEventoConteudo
+{
+    flex: 1;
+    min-width: 0;
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.quemEventoConteudo h3
+{
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.quemEventoData
+{
+    margin-bottom: 8px;
+}
+
+.quemEventoBotao
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    padding: 7px 18px;
+    color: var(--WhiteMainColor);
+    background-color: #263f5c;
+    border-radius: 4px;
+    font-size: 12px;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.quemEventoBotao:hover
+{
+    background-color: #182b42;
+}
+
+.quemEventoAlternado
+{
+    align-self: flex-end;
+}
+
+/* ---------- Responsividade ---------- */
+
+@media (max-width: 1100px)
+{
+    .quemBanner
+    {
+        height: 300px;
+    }
+
+    .quemUsa
+    {
+        padding: 40px 24px 70px 24px;
+    }
+
+    .quemBloco
+    {
+        flex-direction: column;
+        gap: 28px;
+        margin-top: 70px;
+    }
+
+    .quemBlocoInvertido
+    {
+        flex-direction: column-reverse;
+    }
+
+    .quemFotoRedonda
+    {
+        width: min(320px, 80vw);
+        height: min(320px, 80vw);
+    }
+
+    .quemTexto,
+    .quemTextoDireita
+    {
+        width: 100%;
+        text-align: left;
+    }
+
+    .quemTextoDireita .quemRedes
+    {
+        justify-content: flex-start;
+    }
+
+    .quemMosaico
+    {
+        margin: 70px 0;
+    }
+
+    .quemChamada
+    {
+        margin-top: 80px;
+    }
+
+    .quemChamada h2
+    {
+        font-size: 30px;
+        line-height: 38px;
+    }
+
+    .quemEvento
+    {
+        max-width: 100%;
+        padding-right: 0;
+    }
+
+    .quemEventoBotao
+    {
+        position: static;
+        align-self: flex-start;
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 600px)
+{
+    .quemBanner
+    {
+        height: 180px;
+    }
+
+    .quemTitulo
+    {
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .quemTexto p
+    {
+        font-size: 15px;
+        line-height: 22px;
+    }
+
+    .quemRedes
+    {
+        gap: 16px;
+    }
+
+    .quemRedes a
+    {
+        width: 52px;
+        height: 52px;
+    }
+
+    .quemRedes svg
+    {
+        width: 36px;
+        height: 36px;
+    }
+
+    .quemMosaico
+    {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        aspect-ratio: auto;
+        gap: 8px;
+        margin: 50px 0;
+    }
+
+    .mosaicoColuna,
+    .mosaicoDireita
+    {
+        display: contents;
+    }
+
+    .quemMosaico img
+    {
+        height: auto;
+        aspect-ratio: 1 / 1;
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    .quemChamada h2
+    {
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .quemWordmark
+    {
+        width: 260px;
+        height: 40px;
+    }
+
+    .quemWordmark img
+    {
+        width: 301px;
+        margin-left: -41px;
+    }
+
+    .quemEvento,
+    .quemEventoAlternado
+    {
+        align-self: stretch;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .quemEvento > img
+    {
+        flex: none;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 3 / 2;
+    }
+
+    .quemEventoConteudo
+    {
+        font-size: 13px;
+    }
+
+    .quemEventoBotao
+    {
+        margin-left: 0;
+    }
+}

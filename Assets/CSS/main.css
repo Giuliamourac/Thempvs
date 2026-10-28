@@ -30,7 +30,7 @@ img
 
 header
 {
-    font-size: 16px;
+    font-size: 20px;
 }
 
 header div:first-child
@@ -64,7 +64,7 @@ header ul
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 25px;
+    gap: 30px;
     list-style: none;
 }
 
