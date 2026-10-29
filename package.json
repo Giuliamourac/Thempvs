@@ -1,0 +1,29 @@
+{
+  "name": "thempvs",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Giuliamourac/Thempvs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Giuliamourac/Thempvs/issues"
+  },
+  "homepage": "https://github.com/Giuliamourac/Thempvs#readme",
+  "dependencies": {
+    "express": "^5.3.0",
+    "sequelize": "^6.37.8",
+    "tedious": "^20.3.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
