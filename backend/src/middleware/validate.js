@@ -7,6 +7,7 @@ const formatIssues = (issues) =>
     mensagem: issue.message,
   }));
 
+/** Valida req.body com um schema Zod e substitui por dados já limpos/convertidos. */
 export const validateBody = (schema) => (req, _res, next) => {
   const result = schema.safeParse(req.body ?? {});
   if (!result.success) {
@@ -16,6 +17,7 @@ export const validateBody = (schema) => (req, _res, next) => {
   next();
 };
 
+/** Valida a query string (?pagina=2&status=Pago) e coloca o resultado em req.query. */
 export const validateQuery = (schema) => (req, _res, next) => {
   const result = schema.safeParse(req.query ?? {});
   if (!result.success) {
@@ -26,6 +28,7 @@ export const validateQuery = (schema) => (req, _res, next) => {
   next();
 };
 
+/** Valida o parâmetro :id e o disponibiliza como número em req.id (e req.productId). */
 export const validateId = (req, _res, next) => {
   const result = idSchema.safeParse(req.params.id);
   if (!result.success) throw new HttpError(400, 'ID inválido.');

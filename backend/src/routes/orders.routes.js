@@ -6,6 +6,7 @@ import { createOrderSchema, listOrdersQuery, quoteSchema, statusSchema } from '.
 
 const router = Router();
 
+// Cotação é pública: o carrinho mostra preço/estoque/frete reais antes mesmo do login.
 router.post('/cotacao', validateBody(quoteSchema), controller.quote);
 
 router.post('/', requireAuth, validateBody(createOrderSchema), controller.create);

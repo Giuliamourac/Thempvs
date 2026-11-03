@@ -14,7 +14,8 @@
     "db:init": "node scripts/init-db.js",
     "admin:create": "node scripts/create-admin.js",
     "gen:secret": "node scripts/gen-secret.js",
-    "uploads:clean": "node scripts/clean-uploads.js"
+    "uploads:clean": "node scripts/clean-uploads.js",
+    "storage:test": "node scripts/test-storage.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1161.0",

@@ -4,6 +4,7 @@ import { refSchema } from '../validators/product.schema.js';
 
 const notFound = () => new HttpError(404, 'Produto não encontrado.');
 
+// Express 5 encaminha erros de handlers async para o errorHandler automaticamente.
 
 export async function list(req, res) {
   res.json(await Product.list(req.query));

@@ -26,11 +26,13 @@ export const createOrderSchema = z.object({
   itens,
   endereco_id: z.coerce.number({ error: 'Escolha o endereço de entrega.' }).int().positive('Escolha o endereço de entrega.'),
   frete_servico: z.enum(SERVICOS, { error: 'Escolha a forma de entrega.' }),
+  // Cartão ainda não tem gateway de pagamento integrado; ver README.
   metodo_pagamento: z.enum(['pix', 'boleto'], { error: 'Escolha a forma de pagamento.' }),
 });
 
 export const statusSchema = z.object({
   status: z.enum(['Pago', 'Enviado', 'Entregue', 'Cancelado'], { error: 'Status inválido.' }),
+  // Só usada ao marcar como "Enviado".
   transportadora: z
     .string()
     .trim()

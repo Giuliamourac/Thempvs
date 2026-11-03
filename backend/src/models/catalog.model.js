@@ -1,3 +1,4 @@
+/** Categorias e coleções vindas do banco (as opções que o painel e a vitrine mostram). */
 import { pool } from '../config/db.js';
 import { HttpError } from '../utils/httpError.js';
 import { slugify } from '../utils/slug.js';

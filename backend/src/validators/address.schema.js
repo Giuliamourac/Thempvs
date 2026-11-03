@@ -16,6 +16,7 @@ export const uf = z
 
 export const addressSchema = z.object({
   destinatario: texto('O nome do destinatário', { min: 3, max: 150 }),
+  // aceita "11000-000" e "11000000"
   cep: z
     .string({ error: 'Informe o CEP.' })
     .transform((valor) => valor.replace(/\D/g, ''))

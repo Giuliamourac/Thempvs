@@ -1,4 +1,4 @@
-
+/** "Calças Esportivas!" → "calcas-esportivas" */
 export const slugify = (texto) =>
   String(texto ?? '')
     .normalize('NFD')

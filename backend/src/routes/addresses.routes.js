@@ -6,7 +6,7 @@ import { addressSchema } from '../validators/address.schema.js';
 
 const router = Router();
 
-router.use(requireAuth);
+router.use(requireAuth); // endereços são sempre do usuário logado
 
 router.get('/', controller.list);
 router.post('/', validateBody(addressSchema), controller.create);

@@ -1,7 +1,24 @@
+/**
+ * Todo o SQL de produtos fica aqui. Tabelas usadas (veja database/schema.sql):
+ *
+ *   produtos ── categorias        (id_categoria, obrigatório)
+ *      │
+ *      ├── produto_tamanho ── tamanho     (opções de tamanho, em ordem)
+ *      ├── produto_cor ────── cores       (opções de cor, em ordem)
+ *      ├── produto_variacao               (ESTOQUE de cada combinação tamanho x cor)
+ *      ├── produto_imagem                 (galeria; a primeira é a capa)
+ *      ├── medidas_produto                (medidas por tamanho)
+ *      └── colecao                        (opcional)
+ *
+ * A API fala em { nome, categoria, tamanhos, cores, ... }; aqui isso é traduzido
+ * para as colunas do banco (nm_produto, id_categoria, ...).
+ */
 import { pool, withTransaction as comTransacao } from '../config/db.js';
 import { removerImagem } from '../services/storage.js';
 import { HttpError } from '../utils/httpError.js';
 import { slugify } from '../utils/slug.js';
+
+// ---------- helpers ----------
 
 const NOMES_DE_CATEGORIAS = {
   camisetas: 'Camisetas',
@@ -13,12 +30,18 @@ const NOMES_DE_CATEGORIAS = {
   acessorios: 'Acessórios',
 };
 
+// Categorias conhecidas têm nome fixo; as demais usam o texto como foi digitado (com acentos).
 const nomeDaCategoria = (slug, textoOriginal) => NOMES_DE_CATEGORIAS[slug] ?? textoOriginal.trim();
 
+/**
+ * Devolve o id da linha cujo `coluna` = `valor`, criando a linha se ainda não existir.
+ * (tabela/colunas vêm sempre de constantes deste arquivo, nunca do usuário.)
+ */
 async function obterOuCriar(db, { tabela, id, coluna, extras = {} }, valor) {
   const [existentes] = await db.query('SELECT ?? AS id FROM ?? WHERE ?? = ? LIMIT 1', [id, tabela, coluna, valor]);
   if (existentes.length) return existentes[0].id;
 
+  // ON DUPLICATE KEY cobre duas requisições criando o mesmo valor ao mesmo tempo.
   const [resultado] = await db.query('INSERT INTO ?? SET ? ON DUPLICATE KEY UPDATE ?? = LAST_INSERT_ID(??)', [
     tabela,
     { [coluna]: valor, ...extras },
@@ -36,6 +59,7 @@ async function idDaCategoria(db, categoria) {
   const slug = slugify(categoria) || 'sem-categoria';
   const nome = nomeDaCategoria(slug, categoria);
 
+  // Já existe uma categoria com esse slug — ou com esse nome (você pode ter cadastrado à mão)?
   const [existentes] = await db.query(
     'SELECT id_categoria AS id FROM categorias WHERE slug = ? OR nm_categoria = ? ORDER BY slug = ? DESC LIMIT 1',
     [slug, nome, slug],
@@ -45,11 +69,12 @@ async function idDaCategoria(db, categoria) {
   return obterOuCriar(db, { ...CATEGORIA, extras: { nm_categoria: nome } }, slug);
 }
 
+/** Grava a lista (tamanhos ou cores) de um produto, preservando a ordem escolhida. */
 async function gravarLista(db, produtoId, valores, { vinculo, ...tabela }) {
   await db.query('DELETE FROM ?? WHERE id_produto = ?', [vinculo, produtoId]);
 
-  const ordemPorId = new Map();
-  const idPorNome = new Map(); 
+  const ordemPorId = new Map(); // dois valores "iguais" para o MySQL (ex.: Único/Unico) viram um só
+  const idPorNome = new Map(); // nome em minúsculas -> id (para achar a linha de estoque depois)
   for (const valor of valores) {
     const id = await obterOuCriar(db, tabela, valor);
     idPorNome.set(valor.toLowerCase(), id);
@@ -70,6 +95,13 @@ const gravarTamanhos = (db, produtoId, valores) =>
 
 const gravarCores = (db, produtoId, valores) => gravarLista(db, produtoId, valores, { ...COR, vinculo: 'produto_cor' });
 
+/**
+ * Sincroniza produto_variacao com as opções escolhidas: uma linha por tamanho x cor.
+ *  - combinação que já existe: mantém o id (carrinhos abertos continuam válidos) e só troca o estoque
+ *    se o painel mandou um valor;
+ *  - combinação nova: cria (estoque enviado, ou 0);
+ *  - combinação que saiu da lista: apaga (itens de pedidos antigos guardam cópia dos dados).
+ */
 async function gravarVariacoes(db, produtoId, tamanhos, cores, variacoes) {
   const idsCores = cores.ids.length ? cores.ids : [null];
   const chave = (idTamanho, idCor) => `${idTamanho}:${idCor ?? 0}`;
@@ -109,6 +141,7 @@ async function gravarVariacoes(db, produtoId, tamanhos, cores, variacoes) {
 
 const COLUNAS_MEDIDAS = ['busto_cm', 'cintura_cm', 'quadril_cm', 'ombros_cm', 'comprimento_cm', 'manga_cm', 'coxa_cm'];
 
+/** Substitui as medidas do produto. Linhas totalmente vazias são ignoradas. */
 async function gravarMedidas(db, produtoId, tamanhos, medidas) {
   await db.query('DELETE FROM medidas_produto WHERE id_produto = ?', [produtoId]);
 
@@ -120,7 +153,11 @@ async function gravarMedidas(db, produtoId, tamanhos, medidas) {
   await db.query(`INSERT INTO medidas_produto (id_produto, id_tamanho, ${COLUNAS_MEDIDAS.join(', ')}) VALUES ?`, [linhas]);
 }
 
-
+/**
+ * Substitui a galeria do produto (a ordem da lista é a ordem de exibição; a primeira é a capa,
+ * copiada em produtos.imagem_url). Devolve as URLs que SAÍRAM da galeria, para apagar os arquivos
+ * depois que a transação der certo.
+ */
 async function gravarImagens(db, produtoId, urls) {
   const [antigas] = await db.query('SELECT url FROM produto_imagem WHERE id_produto = ?', [produtoId]);
   await db.query('DELETE FROM produto_imagem WHERE id_produto = ?', [produtoId]);
@@ -150,6 +187,11 @@ async function gravarOpcoes(db, produtoId, data) {
   return gravarImagens(db, produtoId, data.imagens);
 }
 
+/**
+ * Apaga do storage as imagens que deixaram de ser usadas — só se nenhum outro produto
+ * ainda as usa (a mesma URL pode estar em dois produtos). Erros aqui nunca derrubam a operação:
+ * no pior caso sobra um arquivo órfão, que `npm run uploads:clean` recolhe depois.
+ */
 async function apagarImagensSemUso(urls) {
   for (const url of urls) {
     try {
@@ -175,6 +217,7 @@ async function slugUnico(db, nome) {
   }
 }
 
+// ---------- leitura ----------
 
 const SLUG_CATEGORIA = 'COALESCE(c.slug, LOWER(c.nm_categoria))';
 const PRECO_FINAL = 'COALESCE(p.preco_promocional, p.preco)';
@@ -198,6 +241,7 @@ const SELECT_PRODUTOS = `
          p.peso_gramas
   ${FROM_PRODUTOS}`;
 
+/** { id_produto => ['P', 'M', ...] } na ordem escolhida no painel. */
 async function listasDe(db, { vinculo, tabela, id, coluna }, ids) {
   if (ids && ids.length === 0) return new Map();
 
@@ -218,6 +262,7 @@ async function listasDe(db, { vinculo, tabela, id, coluna }, ids) {
   return porProduto;
 }
 
+/** { id_produto => [{ id, tamanho, cor, estoque }] } na ordem dos tamanhos/cores do painel. */
 async function variacoesDe(db, ids) {
   const porProduto = new Map();
   if (ids.length === 0) return porProduto;
@@ -240,6 +285,7 @@ async function variacoesDe(db, ids) {
   return porProduto;
 }
 
+/** { id_produto => [url, ...] } na ordem da galeria. */
 async function imagensDe(db, ids) {
   const porProduto = new Map();
   if (ids.length === 0) return porProduto;
@@ -255,6 +301,7 @@ async function imagensDe(db, ids) {
   return porProduto;
 }
 
+/** { id_produto => [{ tamanho, busto_cm, ... }] } na ordem dos tamanhos do produto. Só os que têm tamanho. */
 async function medidasDe(db, ids) {
   const porProduto = new Map();
   if (ids.length === 0) return porProduto;
@@ -295,18 +342,18 @@ async function montarProdutos(db, linhas) {
       slug: linha.slug,
       nome: linha.nome,
       descricao: linha.descricao ?? '',
-      preco, 
-      preco_promocional: promocional,
-      preco_final: promocional ?? preco, 
+      preco, // preço normal ("de")
+      preco_promocional: promocional, // null = sem promoção
+      preco_final: promocional ?? preco, // o que o cliente paga
       categoria: linha.categoria,
       colecao: linha.colecao_slug ? { slug: linha.colecao_slug, nome: linha.colecao_nome } : null,
       tamanhos: tamanhos.get(linha.id) ?? [],
       cores: cores.get(linha.id) ?? [],
       variacoes: variacoes.get(linha.id) ?? [],
-      estoque: (variacoes.get(linha.id) ?? []).reduce((soma, v) => soma + v.estoque, 0), 
+      estoque: (variacoes.get(linha.id) ?? []).reduce((soma, v) => soma + v.estoque, 0), // total (soma das variações)
       medidas: medidas.get(linha.id) ?? [],
       imagens: galeria,
-      imagem_url: galeria[0] ?? linha.imagem_url,
+      imagem_url: galeria[0] ?? linha.imagem_url, // capa
       peso_gramas: linha.peso_gramas,
     };
   });
@@ -317,6 +364,7 @@ async function buscarPorId(db, id) {
   return linhas.length ? (await montarProdutos(db, linhas))[0] : null;
 }
 
+/** Aceita o id numérico (/produtos/12, links antigos) ou o slug (/produtos/camiseta-preta). Slug tem prioridade. */
 export async function findByRef(ref) {
   const [linhas] = await pool.query(
     `${SELECT_PRODUTOS} WHERE p.slug = ? OR p.id_produto = ? ORDER BY p.slug = ? DESC LIMIT 1`,
@@ -334,6 +382,7 @@ const ORDEM_SQL = {
   nome: 'p.nm_produto ASC, p.id_produto DESC',
 };
 
+/** Escapa % e _ para o texto digitado ser buscado literalmente no LIKE. */
 const literalParaLike = (texto) => texto.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 function montarFiltros({ categoria, cor, tamanho, colecao, q, em_estoque: emEstoque }) {
@@ -348,6 +397,7 @@ function montarFiltros({ categoria, cor, tamanho, colecao, q, em_estoque: emEsto
     onde.push('col.slug = ?');
     valores.push(colecao);
   }
+  // cor/tamanho: o produto precisa ter PELO MENOS UM dos valores marcados
   if (cor.length) {
     onde.push(`EXISTS (SELECT 1 FROM produto_cor pc JOIN cores co ON co.id_cor = pc.id_cor
                        WHERE pc.id_produto = p.id_produto AND co.nm_cor IN (?))`);
@@ -392,6 +442,7 @@ export async function list(filtros) {
   };
 }
 
+/** Opções de filtro que existem de verdade nos produtos (com quantos produtos cada uma tem). */
 export async function facets() {
   const [categorias] = await pool.query(
     `SELECT ${SLUG_CATEGORIA} AS slug, c.nm_categoria AS nome, COUNT(p.id_produto) AS total
@@ -412,6 +463,7 @@ export async function facets() {
   return { categorias: num(categorias), cores: num(cores), tamanhos: num(tamanhos) };
 }
 
+// ---------- escrita ----------
 
 export async function create(data) {
   for (let tentativa = 1; ; tentativa += 1) {
@@ -437,12 +489,14 @@ export async function create(data) {
         return buscarPorId(db, resultado.insertId);
       });
     } catch (erro) {
+      // Duas requisições escolheram o mesmo slug ao mesmo tempo: tenta de novo com o próximo livre.
       if (erro.code === 'ER_DUP_ENTRY' && tentativa < 3) continue;
       throw erro;
     }
   }
 }
 
+/** Retorna o produto atualizado, ou null se o id não existir. (O slug não muda ao editar.) */
 export async function update(id, data) {
   let removidas = [];
 
@@ -471,10 +525,11 @@ export async function update(id, data) {
     return buscarPorId(db, id);
   });
 
-  if (produto) await apagarImagensSemUso(removidas);
+  if (produto) await apagarImagensSemUso(removidas); // só depois do commit
   return produto;
 }
 
+/** Retorna true se removeu, false se o id não existia. */
 export async function remove(id) {
   let imagens = [];
 
@@ -486,6 +541,7 @@ export async function remove(id) {
       imagens = [...new Set([...antigas.map((l) => l.url), capa?.imagem_url].filter(Boolean))];
 
       await db.query('DELETE FROM medidas_produto WHERE id_produto = ?', [id]);
+      // produto_tamanho, produto_cor, produto_variacao e produto_imagem saem junto (ON DELETE CASCADE).
       const [resultado] = await db.query('DELETE FROM produtos WHERE id_produto = ?', [id]);
       return resultado.affectedRows > 0;
     });
@@ -493,6 +549,7 @@ export async function remove(id) {
     if (removido) await apagarImagensSemUso(imagens);
     return removido;
   } catch (erro) {
+    // Produto que já está em carrinho ou pedido não pode sumir (chave estrangeira).
     if (erro.code === 'ER_ROW_IS_REFERENCED_2') {
       throw new HttpError(409, 'Este produto está em carrinhos ou pedidos e não pode ser excluído.');
     }

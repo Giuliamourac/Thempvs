@@ -12,6 +12,11 @@ export function signToken(user) {
   });
 }
 
+/**
+ * Exige "Authorization: Bearer <token>". O usuário é relido do banco a cada requisição:
+ * assim, uma conta desativada (ou um admin rebaixado) perde o acesso na hora,
+ * sem esperar o token expirar.
+ */
 export async function requireAuth(req, _res, next) {
   const [esquema, token] = (req.get('authorization') ?? '').split(' ');
   if (esquema?.toLowerCase() !== 'bearer' || !token) {
@@ -37,4 +42,5 @@ const exigirAdmin = (req, _res, next) => {
   next();
 };
 
+/** Use como middleware de rota: já inclui o login. */
 export const requireAdmin = [requireAuth, exigirAdmin];

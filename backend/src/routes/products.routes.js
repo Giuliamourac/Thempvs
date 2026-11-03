@@ -6,6 +6,7 @@ import { listProductsQuery, productSchema } from '../validators/product.schema.j
 
 const router = Router();
 
+// Leitura é pública (a vitrine); criar, editar e excluir exigem um administrador.
 router.get('/', validateQuery(listProductsQuery), controller.list);
 router.get('/filtros', controller.facets); // antes de /:ref, senão "filtros" viraria um slug
 router.get('/:ref', controller.getByRef); // id numérico (links antigos) ou slug

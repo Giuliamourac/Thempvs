@@ -5,7 +5,7 @@ import { checkConnection, pool } from './config/db.js';
 if (env.jwtSecret.length < 32) {
   console.error('\nJWT_SECRET ausente ou curto demais (mínimo de 32 caracteres) no backend/.env.');
   console.error('Para gerar e gravar um automaticamente, rode (em qualquer sistema):\n');
-  console.error('npm run gen:secret\n');
+  console.error('  npm run gen:secret\n');
   process.exit(1);
 }
 
@@ -22,12 +22,12 @@ try {
   console.log(`MySQL conectado em ${env.db.host}:${env.db.port}/${env.db.database}`);
 } catch (error) {
   console.error('\nNão foi possível conectar ao MySQL:', error.code ?? error.message);
-  console.error('Confira o arquivo backend/.env, se o MySQL está rodando e se o banco foi criado');
+  console.error('Confira o arquivo backend/.env, se o MySQL está rodando e se o banco foi criado (npm run db:init).\n');
   process.exit(1);
 }
 
 const server = app.listen(env.port, () => {
-  console.log(`API rodando em http://localhost:${env.port}/api`);
+  console.log(`API rodando em http://localhost:${env.port}/api (imagens: ${env.storage})`);
 });
 
 async function shutdown() {

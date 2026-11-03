@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// Limpa (espaços, maiúsculas) ANTES de validar o formato: em z.email().trim() a ordem seria a inversa.
 const email = z
   .string({ error: 'Informe seu email.' })
   .trim()
@@ -7,6 +8,7 @@ const email = z
   .max(120, 'O email deve ter no máximo 120 caracteres.')
   .pipe(z.email('Digite um email válido, como nome@exemplo.com.'));
 
+// bcrypt só considera os 72 primeiros bytes da senha; recusar acima disso evita senhas "cortadas" em silêncio.
 const senhaNova = z
   .string({ error: 'Informe uma senha.' })
   .min(8, 'A senha deve ter ao menos 8 caracteres.')

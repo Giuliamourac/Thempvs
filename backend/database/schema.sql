@@ -17,6 +17,7 @@
 --   AJUSTE 7  nova tabela          produto_imagem  (galeria: várias imagens por produto, em ordem;
 --             a primeira é a capa e fica copiada em produtos.imagem_url)
 --   AJUSTE 8  medidas_produto      + id_tamanho  (uma linha de medidas POR TAMANHO; NULL = medidas gerais)
+--   AJUSTE 9  medidas_produto      + id_medida   (chave primária; MySQL em nuvem recusa tabela sem ela)
 --
 -- Se as tabelas já existem no seu MySQL (criadas por uma versão anterior),
 -- rode `npm run db:init` na pasta backend: ele aplica os AJUSTES nelas e
@@ -136,6 +137,7 @@ CREATE TABLE IF NOT EXISTS produto_variacao (
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS medidas_produto (
+    id_medida INT AUTO_INCREMENT,                                 -- AJUSTE 9 (MySQL em nuvem, como o Aiven, exige chave primária)
     id_produto INT,
     id_tamanho INT NULL,                                          -- AJUSTE 8
     busto_cm DECIMAL(5,1),
@@ -145,6 +147,7 @@ CREATE TABLE IF NOT EXISTS medidas_produto (
     comprimento_cm DECIMAL(5,1),
     manga_cm DECIMAL(5,1),
     coxa_cm DECIMAL(5,1),
+    CONSTRAINT PK_id_medida PRIMARY KEY (id_medida),
     CONSTRAINT FK_id_produto_medidas FOREIGN KEY (id_produto) REFERENCES produtos(id_produto),
     CONSTRAINT FK_medidas_tamanho FOREIGN KEY (id_tamanho) REFERENCES tamanho(id_tamanho)
 ) ENGINE=InnoDB;

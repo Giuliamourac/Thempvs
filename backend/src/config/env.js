@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import dotenv from 'dotenv';
 
@@ -8,6 +9,25 @@ const list = (value, fallback) =>
     .split(',')
     .map((item) => item.trim())
     .filter(Boolean);
+
+/**
+ * Conexão criptografada com o MySQL (exigida por serviços em nuvem como o Aiven).
+ *   DB_SSL=true        liga o SSL e confere o certificado do servidor
+ *   DB_SSL=no-verify   liga o SSL sem conferir o certificado (criptografa, mas não garante QUEM está do outro lado)
+ *   DB_SSL_CA          certificado da autoridade (CA) do provedor: o TEXTO (-----BEGIN CERTIFICATE-----...)
+ *                      ou o caminho de um arquivo .pem. O Aiven fornece esse arquivo no painel do serviço.
+ * Sem DB_SSL, a conexão é a de sempre (sem SSL), como no MySQL local.
+ */
+function sslDoBanco() {
+  const modo = (process.env.DB_SSL ?? '').toLowerCase();
+  if (!modo || modo === 'false' || modo === '0') return undefined;
+  if (modo === 'no-verify') return { rejectUnauthorized: false };
+
+  const ca = process.env.DB_SSL_CA?.trim();
+  if (!ca) return { rejectUnauthorized: true };
+  const texto = ca.includes('-----BEGIN') ? ca.replace(/\\n/g, '\n') : readFileSync(ca, 'utf8');
+  return { rejectUnauthorized: true, ca: texto };
+}
 
 export const env = {
   port: Number(process.env.PORT) || 3000,
@@ -49,5 +69,6 @@ export const env = {
     user: process.env.DB_USER ?? 'root',
     password: process.env.DB_PASSWORD ?? '',
     database: process.env.DB_NAME ?? 'thempvs',
+    ssl: sslDoBanco(),
   },
 };

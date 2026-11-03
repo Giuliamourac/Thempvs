@@ -41,6 +41,7 @@ app.use('/api/enderecos', addressRoutes);
 app.use('/api/pedidos', orderRoutes);
 app.use('/api/uploads', uploadRoutes);
 
+// Imagens enviadas (nomes aleatórios e imutáveis, então podem ficar em cache).
 app.use('/uploads', express.static(env.uploadDir, { maxAge: '7d', immutable: true, index: false }));
 
 app.use(notFound);

@@ -21,6 +21,7 @@ export async function list(req, res) {
 
 export async function getById(req, res) {
   const pedido = await Order.findById(pool, req.id);
+  // Pedido de outra pessoa responde 404 (e não 403) para não revelar que o número existe.
   if (!pedido || (req.user.perfil !== 'admin' && pedido.usuario_id !== req.user.id)) throw naoEncontrado();
   res.json(pedido);
 }

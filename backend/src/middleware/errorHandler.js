@@ -6,11 +6,13 @@ export function notFound(req, res) {
   res.status(404).json({ error: `Rota não encontrada: ${req.method} ${req.originalUrl}` });
 }
 
+// eslint-disable-next-line no-unused-vars
 export function errorHandler(err, _req, res, _next) {
   if (err instanceof HttpError) {
     return res.status(err.status).json({ error: err.message, ...(err.details && { details: err.details }) });
   }
 
+  // Erros do body-parser (JSON malformado, corpo grande demais...)
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({ error: 'JSON inválido no corpo da requisição.' });
   }
@@ -18,6 +20,7 @@ export function errorHandler(err, _req, res, _next) {
     return res.status(413).json({ error: 'Corpo da requisição grande demais.' });
   }
 
+  // Erros do multer (upload)
   if (err.name === 'MulterError') {
     if (err.code === 'LIMIT_FILE_SIZE') {
       return res.status(413).json({ error: 'A imagem é grande demais (máximo de 5 MB).' });
@@ -28,7 +31,7 @@ export function errorHandler(err, _req, res, _next) {
   console.error('[erro]', err);
 
   if (DB_UNAVAILABLE.has(err.code)) {
-    return res.status(503).json({ error: 'Banco de dados indisponível.' });
+    return res.status(503).json({ error: 'Banco de dados indisponível. Tente novamente em instantes.' });
   }
 
   res.status(500).json({ error: 'Erro interno do servidor.' });

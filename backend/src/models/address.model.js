@@ -21,6 +21,7 @@ export async function findOwned(db, userId, id) {
 
 export function create(userId, data) {
   return withTransaction(async (db) => {
+    // O primeiro endereço do cliente já nasce como padrão.
     const [[{ total }]] = await db.query('SELECT COUNT(*) AS total FROM enderecos WHERE id_usuario = ? FOR UPDATE', [userId]);
     const padrao = data.padrao || total === 0;
     if (padrao) await db.query('UPDATE enderecos SET padrao = 0 WHERE id_usuario = ?', [userId]);
@@ -35,6 +36,7 @@ export function create(userId, data) {
   });
 }
 
+/** Retorna true se removeu; false se o endereço não existe (ou não é do usuário). */
 export async function remove(userId, id) {
   try {
     const [resultado] = await pool.query('DELETE FROM enderecos WHERE id_endereco = ? AND id_usuario = ?', [id, userId]);

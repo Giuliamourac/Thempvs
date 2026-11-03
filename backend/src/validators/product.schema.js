@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// Mensagem diferente para "campo ausente" e "valor com tipo errado".
 const campo = (rotulo) => ({
   error: (issue) =>
     issue.input === undefined
@@ -7,6 +8,7 @@ const campo = (rotulo) => ({
       : `O campo ${rotulo.toLowerCase()} é inválido.`,
 });
 
+// Aceita número ou texto numérico ("19,90" / "19.90"); texto vazio NÃO vira 0.
 const numeroDeTexto = (valor) => {
   if (typeof valor !== 'string') return valor;
   const limpo = valor.trim().replace(',', '.');
@@ -51,6 +53,7 @@ const inteiroNaoNegativo = (rotulo, maximo = 1_000_000) =>
       .max(maximo, `${rotulo}: valor muito alto.`),
   );
 
+/** Estoque de UMA combinação tamanho x cor. `cor` é null quando o produto não tem cores. */
 const variacao = z.object({
   tamanho: z.string(campo('Tamanho')).trim().min(1, 'Variação: informe o tamanho.'),
   cor: z
@@ -61,6 +64,7 @@ const variacao = z.object({
   estoque: inteiroNaoNegativo('Estoque'),
 });
 
+/** Uma URL de imagem da galeria (nossa ou externa). */
 const urlImagem = z
   .string(campo('Imagem'))
   .trim()
@@ -71,6 +75,7 @@ const urlImagem = z
     'A URL da imagem deve começar com http://, https:// ou /.',
   );
 
+// Vazio ("" ou null) vira null; texto numérico ("19,90") vira número.
 const numeroOuNulo = (valor) => (valor === null || valor === undefined || valor === '' ? null : numeroDeTexto(valor));
 
 const medida = (rotulo) =>
@@ -84,6 +89,7 @@ const medida = (rotulo) =>
       .nullable(),
   );
 
+/** Medidas (cm) de UM tamanho. Qualquer campo pode ficar vazio. */
 const medidasDoTamanho = z.object({
   tamanho: z.string(campo('Tamanho')).trim().min(1, 'Medidas: informe o tamanho.'),
   busto_cm: medida('Busto'),
@@ -95,6 +101,7 @@ const medidasDoTamanho = z.object({
   coxa_cm: medida('Coxa'),
 });
 
+/** Corpo aceito por POST e PUT /api/products. */
 export const productSchema = z
   .object({
   nome: z
@@ -125,6 +132,7 @@ export const productSchema = z
     .min(1, 'Informe a categoria.')
     .max(80, 'A categoria deve ter no máximo 80 caracteres.'),
 
+  // Preço promocional (opcional): é o que o cliente paga quando preenchido. Vazio = sem promoção.
   preco_promocional: z.preprocess(
     numeroOuNulo,
     z
@@ -135,6 +143,7 @@ export const productSchema = z
       .nullable(),
   ),
 
+  // Coleção (opcional): o "slug" de uma coleção que já existe (veja GET /api/colecoes).
   colecao: z
     .string(campo('Coleção'))
     .trim()
@@ -146,8 +155,10 @@ export const productSchema = z
 
   cores: listaDeTextos('Cores').default([]),
 
+  // Estoque por combinação. Combinações que não aparecerem aqui ficam com 0 (novas) ou mantêm o valor (existentes).
   variacoes: z.array(variacao, campo('Estoque por variação')).max(900, 'Variações demais.').default([]),
 
+  // A coluna produtos.peso_gramas é NOT NULL no banco.
   peso_gramas: z.preprocess(
     numeroDeTexto,
     z
@@ -157,10 +168,13 @@ export const productSchema = z
       .max(100_000, 'Peso muito alto.'),
   ),
 
+  // Medidas por tamanho (opcional).
   medidas: z.array(medidasDoTamanho, campo('Medidas')).max(60, 'Medidas demais.').default([]),
 
+  // Galeria: a PRIMEIRA imagem é a capa.
   imagens: z.array(urlImagem, campo('Imagens')).max(8, 'No máximo 8 imagens por produto.').default([]),
 
+  // Campo antigo (uma imagem só): continua aceito e vira a primeira da galeria.
   imagem_url: imagemUrl,
   })
   .superRefine((dados, ctx) => {
@@ -205,17 +219,21 @@ export const productSchema = z
     });
   })
   .transform((dados) => {
+    // Compatibilidade: sem galeria mas com o campo antigo imagem_url → a galeria é só essa imagem.
     const { imagem_url: antiga, ...resto } = dados;
     const imagens = [...new Set(resto.imagens.length ? resto.imagens : antiga ? [antiga] : [])];
     return { ...resto, imagens };
   });
 
+/** Parâmetro :id — inteiro positivo. */
 export const idSchema = z.coerce
   .number({ error: 'ID inválido.' })
   .int('ID inválido.')
   .positive('ID inválido.');
 
+// ---------- GET /api/products?... ----------
 
+// ?cor=Preto&cor=Branco (repetido) ou ?cor=Preto → sempre uma lista.
 const lista = z.preprocess(
   (valor) => (valor === undefined ? [] : Array.isArray(valor) ? valor : [valor]),
   z.array(z.string().trim().min(1).max(80)).max(30),
@@ -238,4 +256,5 @@ export const listProductsQuery = z.object({
   limite: z.coerce.number({ error: 'limite inválido.' }).int().min(1).max(100).default(12),
 });
 
+/** Parâmetro :ref de GET /api/products/:ref — um id (123) ou um slug (camiseta-preta). */
 export const refSchema = z.string().trim().min(1).max(150);

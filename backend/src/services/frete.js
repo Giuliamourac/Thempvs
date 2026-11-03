@@ -1,3 +1,11 @@
+/**
+ * Cálculo de frete — TABELA FIXA por região e peso.
+ *
+ * É um substituto simples para uma integração real (Correios, Melhor Envio, Frenet...):
+ * quando você contratar uma, troque só a função `cotarFrete` — o resto do sistema
+ * (cotação na tela, criação do pedido) já passa por ela e SEMPRE recalcula no servidor.
+ * Valores em centavos.
+ */
 import { env } from '../config/env.js';
 
 const REGIAO_POR_UF = {
@@ -9,6 +17,7 @@ const REGIAO_POR_UF = {
   AC: 'norte', AP: 'norte', AM: 'norte', PA: 'norte', RO: 'norte', RR: 'norte', TO: 'norte',
 };
 
+// base = primeiro kg · porKg = cada kg adicional · prazo = dias corridos (serviço padrão)
 const TABELA = {
   sudeste: { base: 1990, porKg: 400, prazo: 4 },
   sul: { base: 2490, porKg: 500, prazo: 5 },
@@ -35,7 +44,7 @@ export function cotarFrete({ uf, pesoGramas, subtotalCentavos }) {
     {
       servico: 'expresso',
       nome: 'Expresso',
-      valor_centavos: Math.round((padrao * 1.8) / 10) * 10,
+      valor_centavos: Math.round((padrao * 1.8) / 10) * 10, // o frete grátis vale só para o padrão
       prazo_dias: Math.max(1, Math.ceil(regiao.prazo / 2)),
       gratis: false,
     },

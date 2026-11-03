@@ -120,7 +120,14 @@ try {
     .join('\n');
   await connection.query('CREATE DATABASE IF NOT EXISTS ?? CHARACTER SET utf8mb4', [env.db.database]);
   await connection.query('USE ??', [env.db.database]);
-  await connection.query(comandos);
+  try {
+    await connection.query(comandos);
+  } catch (erro) {
+    console.error(`\nERRO ao criar as tabelas: ${erro.code ?? ''} ${erro.sqlMessage ?? erro.message}`);
+    console.error('As tabelas seguintes a esta NÃO foram criadas. Corrija o problema e rode "npm run db:init" de novo.');
+    process.exitCode = 1;
+    throw erro;
+  }
   console.log(`Schema aplicado no banco "${env.db.database}".`);
 
   // AJUSTE 1 — tamanho.sg_tamanho era VARCHAR(5)
@@ -146,6 +153,12 @@ try {
     'FK_item_pedido_variacao',
     'FOREIGN KEY (id_variacao) REFERENCES produto_variacao(id_variacao) ON DELETE SET NULL',
   );
+
+  // AJUSTE 9 — medidas_produto sem chave primária (versões antigas) ganha id_medida
+  if (!(await colunas('medidas_produto')).has('id_medida')) {
+    await connection.query('ALTER TABLE medidas_produto ADD COLUMN id_medida INT AUTO_INCREMENT PRIMARY KEY FIRST');
+    console.log('medidas_produto: chave primária id_medida adicionada.');
+  }
 
   // AJUSTE 8
   await adicionarColunaSeFaltar('medidas_produto', 'id_tamanho', 'INT NULL');
