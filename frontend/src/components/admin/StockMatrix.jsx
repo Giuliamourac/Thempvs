@@ -1,5 +1,10 @@
+/** Chave de uma combinação no objeto `estoques` do formulário. */
 export const chaveEstoque = (tamanho, cor) => `${tamanho}|${cor ?? ''}`;
 
+/**
+ * Tabela "Estoque por variação": uma linha por tamanho e uma coluna por cor
+ * (ou uma única coluna quando o produto não tem cores). Campo vazio vale 0.
+ */
 export default function StockMatrix({ tamanhos, cores, estoques, onChange, error }) {
   const colunas = cores.length > 0 ? cores : [null];
 

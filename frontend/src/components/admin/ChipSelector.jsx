@@ -1,11 +1,16 @@
 import { useState } from 'react';
 import { normalizar } from '../../utils/format.js';
 
+/**
+ * Seleção múltipla em "chips": opções sugeridas + campo para adicionar valores próprios.
+ * `value` é a lista selecionada (ex.: ['P', 'M']).
+ */
 export default function ChipSelector({ id, label, sugestoes, value, onChange, error, placeholder }) {
   const [novo, setNovo] = useState('');
 
   const jaTem = (item) => value.some((v) => normalizar(v) === normalizar(item));
 
+  // Sugestões + itens já selecionados que não são sugestão (valores próprios).
   const opcoes = [...sugestoes, ...value.filter((v) => !sugestoes.some((s) => normalizar(s) === normalizar(v)))];
 
   const alternar = (item) =>
@@ -51,7 +56,7 @@ export default function ChipSelector({ id, label, sugestoes, value, onChange, er
           onChange={(e) => setNovo(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              e.preventDefault();
+              e.preventDefault(); // não envia o formulário
               adicionar();
             }
           }}

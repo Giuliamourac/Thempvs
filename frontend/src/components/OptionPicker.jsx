@@ -1,5 +1,10 @@
 import { Fragment, useId } from 'react';
 
+/**
+ * Seletor de uma opção (tamanho, cor...) no estilo "tamanhos" do layout original:
+ * inputs radio escondidos + labels clicáveis.
+ * `isDisabled(opcao)` marca opções indisponíveis (ex.: esgotadas): ficam riscadas e não podem ser escolhidas.
+ */
 export default function OptionPicker({ options, value, onChange, label, isDisabled }) {
   const grupo = useId();
 

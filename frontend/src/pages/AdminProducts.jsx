@@ -16,6 +16,7 @@ import { COLUNAS_MEDIDAS } from '../components/admin/MeasuresMatrix.jsx';
 
 const POR_PAGINA = 10;
 
+/** Validação rápida no navegador (o backend valida de novo — é a validação que vale). */
 function validar(valores) {
   const erros = {};
   const preco = Number(valores.preco);
@@ -70,6 +71,7 @@ const paraFormulario = (produto) => ({
   ),
 });
 
+/** Uma linha por combinação tamanho x cor (campo vazio = 0). */
 const montarVariacoes = (valores) => {
   const cores = valores.cores.length > 0 ? valores.cores : [null];
   return valores.tamanhos.flatMap((tamanho) =>
@@ -81,6 +83,7 @@ const montarVariacoes = (valores) => {
   );
 };
 
+/** Só os tamanhos que têm ao menos uma medida preenchida. */
 const montarMedidas = (valores) =>
   valores.tamanhos
     .map((tamanho) => {
@@ -116,6 +119,7 @@ export default function AdminProducts() {
   const params = useMemo(() => ({ q: buscaAplicada, pagina, limite: POR_PAGINA }), [buscaAplicada, pagina]);
   const { products, total, paginas, loading, error: erroLista, reload } = useProducts(params);
 
+  // A busca espera o usuário parar de digitar (300 ms) e volta para a página 1.
   useEffect(() => {
     const timer = setTimeout(() => {
       setBuscaAplicada(busca.trim());
@@ -132,6 +136,7 @@ export default function AdminProducts() {
   const [alerta, setAlerta] = useState(null); // { tipo: 'sucesso' | 'erro', texto }
   const formularioRef = useRef(null);
 
+  // Alertas de sucesso somem sozinhos; os de erro ficam até serem fechados.
   useEffect(() => {
     if (alerta?.tipo !== 'sucesso') return undefined;
     const timer = setTimeout(() => setAlerta(null), 5000);
@@ -178,6 +183,8 @@ export default function AdminProducts() {
       limparFormulario();
       reload();
     } catch (erro) {
+      // Erros de validação do backend: { campo, mensagem } → mostra embaixo de cada campo.
+      // Erros de variacoes.N.campo aparecem juntos embaixo da tabela de estoque.
       const campoDoErro = (campo) =>
         campo.startsWith('variacoes') ? 'estoques' : campo.startsWith('medidas') ? 'medidas' : campo.startsWith('imagens') ? 'imagens' : campo;
       const porCampo = Object.fromEntries((erro.fieldErrors ?? []).map((e) => [campoDoErro(e.campo), e.mensagem]));
@@ -188,6 +195,7 @@ export default function AdminProducts() {
     }
   };
 
+  /** Envia UM arquivo e devolve a URL salva; mostra o erro e relança para o ImageGallery pular esta imagem. */
   const aoEnviarImagem = async (arquivo) => {
     const rejeitar = (texto) => {
       setAlerta({ tipo: 'erro', texto: `${arquivo.name}: ${texto}` });

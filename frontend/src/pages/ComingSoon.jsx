@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+/** Páginas que existiam como arquivos vazios no projeto original (Sale, Lojas, Contato...). */
 export default function ComingSoon({ titulo }) {
   return (
     <main className="estado-pagina">

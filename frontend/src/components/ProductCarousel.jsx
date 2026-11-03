@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ProductCard from './ProductCard.jsx';
 
+/** Vitrine com setas: mostra `visiveis` produtos por vez e avança de página em página. */
 export default function ProductCarousel({ titulo, produtos, visiveis = 4 }) {
   const [inicio, setInicio] = useState(0);
 

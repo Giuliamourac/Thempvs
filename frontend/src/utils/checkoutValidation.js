@@ -1,5 +1,6 @@
 import { somenteDigitos } from './format.js';
 
+/** Etapa a que cada campo pertence (editar um campo invalida a conclusão da etapa). */
 export const ETAPA_DO_CAMPO = {
   enderecoId: 'endereco',
   cep: 'endereco',
@@ -14,6 +15,7 @@ export const ETAPA_DO_CAMPO = {
   metodo: 'pagamento',
 };
 
+/** id do elemento a focar quando o campo é inválido. */
 export const ID_DO_CAMPO = {
   enderecoId: 'enderecoSalvo-novo',
   cep: 'campoCep',
@@ -27,8 +29,12 @@ export const ID_DO_CAMPO = {
   metodo: 'metodoPix',
 };
 
+/** Nome do campo no backend → nome do campo no formulário (só o que muda). */
 export const CAMPO_DO_BACKEND = { uf: 'estado' };
 
+// Cada validador devolve { campo: 'mensagem' } na ordem em que os campos aparecem na tela.
+
+/** Endereço salvo escolhido = nada a validar; "novo" = valida o formulário. */
 export function validarEndereco(form) {
   if (!form.enderecoId) return { enderecoId: 'Escolha um endereço de entrega.' };
   if (form.enderecoId !== 'novo') return {};
@@ -64,6 +70,7 @@ export const VALIDADORES = {
   pagamento: validarPagamento,
 };
 
+/** Máscaras aplicadas enquanto o usuário digita. */
 export const MASCARAS = {
   cep: (valor) => {
     const d = somenteDigitos(valor).slice(0, 8);

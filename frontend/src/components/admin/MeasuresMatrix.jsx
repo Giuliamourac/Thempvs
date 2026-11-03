@@ -1,3 +1,4 @@
+/** Colunas de medida (nome do campo na API → rótulo). */
 export const COLUNAS_MEDIDAS = [
   ['busto_cm', 'Busto'],
   ['cintura_cm', 'Cintura'],
@@ -8,6 +9,7 @@ export const COLUNAS_MEDIDAS = [
   ['coxa_cm', 'Coxa'],
 ];
 
+/** Tabela "Medidas (cm)": uma linha por tamanho. Tudo opcional; campo vazio = não informado. */
 export default function MeasuresMatrix({ tamanhos, medidas, onChange, error }) {
   if (tamanhos.length === 0) return null;
 

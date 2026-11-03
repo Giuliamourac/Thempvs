@@ -1,3 +1,4 @@
+/** Campo de formulário do checkout: rótulo + controle + ajuda + mensagem de erro. */
 export default function Field({
   id,
   label,

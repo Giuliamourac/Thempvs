@@ -7,6 +7,7 @@ export const QUANTIDADE_MAXIMA = 99;
 
 const texto = (valor) => String(valor ?? '').trim();
 
+/** Maior quantidade permitida para o item: o estoque conhecido (se houver) ou 99. */
 export const limiteDoItem = (item) =>
   Number.isInteger(item?.estoque) && item.estoque >= 1 ? Math.min(QUANTIDADE_MAXIMA, item.estoque) : QUANTIDADE_MAXIMA;
 
@@ -16,6 +17,11 @@ const limitarQuantidade = (quantidade, maximo = QUANTIDADE_MAXIMA) => {
   return Math.min(maximo, Math.max(QUANTIDADE_MINIMA, numero));
 };
 
+/**
+ * Valida e normaliza um item vindo da tela ou do localStorage. Retorna null se inválido.
+ * `variacaoId` é o id da variação (produto + tamanho + cor) no banco: é ele que a API usa no pedido.
+ * Preço, cor, tamanho e estoque aqui são só para EXIBIR; o servidor recalcula tudo no pedido.
+ */
 function sanearItem(bruto) {
   if (!bruto || typeof bruto !== 'object') return null;
 
@@ -53,9 +59,14 @@ function gravarStorage(chave, itens) {
   try {
     window.localStorage.setItem(chave, JSON.stringify(itens));
   } catch {
+    // localStorage indisponível (modo privado, cota cheia): o carrinho segue só em memória.
   }
 }
 
+/**
+ * Estado do carrinho persistido em localStorage.
+ * Itens da mesma variação (produto + tamanho + cor) são somados em uma única linha.
+ */
 export function useCartStore(chave = CHAVE_CARRINHO) {
   const [itens, setItens] = useState(() => lerStorage(chave));
 
@@ -63,6 +74,7 @@ export function useCartStore(chave = CHAVE_CARRINHO) {
     gravarStorage(chave, itens);
   }, [chave, itens]);
 
+  // Mantém várias abas sincronizadas.
   useEffect(() => {
     const aoMudarStorage = (evento) => {
       if (evento.key === chave) setItens(lerStorage(chave));
@@ -71,6 +83,11 @@ export function useCartStore(chave = CHAVE_CARRINHO) {
     return () => window.removeEventListener('storage', aoMudarStorage);
   }, [chave]);
 
+  /**
+   * Retorna { ok, limitado }:
+   *   ok=false      → dados inválidos;
+   *   limitado=true → já havia todo o estoque no carrinho (ou a soma passou dele e foi cortada).
+   */
   const adicionar = useCallback(
     (dados) => {
       const novo = sanearItem(dados);
@@ -111,6 +128,10 @@ export function useCartStore(chave = CHAVE_CARRINHO) {
 
   const limpar = useCallback(() => setItens([]), []);
 
+  /**
+   * Alinha o carrinho com a cotação do servidor (`quote.itens`): atualiza estoque e preço,
+   * tira o que não está mais à venda/esgotou e reduz quantidades acima do estoque.
+   */
   const ajustarAoServidor = useCallback((itensDaCotacao) => {
     const porId = new Map(itensDaCotacao.map((linha) => [linha.variacao_id, linha]));
     setItens((atuais) =>

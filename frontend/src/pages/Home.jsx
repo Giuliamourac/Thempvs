@@ -10,7 +10,7 @@ const REDES = [
 ];
 
 const POR_VITRINE = 8;
-const PARAMS_HOME = { limite: POR_VITRINE * 2 }; 
+const PARAMS_HOME = { limite: POR_VITRINE * 2 }; // 16 mais recentes: 8 em Lançamentos + 8 em Destaques
 
 function Vitrines({ products, loading, error, reload }) {
   if (loading) {
@@ -28,6 +28,8 @@ function Vitrines({ products, loading, error, reload }) {
     );
   }
 
+  // A tabela products não tem um campo "destaque": os mais recentes entram em
+  // "Lançamentos" e os seguintes em "Destaques".
   const lancamentos = products.slice(0, POR_VITRINE);
   const destaques = products.slice(POR_VITRINE, POR_VITRINE * 2);
 
@@ -46,6 +48,8 @@ function Vitrines({ products, loading, error, reload }) {
 
 function Categorias() {
   const { categorias } = useCatalogo();
+  // "Dança" é a identidade da marca inteira, então leva para a listagem completa;
+  // as demais vêm do banco (só as que têm produtos).
   const itens = [
     { rotulo: 'Dança', to: '/produtos' },
     ...categorias

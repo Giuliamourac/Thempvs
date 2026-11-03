@@ -14,11 +14,11 @@ export const FORMULARIO_VAZIO = {
   categoria: '',
   colecao: '',
   peso_gramas: '',
-  imagens: [],
-  medidas: {}, 
+  imagens: [], // URLs; a primeira é a capa
+  medidas: {}, // { P: { busto_cm: '50', ... } }
   tamanhos: [],
   cores: [],
-  estoques: {},
+  estoques: {}, // { 'P|Preto': '5' } — estoque de cada combinação tamanho x cor
 };
 
 function Campo({ id, label, erro, obrigatorio, children }) {
@@ -38,6 +38,10 @@ function Campo({ id, label, erro, obrigatorio, children }) {
   );
 }
 
+/**
+ * Formulário de cadastro/edição. É controlado pelo pai (AdminProducts):
+ * `valores` = estado atual, `erros` = { campo: mensagem }.
+ */
 export default function ProductForm({
   valores,
   erros,

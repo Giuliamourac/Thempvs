@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import { CatalogProvider } from './context/CatalogContext.jsx';
 import { CartProvider } from './context/CartContext.jsx';
 
+// A ordem importa: base primeiro; os demais são escopados por página (.page-*).
 import './styles/base.css';
 import './styles/home.css';
 import './styles/products.css';

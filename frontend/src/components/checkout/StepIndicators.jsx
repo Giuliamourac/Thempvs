@@ -27,6 +27,7 @@ export const ETAPAS = [
   { nome: 'revisao', titulo: 'Revisão do Pedido' },
 ];
 
+/** Círculos no topo do checkout; clicar abre a etapa correspondente. */
 export default function StepIndicators({ aberta, concluidas, onAbrir }) {
   return (
     <ol className="etapas" aria-label="Etapas do checkout">
@@ -65,6 +66,7 @@ export default function StepIndicators({ aberta, concluidas, onAbrir }) {
   );
 }
 
+// Linha de ligação entre dois círculos (um <li> decorativo, como no HTML original).
 function FragmentComLinha({ mostrarLinha, children }) {
   return (
     <>

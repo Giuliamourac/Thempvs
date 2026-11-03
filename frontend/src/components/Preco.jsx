@@ -1,5 +1,6 @@
 import { formatarMoeda } from '../utils/format.js';
 
+/** Preço do produto: em promoção mostra o preço antigo riscado + o preço final. */
 export default function Preco({ produto, className = '' }) {
   const emPromocao = produto.preco_promocional !== null && produto.preco_promocional < produto.preco;
 

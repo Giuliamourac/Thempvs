@@ -3,6 +3,10 @@ import { createCategory, createCollection, getCategories, getCollections } from 
 
 const CatalogContext = createContext(null);
 
+/**
+ * Categorias e coleções vindas do banco (GET /api/categorias e /api/colecoes), carregadas uma vez.
+ * `criarCategoria` / `criarColecao` (admin) já atualizam a lista.
+ */
 export function CatalogProvider({ children }) {
   const [categorias, setCategorias] = useState([]);
   const [colecoes, setColecoes] = useState([]);
@@ -18,6 +22,7 @@ export function CatalogProvider({ children }) {
         setColecoes(cols);
       })
       .catch(() => {
+        /* sem catálogo: os selects ficam vazios e os rótulos caem no próprio slug */
       })
       .finally(() => ativo && setPronto(true));
     return () => {
@@ -47,6 +52,7 @@ export function CatalogProvider({ children }) {
       recarregar,
       criarCategoria,
       criarColecao,
+      /** Nome bonito da categoria a partir do slug (cai no próprio slug se não achar). */
       nomeDaCategoria: (slug) => categorias.find((c) => c.slug === slug)?.nome ?? slug,
     }),
     [categorias, colecoes, pronto, recarregar, criarCategoria, criarColecao],

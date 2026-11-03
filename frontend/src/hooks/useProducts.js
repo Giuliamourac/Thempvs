@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getErrorMessage, getProducts, isCancel } from '../services/api.js';
 
+/**
+ * Carrega UMA página de produtos do servidor. `params` = filtros da API (veja getProducts).
+ * Devolve { products, total, paginas, loading, error, reload }.
+ * (Use a mesma chave estável: o efeito refaz a busca quando o conteúdo de `params` muda.)
+ */
 export function useProducts(params = {}) {
   const [dados, setDados] = useState({ itens: [], total: 0, paginas: 1 });
   const [loading, setLoading] = useState(true);

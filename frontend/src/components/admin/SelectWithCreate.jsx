@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+/**
+ * <select> com "+ Criar novo...": o admin cria categoria/coleção sem sair do formulário.
+ * `opcoes` = [{ slug, nome }]; `onCriar(nome)` devolve o item criado (ou lança).
+ */
 export default function SelectWithCreate({ id, value, onChange, opcoes, onCriar, vazio, rotuloCriar, className, ...resto }) {
   const [criando, setCriando] = useState(false);
   const [nome, setNome] = useState('');

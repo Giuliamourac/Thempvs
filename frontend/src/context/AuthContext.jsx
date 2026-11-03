@@ -11,7 +11,12 @@ import {
 
 const AuthContext = createContext(null);
 
-
+/**
+ * Sessão do usuário. `status`:
+ *   'carregando' — conferindo o token salvo com o servidor (não decida nada ainda)
+ *   'pronto'     — `usuario` é o usuário logado ou null
+ * A API é quem manda: o token só prova quem você é; o perfil (admin) vem sempre do servidor.
+ */
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [status, setStatus] = useState(() => (tokenSalvo.ler() ? 'carregando' : 'pronto'));
@@ -24,6 +29,7 @@ export function AuthProvider({ children }) {
       .then((u) => setUsuario(u))
       .catch((erro) => {
         if (isCancel(erro)) return;
+        // 401: o interceptor já apagou o token. Servidor fora do ar: segue deslogado (o token fica salvo).
         setUsuario(null);
       })
       .finally(() => {
@@ -32,6 +38,7 @@ export function AuthProvider({ children }) {
     return () => controller.abort();
   }, []);
 
+  // Sessão vencida no meio do uso.
   useEffect(() => {
     const aoExpirar = () => setUsuario(null);
     window.addEventListener(EVENTO_SESSAO_EXPIRADA, aoExpirar);

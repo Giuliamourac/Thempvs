@@ -1,3 +1,4 @@
+/** Etapa expansível do checkout (só uma fica aberta por vez; o controle é do pai). */
 export default function Step({ nome, titulo, aberta, onAlternar, children }) {
   const botaoId = `botaoEtapa-${nome}`;
   const painelId = `painelEtapa-${nome}`;

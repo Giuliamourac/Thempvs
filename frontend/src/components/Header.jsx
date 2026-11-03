@@ -15,6 +15,10 @@ const LINKS = [
   { to: '/quem-usa', rotulo: 'Quem Usa' },
 ];
 
+/**
+ * Na listagem (/produtos) a busca filtra enquanto digita, via ?q=.
+ * Nas outras páginas, Enter leva para a listagem já filtrada.
+ */
 function CampoBusca() {
   const navigate = useNavigate();
   const { pathname } = useLocation();

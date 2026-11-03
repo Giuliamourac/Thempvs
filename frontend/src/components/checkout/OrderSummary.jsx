@@ -97,6 +97,7 @@ export default function OrderSummary({ cart, quote, carregando, erro, freteEscol
   const { itens } = cart;
   const linhaDe = (item) => quote?.itens.find((linha) => linha.variacao_id === item.variacaoId);
 
+  // Subtotal do servidor quando já chegou; senão a estimativa do carrinho.
   const subtotal = quote ? quote.subtotal : cart.totais.subtotalCentavos / 100;
   const frete = freteEscolhido?.valor ?? null;
   const total = subtotal + (frete ?? 0);

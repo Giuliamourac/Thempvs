@@ -13,6 +13,7 @@ const ORDENS = [
   { valor: 'nome', rotulo: 'Nome (A–Z)' },
 ];
 
+/** Opções da sidebar: as que existem no banco (com quantidade) + as marcadas na URL que não existem mais. */
 const opcoesDe = (itens = [], selecionados, valorDe = (i) => i.nome) => {
   const opcoes = itens.map((item) => ({ valor: valorDe(item), rotulo: `${item.nome} (${item.total})` }));
   for (const marcado of selecionados) {
@@ -21,7 +22,11 @@ const opcoesDe = (itens = [], selecionados, valorDe = (i) => i.nome) => {
   return opcoes;
 };
 
-
+/**
+ * Os filtros ficam na URL (?categoria=camisetas&cor=Preto&tamanho=M&q=jaqueta&ordem=menor_preco):
+ * dá para compartilhar o link, o botão "voltar" funciona e os links do rodapé/home
+ * já abrem a listagem filtrada. Quem filtra, ordena e pagina é o SERVIDOR.
+ */
 export default function Products() {
   const [params, setParams] = useSearchParams();
   const [facetas, setFacetas] = useState(null);
@@ -38,6 +43,7 @@ export default function Products() {
   const colecao = params.get('colecao') ?? '';
   const ordem = ORDENS.some((o) => o.valor === params.get('ordem')) ? params.get('ordem') : 'recentes';
 
+  // Muda sempre que qualquer filtro/ordem muda (os arrays acima são recriados a cada render).
   const chaveDosFiltros = params.toString();
   const filtros = useMemo(
     () => ({ categoria: categorias, cor: cores, tamanho: tamanhos, q: busca, colecao, ordem }),
@@ -49,6 +55,7 @@ export default function Products() {
     getProductFilters({ signal: controller.signal })
       .then(setFacetas)
       .catch(() => {
+        /* sem facetas a sidebar fica só com o que está marcado na URL */
       });
     return () => controller.abort();
   }, [versao]);

@@ -35,6 +35,7 @@ export default function App() {
         <Route path="admin/produtos" element={<RequireAuth admin><AdminProducts /></RequireAuth>} />
         <Route path="admin/pedidos" element={<RequireAuth admin><AdminOrders /></RequireAuth>} />
 
+        {/* Páginas que ainda estavam vazias no projeto original */}
         <Route path="sale" element={<ComingSoon titulo="Sale" />} />
         <Route path="lojas" element={<ComingSoon titulo="Lojas" />} />
         <Route path="contato" element={<ComingSoon titulo="Contato" />} />

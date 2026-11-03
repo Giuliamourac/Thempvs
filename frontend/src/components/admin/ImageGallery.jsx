@@ -3,6 +3,11 @@ import ProductImage from '../ProductImage.jsx';
 
 const MAXIMO = 8;
 
+/**
+ * Galeria do produto: envia arquivos (vários de uma vez), aceita colar uma URL, reordena e remove.
+ * A PRIMEIRA imagem é a capa (a que aparece nas listagens).
+ * `imagens` = lista de URLs; `onChange(novaLista)`; `onEnviar(file)` devolve a URL salva (ou lança).
+ */
 export default function ImageGallery({ imagens, onChange, onEnviar, onErro, erro }) {
   const arquivoRef = useRef(null);
   const [enviando, setEnviando] = useState(0);
@@ -24,8 +29,9 @@ export default function ImageGallery({ imagens, onChange, onEnviar, onErro, erro
       try {
         const nova = await onEnviar(arquivo);
         atual = [...atual, nova];
-        onChange(atual); 
+        onChange(atual); // mostra cada imagem assim que ela chega
       } catch {
+        /* o pai já mostrou o erro desta imagem; segue com as próximas */
       } finally {
         setEnviando((n) => n - 1);
       }

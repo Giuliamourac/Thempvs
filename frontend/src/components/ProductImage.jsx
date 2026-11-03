@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IMAGEM_PADRAO } from '../constants/catalog.js';
 
+/** <img> que troca por uma imagem padrão quando não há URL ou ela falha ao carregar. */
 export default function ProductImage({ src, alt = '', ...props }) {
   const [falhou, setFalhou] = useState(false);
 

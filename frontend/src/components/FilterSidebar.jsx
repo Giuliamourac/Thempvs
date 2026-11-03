@@ -1,3 +1,7 @@
+/**
+ * Barra lateral de filtros da listagem.
+ * grupos: [{ nome, titulo, opcoes: [{ valor, rotulo }], selecionados: [valor] }]
+ */
 export default function FilterSidebar({ grupos, onAlternar }) {
   return (
     <aside className="barra-filtros" aria-label="Filtros">

@@ -1,6 +1,12 @@
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
+/**
+ * Protege uma rota. Sem login → /entrar (volta para cá depois).
+ * `admin`: logado mas sem perfil de administrador → aviso de acesso restrito.
+ *
+ * Isto é só conforto de navegação: quem protege os dados de verdade é a API (401/403).
+ */
 export default function RequireAuth({ admin = false, children }) {
   const { usuario, status, ehAdmin } = useAuth();
   const { pathname, search } = useLocation();

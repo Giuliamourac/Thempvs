@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Preco from './Preco.jsx';
 import ProductImage from './ProductImage.jsx';
 
+/** Cartão da listagem /produtos. A seleção de tamanho é independente em cada cartão. */
 export default function CatalogCard({ produto }) {
   const [selecionado, setSelecionado] = useState('');
 

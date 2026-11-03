@@ -13,7 +13,7 @@ import ProductImage from '../components/ProductImage.jsx';
 import { COLUNAS_MEDIDAS } from '../components/admin/MeasuresMatrix.jsx';
 
 const LIMITE_DESCRICAO = 160;
-const PARAMS_RECOMENDADOS = { limite: 12 }; 
+const PARAMS_RECOMENDADOS = { limite: 12 }; // os 12 mais recentes bastam para as seções de sugestão
 
 function Descricao({ texto }) {
   const [aberta, setAberta] = useState(false);
@@ -36,6 +36,7 @@ function Descricao({ texto }) {
 
 const POUCAS_UNIDADES = 5;
 
+/** Tabela de medidas do produto (vinda do painel). Só mostra as colunas que têm algum valor. */
 function TabelaMedidas({ medidas }) {
   const colunas = COLUNAS_MEDIDAS.filter(([campo]) => medidas.some((linha) => linha[campo] !== null));
   if (medidas.length === 0 || colunas.length === 0) return null;
@@ -67,6 +68,7 @@ function TabelaMedidas({ medidas }) {
   );
 }
 
+/** Imagem grande + miniaturas clicáveis (a primeira é a capa). */
 function Galeria({ produto }) {
   const imagens = produto.imagens.length ? produto.imagens : [produto.imagem_url];
   const [indice, setIndice] = useState(0);
@@ -104,6 +106,7 @@ function ProdutoInfo({ produto }) {
   const variacoes = produto.variacoes ?? [];
   const temCores = produto.cores.length > 0;
 
+  // Estoque da combinação tamanho + cor (0 se ela não existe).
   const estoqueDe = (t, c) =>
     variacoes.find((v) => v.tamanho === t && (!temCores || v.cor === c))?.estoque ?? 0;
 
@@ -122,6 +125,7 @@ function ProdutoInfo({ produto }) {
   const aoEscolherCor = (nova) => {
     setCor(nova);
     setAviso({ tipo: '', texto: '' });
+    // Se o tamanho escolhido não existe nessa cor, desmarca.
     if (tamanho && estoqueDe(tamanho, nova) === 0) setTamanho('');
   };
 
@@ -135,7 +139,7 @@ function ProdutoInfo({ produto }) {
       variacaoId: variacao.id,
       produtoId: String(produto.id),
       nome: produto.nome,
-      precoCentavos: paraCentavos(produto.preco_final),
+      precoCentavos: paraCentavos(produto.preco_final), // estimativa; o servidor recalcula
       cor,
       tamanho,
       imagem: produto.imagem_url ?? '',
@@ -308,6 +312,7 @@ export default function ProductDetail() {
 
   const { produto } = estado;
 
+  // Link antigo (/produtos/12): vai para o endereço bonito (/produtos/camiseta-preta).
   if (ref !== produto.slug) return <Navigate to={`/produtos/${produto.slug}`} replace />;
 
   const outros = products.filter((p) => p.id !== produto.id);

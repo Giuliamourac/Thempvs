@@ -1,3 +1,9 @@
+/*
+ * Página de carrinho / checkout.
+ * Cabeçalho e rodapé vêm do main.css (mesmo padrão das outras páginas).
+ * Tudo aqui é escopado em .pagina-checkout para não afetar o resto do site.
+ */
+
 .pagina-checkout
 {
     --AzulCheckout: #2e435d;

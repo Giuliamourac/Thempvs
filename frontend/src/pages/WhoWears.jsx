@@ -55,6 +55,7 @@ export default function WhoWears() {
       <main className="quemUsa">
         <h1 className="quemTitulo">Quem usa, usa Thempvs</h1>
 
+        {/* Primeiro bloco: foto à esquerda, texto à direita */}
         <section className="quemBloco">
           <img className="quemFotoRedonda" src={placeholder(400, 400, '8a8a8a')} alt="" />
 
@@ -74,6 +75,7 @@ export default function WhoWears() {
           </div>
         </section>
 
+        {/* Mosaico de fotos */}
         <section className="quemMosaico" aria-label="Fotos">
           <img className="mosaicoA" src={placeholder(425, 705, '6b6b6b')} alt="" />
 
@@ -91,6 +93,7 @@ export default function WhoWears() {
           </div>
         </section>
 
+        {/* Segundo bloco: texto à esquerda, foto à direita */}
         <section className="quemBloco quemBlocoInvertido">
           <div className="quemTexto">
             <p>{TEXTO_LOREM}</p>
@@ -110,6 +113,7 @@ export default function WhoWears() {
           <img className="quemFotoRedonda" src={placeholder(400, 400, '7a2fc9')} alt="" />
         </section>
 
+        {/* Chamada final */}
         <section className="quemChamada">
           <h2>Saiba onde e quando achar</h2>
           <div className="quemWordmark">

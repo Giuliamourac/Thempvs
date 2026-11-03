@@ -16,7 +16,7 @@ import StepIndicators, { ETAPAS } from './StepIndicators.jsx';
 import { AddressStep, PaymentStep, ReviewStep, enderecoEmLinha } from './steps.jsx';
 
 const FORM_INICIAL = {
-  enderecoId: '', 
+  enderecoId: '', // id de um endereço salvo, ou "novo"
   cep: '',
   destinatario: '',
   rua: '',
@@ -55,6 +55,10 @@ function PedirLogin() {
   );
 }
 
+/**
+ * Checkout em 3 etapas (endereço → entrega e pagamento → revisão).
+ * Preço, estoque e frete vêm do servidor (useQuote) e o pedido é criado em POST /api/pedidos.
+ */
 export default function Checkout({ cart }) {
   const navigate = useNavigate();
   const { usuario, status } = useAuth();
@@ -72,6 +76,7 @@ export default function Checkout({ cart }) {
 
   useEffect(() => () => clearTimeout(temporizador.current), []);
 
+  // Endereços salvos do cliente (o padrão já vem marcado).
   const usuarioId = usuario?.id;
   useEffect(() => {
     if (!usuarioId) return undefined;
@@ -99,6 +104,8 @@ export default function Checkout({ cart }) {
   const { quote, carregando, erro: erroCotacao, recarregar } = useQuote(cart.itens, ufDoPedido);
   const freteEscolhido = quote?.fretes.find((opcao) => opcao.servico === form.frete) ?? null;
 
+  // ---------- campos ----------
+
   const alterarCampo = (nome, valor) => {
     const valorFinal = MASCARAS[nome] ? MASCARAS[nome](valor) : valor;
     setForm((atual) => ({ ...atual, [nome]: valorFinal }));
@@ -114,6 +121,8 @@ export default function Checkout({ cart }) {
     setConcluidas((atuais) => (atuais[etapa] ? { ...atuais, [etapa]: false } : atuais));
   };
 
+  // ---------- etapas ----------
+
   const abrirEtapa = (nome, { focarPrimeiro = false } = {}) => {
     setAberta(nome);
     if (nome === 'revisao') {
@@ -123,6 +132,7 @@ export default function Checkout({ cart }) {
 
     if (focarPrimeiro) {
       clearTimeout(temporizador.current);
+      // Espera a animação abrir o painel para o foco funcionar.
       temporizador.current = setTimeout(() => {
         const secao = document.querySelector(`.etapa[data-etapa="${nome}"]`);
         secao?.querySelector('input:not([type=hidden]):not([disabled]), select, textarea')?.focus({
@@ -135,6 +145,7 @@ export default function Checkout({ cart }) {
 
   const alternarEtapa = (nome) => (aberta === nome ? setAberta(null) : abrirEtapa(nome));
 
+  /** Valida uma etapa; guarda os erros e devolve o primeiro campo inválido (ou undefined). */
   const validarEtapa = (nome) => {
     const novosErros = VALIDADORES[nome](form);
     setErros((atuais) => ({ ...semErrosDaEtapa(atuais, nome), ...novosErros }));
@@ -159,6 +170,7 @@ export default function Checkout({ cart }) {
       setForm((atual) => ({ ...atual, enderecoId: String(salvo.id) }));
       return true;
     } catch (erro) {
+      // Erro de validação do servidor: mostra embaixo de cada campo.
       const porCampo = Object.fromEntries(
         (erro.fieldErrors ?? []).map(({ campo, mensagem }) => [CAMPO_DO_BACKEND[campo] ?? campo, mensagem]),
       );
@@ -209,11 +221,12 @@ export default function Checkout({ cart }) {
       const primeiroInvalido = validarEtapa(nome);
       if (primeiroInvalido) {
         abrirEtapa(nome);
-        setTimeout(() => focar(ID_DO_CAMPO[primeiroInvalido]), 0);
+        setTimeout(() => focar(ID_DO_CAMPO[primeiroInvalido]), 0); // espera o painel abrir
         return;
       }
     }
     if (!enderecoSalvo) {
+      // Preencheu "outro endereço" mas ainda não o salvou (voltou à revisão direto).
       abrirEtapa('endereco');
       return;
     }
@@ -230,6 +243,7 @@ export default function Checkout({ cart }) {
       navigate(`/pedidos/${pedido.id}`, { replace: true, state: { novo: true } });
     } catch (erro) {
       setErroConclusao(getErrorMessage(erro));
+      // 409: estoque mudou. Mostra o que faltou e atualiza a cotação (o resumo oferece "Ajustar carrinho").
       setProblemas(erro.response?.status === 409 ? (erro.response.data?.details ?? []) : []);
       if (erro.response?.status === 409) recarregar();
     } finally {
@@ -302,6 +316,7 @@ export default function Checkout({ cart }) {
         />
       </div>
 
+      {/* Área decorativa da marca (placeholder até existir o arquivo original) */}
       <div className="checkout-decoracao" aria-hidden="true">
         <img src="https://placehold.co/460x240/ffffff/2e435d?text=DANCER" alt="" />
       </div>

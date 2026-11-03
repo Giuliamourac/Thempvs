@@ -4,7 +4,10 @@ import Preco from './Preco.jsx';
 import ProductImage from './ProductImage.jsx';
 import OptionPicker from './OptionPicker.jsx';
 
+/** Cartão de produto da home e das seções "Você também pode gostar" / "Lançamentos". */
 export default function ProductCard({ produto }) {
+  // Como no layout original, a escolha de tamanho no cartão é só visual;
+  // a compra acontece na página do produto.
   const [tamanho, setTamanho] = useState('');
 
   return (

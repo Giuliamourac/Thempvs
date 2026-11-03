@@ -16,6 +16,7 @@ const textoFrete = (opcao) =>
   `${opcao.nome} — ${opcao.valor === 0 ? 'Grátis' : formatarMoeda(opcao.valor)} — ` +
   `até ${opcao.prazo_dias} ${opcao.prazo_dias === 1 ? 'dia' : 'dias'}`;
 
+// Cada etapa recebe: form (valores), errors, onChange(nome, valor) e onSubmit.
 
 export function AddressStep({ form, errors, onChange, onSubmit, enderecos, enviando }) {
   const campo = (nome) => ({
