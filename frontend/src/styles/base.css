@@ -1,0 +1,327 @@
+:root
+{
+    --WhiteMainColor: #FFFFFF;
+    --ContrastGrey: #484848;
+    --PureBlack: #000000;
+    --BrownSocial: #3b2a20;
+}
+
+* 
+{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body
+{
+    font-family: "Inter", sans-serif;
+}
+
+img
+{
+    display: block;
+    max-width: 100%;
+}
+
+/* ---------- Header ---------- */
+
+header
+{
+    font-size: 20px;
+}
+
+header div:first-child
+{
+    background-color: var(--PureBlack);
+    font-size: 10px;
+    color: var(--WhiteMainColor);
+    text-align: center;
+    padding: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+header nav
+{
+   display: flex;
+   flex-wrap: nowrap;
+   align-items: center;
+   justify-content: space-between;
+   margin: 9.5px 20px 9.5px 20px;
+}
+
+.header-logo
+{
+    flex-shrink: 0;
+}
+
+.header-logo img
+{
+    height: 40px;
+    width: auto;
+}
+
+header ul
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    list-style: none;
+}
+
+header nav div
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+header nav div input
+{
+    width: 260px;
+    height: 41px;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+}
+
+header a
+{
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--PureBlack);
+}
+
+#carrinho
+{
+    position: relative;
+}
+
+#carrinho img
+{
+    min-width: 30px;
+    height: 30px;
+    width: auto;
+}
+
+#avatarNavbar
+{
+    width: 55px;
+    height: 55px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+/* footwer */
+
+
+.footer {
+    background-color: #4a4a4a; 
+    color: #ffffff;
+    padding: 40px 20px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-col h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 6px;
+}
+
+.footer-col ul li a, 
+.footer-col p {
+    color: #d1d1d1;
+    text-decoration: none;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.footer-col ul li a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.email-link {
+    text-decoration: underline;
+    color: #d1d1d1;
+}
+
+.logo-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo .icon {
+    font-size: 1.8rem;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    padding: 2px 8px;
+}
+
+.logo h2 {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+.tagline {
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: #cccccc;
+}
+
+.map-col {
+    width: 200px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+@media (max-width: 900px)
+{
+    header ul
+    {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px 20px;
+    }
+
+    header nav
+    {
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    header nav div
+    {
+        gap: 20px;
+    }
+
+    header nav div input
+    {
+        width: 200px;
+    }
+}
+
+/* ---------- Acréscimos do port para React ---------- */
+
+/* O logo é preto; no rodapé escuro ele precisa ficar branco (já era assim no checkout). */
+.footer .logo img
+{
+    filter: brightness(0) invert(1);
+}
+
+header nav ul a.active
+{
+    font-weight: 600;
+}
+
+.cart-badge
+{
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+    color: var(--WhiteMainColor);
+    background-color: #2e435d;
+    border-radius: 9px;
+}
+
+.sr-only
+{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.estado-pagina
+{
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.estado-pagina h1
+{
+    margin-bottom: 12px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #111;
+}
+
+.estado-pagina a,
+.link-voltar
+{
+    color: #2e435d;
+    font-weight: 600;
+}
+
+.estado-pagina .estado-erro
+{
+    color: #b3261e;
+}
+
+.botao-padrao
+{
+    display: inline-block;
+    padding: 10px 24px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #2e435d;
+    border: 0;
+    border-radius: 2px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.botao-padrao:hover
+{
+    background-color: #1e2c3d;
+}

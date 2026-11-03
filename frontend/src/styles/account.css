@@ -1,0 +1,557 @@
+.conta
+{
+    --conta-azul: #2e435d;
+    --conta-azul-escuro: #1e2c3d;
+    --conta-borda: #d0d0d0;
+    --conta-erro: #b3261e;
+
+    max-width: 980px;
+    margin: 40px auto 70px;
+    padding: 0 20px;
+    font-family: "Inter", sans-serif;
+    color: #111;
+}
+
+.conta-estreita
+{
+    max-width: 440px;
+}
+
+.conta h1
+{
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.conta h2
+{
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.conta-form
+{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.conta-campo
+{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+}
+
+.conta-campo span
+{
+    font-weight: 500;
+}
+
+.conta input
+{
+    height: 42px;
+    padding: 0 12px;
+    font: inherit;
+    font-size: 0.95rem;
+    border: 1px solid var(--conta-borda);
+    border-radius: 4px;
+}
+
+.conta input:focus-visible
+{
+    outline: 3px solid #7d9cc4;
+    outline-offset: 1px;
+}
+
+.conta input[aria-invalid="true"]
+{
+    border-color: var(--conta-erro);
+}
+
+.conta-erro
+{
+    font-size: 0.85rem;
+    color: var(--conta-erro);
+}
+
+.conta-botao
+{
+    height: 44px;
+    padding: 0 22px;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #fff;
+    background: var(--conta-azul);
+    border: 1px solid var(--conta-azul);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.conta-botao:hover:not(:disabled)
+{
+    background: var(--conta-azul-escuro);
+}
+
+.conta-botao:disabled
+{
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.conta-botao.secundario
+{
+    color: var(--conta-azul);
+    background: #fff;
+}
+
+.conta-botao.perigo
+{
+    background: var(--conta-erro);
+    border-color: var(--conta-erro);
+}
+
+.conta-rodape
+{
+    margin-top: 18px;
+    font-size: 0.9rem;
+}
+
+.conta-rodape a,
+.conta-links a,
+.conta-tabela a,
+.pedido-voltar a
+{
+    color: var(--conta-azul);
+    font-weight: 500;
+}
+
+.conta-dados
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.conta-dados dt
+{
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #666;
+}
+
+.conta-dados dd
+{
+    font-size: 1rem;
+}
+
+.conta-links
+{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.conta-aviso
+{
+    margin-bottom: 18px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    border: 1px solid;
+    border-radius: 4px;
+}
+
+.conta-aviso.sucesso
+{
+    color: #14532d;
+    background: #e4f4ea;
+    border-color: #a7d7b6;
+}
+
+.conta-aviso.erro
+{
+    color: #7f1d1d;
+    background: #fdeaea;
+    border-color: #f0b4b4;
+}
+
+/* ---------- Tabelas e pedidos ---------- */
+
+.conta-tabela-wrap
+{
+    overflow-x: auto;
+}
+
+.conta-tabela
+{
+    width: 100%;
+    font-size: 0.9rem;
+    border-collapse: collapse;
+}
+
+.conta-tabela th,
+.conta-tabela td
+{
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.conta-tabela th
+{
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #555;
+    background: #f6f6f6;
+}
+
+.pedido-variacao
+{
+    display: block;
+    font-size: 0.78rem;
+    color: #666;
+}
+
+.pedido-topo
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+}
+
+.pedido-topo h1
+{
+    margin-bottom: 0;
+}
+
+.pedido-data
+{
+    margin: 6px 0 20px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.pedido-bloco
+{
+    margin-bottom: 24px;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid var(--conta-borda);
+    border-radius: 6px;
+}
+
+.pedido-bloco p
+{
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.pedido-envio,
+.pedido-cliente
+{
+    margin-top: 10px;
+}
+
+.pedido-colunas
+{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+}
+
+.pedido-totais
+{
+    max-width: 280px;
+    margin: 14px 0 0 auto;
+    font-size: 0.9rem;
+}
+
+.pedido-totais div
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.pedido-totais .total
+{
+    margin-top: 4px;
+    padding-top: 8px;
+    font-weight: 600;
+    border-top: 1px solid var(--conta-borda);
+}
+
+.pedido-acoes
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.pedido-voltar
+{
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+
+/* ---------- Selo de status ---------- */
+
+.badge-status
+{
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border-radius: 999px;
+}
+
+.badge-pendente { color: #7a4b00; background: #fdf0d2; }
+.badge-pago { color: #0b4f6c; background: #d9eef8; }
+.badge-enviado { color: #3b2a8a; background: #e6e0fa; }
+.badge-entregue { color: #14532d; background: #dcf2e3; }
+.badge-cancelado { color: #7f1d1d; background: #fbdede; }
+
+/* ---------- Admin: navegação, filtros, matriz de estoque ---------- */
+
+.admin-nav
+{
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--admin-borda);
+}
+
+.admin-nav a
+{
+    margin-bottom: -2px;
+    padding: 9px 18px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #555;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+}
+
+.admin-nav a.active
+{
+    color: var(--admin-azul);
+    border-bottom-color: var(--admin-azul);
+}
+
+.admin-filtros
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.admin-filtros .admin-titulo-card
+{
+    margin-bottom: 0;
+    margin-right: auto;
+}
+
+.admin-filtro
+{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.admin-paginacao
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+    font-size: 0.85rem;
+}
+
+.admin-matriz
+{
+    width: auto;
+    min-width: 240px;
+}
+
+.admin-matriz th[scope="row"]
+{
+    font-weight: 600;
+    background: #f6f6f6;
+}
+
+.admin-input-estoque
+{
+    width: 86px;
+}
+
+.admin-total-estoque
+{
+    font-weight: 400;
+    color: #666;
+}
+
+/* ---------- Página do produto: opção esgotada e aviso de estoque ---------- */
+
+.page-detail .tamanhos input:disabled + label,
+.page-detail .tamanhos label.indisponivel
+{
+    color: #999;
+    text-decoration: line-through;
+    background: #f1f1f1;
+    border-color: #ddd;
+    cursor: not-allowed;
+}
+
+.aviso-poucas-unidades
+{
+    margin: 10px 0 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #9a3412;
+}
+
+/* ---------- Checkout ---------- */
+
+.pagina-checkout .metodos.opcoes-lista
+{
+    grid-template-columns: 1fr;
+    margin-bottom: 14px;
+}
+
+.pagina-checkout .metodos.opcoes-lista .metodo-caixa
+{
+    justify-content: flex-start;
+    padding: 10px 14px;
+    line-height: 1.4;
+    text-align: left;
+}
+
+.pagina-checkout .botao-link
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+    text-decoration: none;
+}
+
+.pagina-checkout .botao-secundario
+{
+    width: 100%;
+    max-width: 280px;
+    height: 47px;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--AzulCheckout);
+    background: #fff;
+    border: 2px solid var(--AzulCheckout);
+}
+
+.checkout-login
+{
+    padding: 24px;
+    font-size: 15px;
+    line-height: 1.5;
+    background: #fff;
+    border: 1px solid #5a6c85;
+}
+
+.checkout-login-botoes
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.lista-problemas
+{
+    margin: 6px 0 0 18px;
+}
+
+.resumo-item-problema
+{
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #b3261e;
+}
+
+.resumo-aviso-erro
+{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    color: #7f1d1d;
+    background: #fdeaea;
+    border: 1px solid #f0b4b4;
+}
+
+.resumo-ajustar
+{
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #fff;
+    background: #7f1d1d;
+    border: 0;
+    cursor: pointer;
+}
+
+@media (max-width: 640px)
+{
+    .pedido-colunas
+    {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- itens 4–6: promoção, ordenação, galeria, medidas ---------- */
+
+.preco-promo { display: inline-flex; flex-wrap: wrap; gap: 0 8px; align-items: baseline; }
+.preco-promo .preco-antigo { color: #8a8a8a; font-weight: 400; font-size: 0.85em; }
+.preco-promo .preco-novo { color: #b3261e; font-weight: 700; }
+
+.page-products .barra-ordem {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  margin-bottom: 16px; font-size: 14px; color: #484848;
+}
+.page-products .barra-ordem select { padding: 6px 8px; border: 1px solid #bbb; background: #fff; font: inherit; }
+
+.page-detail .miniaturas { justify-content: flex-start; gap: 12px; overflow-y: auto; scrollbar-width: thin; }
+.page-detail .miniatura { flex: 0 0 calc((100% - 24px) / 3); padding: 0; background: #eee; }
+.page-detail .miniatura[aria-current='true'] { border: 2px solid #111; }
+.page-detail .miniatura:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
+.page-detail .preco-parcelado .preco-antigo { text-decoration: line-through; }
+.page-detail .tag-colecao { display: inline-block; margin: 0 0 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #666; }
+.page-detail .tabela-medidas-container { overflow-x: auto; }
+
+.admin .admin-busca { max-width: 360px; margin-bottom: 12px; }
+.admin .admin-paginacao { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; font-size: 14px; }
+
+.admin .admin-galeria { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; }
+.admin .admin-galeria-item { width: 120px; }
+.admin .admin-galeria-img { position: relative; width: 120px; height: 160px; background: #eee; border: 1px solid #ddd; overflow: hidden; }
+.admin .admin-galeria-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.admin .admin-galeria-capa {
+  position: absolute; left: 4px; top: 4px; padding: 2px 6px; font-size: 11px; font-weight: 700;
+  background: #111; color: #fff; border-radius: 2px;
+}
+.admin .admin-galeria-acoes { display: flex; gap: 4px; margin-top: 6px; justify-content: space-between; }

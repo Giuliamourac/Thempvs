@@ -1,0 +1,32 @@
+{
+  "name": "thempvs-backend",
+  "version": "1.0.0",
+  "description": "API REST da Thempvs (Express + MySQL)",
+  "private": true,
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "db:init": "node scripts/init-db.js",
+    "admin:create": "node scripts/create-admin.js",
+    "gen:secret": "node scripts/gen-secret.js",
+    "uploads:clean": "node scripts/clean-uploads.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1161.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.7.2",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.5.0",
+    "mysql2": "^3.14.0",
+    "sharp": "^0.35.5",
+    "zod": "^4.0.0"
+  }
+}
