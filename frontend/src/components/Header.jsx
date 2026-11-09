@@ -9,7 +9,6 @@ const LINKS = [
   { to: '/', rotulo: 'Home', end: true },
   { to: '/produtos', rotulo: 'Produtos' },
   { to: '/sale', rotulo: 'Sale' },
-  { to: '/lojas', rotulo: 'Lojas' },
   { to: '/contato', rotulo: 'Contato' },
   { to: '/movement', rotulo: 'Movement' },
   { to: '/quem-usa', rotulo: 'Quem Usa' },

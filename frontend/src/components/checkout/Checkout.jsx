@@ -10,6 +10,7 @@ import {
   MASCARAS,
   VALIDADORES,
 } from '../../utils/checkoutValidation.js';
+import dancer from '../../assets/dancer.png';
 import OrderSummary from './OrderSummary.jsx';
 import Step from './Step.jsx';
 import StepIndicators, { ETAPAS } from './StepIndicators.jsx';
@@ -306,19 +307,21 @@ export default function Checkout({ cart }) {
             ))}
         </div>
 
-        <OrderSummary
-          cart={cart}
-          quote={quote}
-          carregando={carregando}
-          erro={erroCotacao}
-          freteEscolhido={freteEscolhido}
-          onTentarDeNovo={recarregar}
-        />
-      </div>
+        <div className="checkout-lateral">
+          <OrderSummary
+            cart={cart}
+            quote={quote}
+            carregando={carregando}
+            erro={erroCotacao}
+            freteEscolhido={freteEscolhido}
+            onTentarDeNovo={recarregar}
+          />
 
-      {/* Área decorativa da marca (placeholder até existir o arquivo original) */}
-      <div className="checkout-decoracao" aria-hidden="true">
-        <img src="https://placehold.co/460x240/ffffff/2e435d?text=DANCER" alt="" />
+          {/* Marca "Dancer", centralizada abaixo dos produtos do carrinho */}
+          <div className="checkout-decoracao" aria-hidden="true">
+            <img src={dancer} alt="" />
+          </div>
+        </div>
       </div>
     </main>
   );

@@ -15,6 +15,7 @@ import './styles/checkout.css';
 import './styles/who-wears.css';
 import './styles/admin.css';
 import './styles/account.css';
+import './styles/contact.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

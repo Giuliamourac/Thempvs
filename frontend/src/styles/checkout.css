@@ -44,7 +44,7 @@
 {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 36px 60px 0 60px;
+    padding: 36px 60px 90px 60px; /* 90px: respiro antes do rodapé */
     color: var(--PureBlack);
 }
 
@@ -850,21 +850,24 @@
 
 /* ---------- Área decorativa ---------- */
 
+.checkout-lateral
+{
+    min-width: 0;
+}
+
 .checkout-decoracao
 {
     display: flex;
-    justify-content: flex-end;
-    margin: 70px 0 110px 0;
-    padding-right: 80px;
+    justify-content: center;
+    margin: 48px 0 70px 0;
 }
 
 .checkout-decoracao img
 {
     width: 100%;
-    max-width: 460px;
+    max-width: 405px;
     height: auto;
-    aspect-ratio: 460 / 240;
-    background-color: var(--WhiteMainColor);
+    aspect-ratio: 405 / 213;
 }
 
 /* ---------- Responsividade ---------- */
@@ -873,7 +876,7 @@
 {
     .checkout
     {
-        padding: 28px 24px 0 24px;
+        padding: 28px 24px 70px 24px;
     }
 
     .checkout-colunas
@@ -884,9 +887,7 @@
 
     .checkout-decoracao
     {
-        justify-content: center;
-        margin: 50px 0 70px 0;
-        padding-right: 0;
+        margin: 40px 0 60px 0;
     }
 }
 
@@ -899,7 +900,7 @@
 
     .checkout
     {
-        padding: 24px 16px 0 16px;
+        padding: 24px 16px 56px 16px;
     }
 
     .checkout-titulo

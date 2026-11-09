@@ -6,11 +6,20 @@
     height: 548px;
 }
 
+/* Home: o banner segue a proporção do design (1439 x 548: 548px de altura em 1440px de largura).
+   A altura acompanha a largura da tela e a imagem inteira aparece, sem recorte. */
+.page-home .hero
+{
+    height: auto;
+    aspect-ratio: 1439 / 548;
+}
+
 .hero img
 {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 35%;
 }
 
 
@@ -33,7 +42,7 @@
 
 .page-home .vitrine h2
 {
-    font-size: 40px;
+    font-size: clamp(26px, 3.2vw, 40px);
 }
 
 
@@ -68,7 +77,8 @@
 
 .listaProdutos li
 {
-    flex: 1;
+    /* Largura fixa de 1/4 da linha: com 1, 2 ou 3 produtos o cartão não estica (antes: flex: 1). */
+    flex: 0 0 calc((100% - 30px) / 4);
     min-width: 0;
 }
 
@@ -145,36 +155,39 @@
 }
 
 
-/* categorias */
+/* categorias (Figma): 3 na primeira linha e 2 na segunda, as duas linhas centralizadas na tela,
+   com 10px de margem nas laterais e 4px entre as fotos. Vale para todas as larguras. */
+
+.categorias
+{
+    margin-top: 40px;
+}
 
 .categorias ul
 {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 4px;
-    margin: 30px 10px 0 10px;
+    --gap: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--gap);
+    width: calc(100% - 20px);
+    max-width: 1440px;
+    margin: 30px auto 0 auto;
+    padding: 0;
     list-style: none;
 }
 
 .categorias ul li
 {
-    grid-column: span 2;
-}
-
-.categorias ul li:nth-child(4)
-{
-    grid-column: 2 / span 2;
-}
-
-.categorias ul li:nth-child(5)
-{
-    grid-column: 4 / span 2;
+    flex: 0 0 calc((100% - 2 * var(--gap)) / 3);
+    min-width: 0;
 }
 
 .categorias ul a
 {
     position: relative;
     display: block;
+    overflow: hidden;
     color: var(--WhiteMainColor);
     text-decoration: none;
 }
@@ -184,14 +197,13 @@
     width: 100%;
     aspect-ratio: 470 / 450;
     object-fit: cover;
+    object-position: center;
+    transition: filter 0.2s ease;
 }
 
-.categorias ul a::after
+.categorias ul a:hover img
 {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.35);
+    filter: brightness(0.85);
 }
 
 .categorias ul h3
@@ -203,7 +215,10 @@
     align-items: center;
     justify-content: center;
     margin: 0;
-    font-size: 32px;
+    padding: 0 4px;
+    text-align: center;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+    font-size: clamp(11px, 3.2vw, 32px);
     font-weight: 700;
 }
 
@@ -254,12 +269,28 @@
     list-style: none;
 }
 
-.redesSociais img
+.redesSociais a
 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 96px;
     height: 96px;
-    border-radius: 100%;
+    color: var(--WhiteMainColor);
     background-color: var(--BrownSocial);
+    border-radius: 100%;
+    transition: opacity 0.2s ease;
+}
+
+.redesSociais a:hover
+{
+    opacity: 0.85;
+}
+
+.redesSociais svg
+{
+    width: 48px;
+    height: 48px;
 }
 
 
@@ -280,23 +311,6 @@
     .listaProdutos li
     {
         flex: 0 0 calc(50% - 5px);
-    }
-
-    .categorias ul
-    {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .categorias ul li,
-    .categorias ul li:nth-child(4),
-    .categorias ul li:nth-child(5)
-    {
-        grid-column: auto;
-    }
-
-    .categorias ul h3
-    {
-        font-size: 22px;
     }
 
     .sobre > img

@@ -1,4 +1,17 @@
+import foto1 from '../assets/quem-usa/foto-1.jpg';
+import foto2 from '../assets/quem-usa/foto-2.jpg';
+import foto3 from '../assets/quem-usa/foto-3.jpg';
+import foto4 from '../assets/quem-usa/foto-4.jpg';
+import foto5 from '../assets/quem-usa/foto-5.jpg';
+import foto6 from '../assets/quem-usa/foto-6.jpg';
+import foto7 from '../assets/quem-usa/foto-7.jpg';
+import foto8 from '../assets/quem-usa/foto-8.jpg';
+import historia1 from '../assets/quem-usa/historia-1.jpg';
+import historia2 from '../assets/quem-usa/historia-2.jpg';
+import bannerQuemUsa from '../assets/banners/quem-usa.jpg';
 import { Link } from 'react-router-dom';
+import { IconeCalendario, ICONE_REDE } from '../components/Icons.jsx';
+import { REDES_SOCIAIS } from '../constants/contact.js';
 import logo from '../assets/Logo1.png';
 
 const TEXTO_LOREM =
@@ -26,22 +39,21 @@ const EVENTOS = [
 const placeholder = (largura, altura, cor, texto = 'Foto') =>
   `https://placehold.co/${largura}x${altura}/${cor}/ffffff?text=${texto}`;
 
-function IconeFacebook() {
+/** Instagram + Facebook (links do projeto em constants/contact.js). */
+function Redes() {
   return (
-    <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round">
-      <rect x="5" y="5" width="38" height="38" rx="5" />
-      <path d="M33 43V28h5l1-6h-6v-4c0-2 1-3 3-3h3v-5h-4c-5 0-7 3-7 7v5h-5v6h5v15" />
-    </svg>
-  );
-}
-
-function IconeInstagram() {
-  return (
-    <svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="3">
-      <rect x="5" y="5" width="38" height="38" rx="11" />
-      <circle cx="24" cy="24" r="9" />
-      <circle cx="35" cy="13" r="1.8" fill="currentColor" stroke="none" />
-    </svg>
+    <ul className="quemRedes">
+      {REDES_SOCIAIS.filter(({ id }) => id !== 'tiktok').map(({ id, rotulo, url }) => {
+        const Icone = ICONE_REDE[id];
+        return (
+          <li key={id}>
+            <a href={url} target="_blank" rel="noopener noreferrer" aria-label={rotulo}>
+              <Icone />
+            </a>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -49,7 +61,7 @@ export default function WhoWears() {
   return (
     <div className="page-who-wears">
       <section className="quemBanner">
-        <img src={placeholder(1440, 507, '484848', 'Banner+Thempvs')} alt="" />
+        <img src={bannerQuemUsa} alt="" />
       </section>
 
       <main className="quemUsa">
@@ -57,39 +69,30 @@ export default function WhoWears() {
 
         {/* Primeiro bloco: foto à esquerda, texto à direita */}
         <section className="quemBloco">
-          <img className="quemFotoRedonda" src={placeholder(400, 400, '8a8a8a')} alt="" />
+          <img className="quemFotoRedonda" src={historia1} alt="" />
 
           <div className="quemTexto quemTextoDireita">
             <p>{TEXTO_LOREM}</p>
 
-            <ul className="quemRedes">
-              <li>
-                <a href="#" aria-label="Rede social"></a>
-              </li>
-              <li>
-                <a href="#" aria-label="Facebook">
-                  <IconeFacebook />
-                </a>
-              </li>
-            </ul>
+            <Redes />
           </div>
         </section>
 
         {/* Mosaico de fotos */}
         <section className="quemMosaico" aria-label="Fotos">
-          <img className="mosaicoA" src={placeholder(425, 705, '6b6b6b')} alt="" />
+          <img className="mosaicoA" src={foto1} alt="" />
 
           <div className="mosaicoColuna">
-            <img src={placeholder(425, 177, '7a7a7a')} alt="" />
-            <img src={placeholder(425, 370, '6b6b6b')} alt="" />
-            <img src={placeholder(425, 125, '7a7a7a')} alt="" />
+            <img src={foto2} alt="" />
+            <img src={foto3} alt="" />
+            <img src={foto4} alt="" />
           </div>
 
           <div className="mosaicoDireita">
-            <img className="mosaicoD1" src={placeholder(254, 275, '6b6b6b')} alt="" />
-            <img className="mosaicoD2" src={placeholder(254, 273, '7a7a7a')} alt="" />
-            <img className="mosaicoD3" src={placeholder(187, 563, '6b6b6b')} alt="" />
-            <img className="mosaicoD4" src={placeholder(460, 125, '7a7a7a')} alt="" />
+            <img className="mosaicoD1" src={foto5} alt="" />
+            <img className="mosaicoD2" src={foto6} alt="" />
+            <img className="mosaicoD3" src={foto7} alt="" />
+            <img className="mosaicoD4" src={foto8} alt="" />
           </div>
         </section>
 
@@ -98,19 +101,10 @@ export default function WhoWears() {
           <div className="quemTexto">
             <p>{TEXTO_LOREM}</p>
 
-            <ul className="quemRedes">
-              <li>
-                <a href="#" aria-label="Instagram">
-                  <IconeInstagram />
-                </a>
-              </li>
-              <li>
-                <a href="#" aria-label="Rede social"></a>
-              </li>
-            </ul>
+            <Redes />
           </div>
 
-          <img className="quemFotoRedonda" src={placeholder(400, 400, '7a2fc9')} alt="" />
+          <img className="quemFotoRedonda" src={historia2} alt="" />
         </section>
 
         {/* Chamada final */}
@@ -129,7 +123,7 @@ export default function WhoWears() {
                 <img src={placeholder(240, 160, '777777', 'Codigo+de+rua')} alt={evento.alt} />
                 <div className="quemEventoConteudo">
                   <h3>{evento.titulo}</h3>
-                  <p className="quemEventoData">Data: {evento.data} ▣</p>
+                  <p className="quemEventoData">Data: {evento.data} <IconeCalendario className="quemIconeData" /></p>
                   {evento.paragrafos.map((paragrafo) => (
                     <p key={paragrafo}>{paragrafo}</p>
                   ))}

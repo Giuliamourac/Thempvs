@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getErrorMessage, getProductFilters, getProducts, isCancel } from '../services/api.js';
-import CatalogCard from '../components/CatalogCard.jsx';
-import FilterSidebar from '../components/FilterSidebar.jsx';
+import ProductListing from '../components/ProductListing.jsx';
+import bannerProdutos from '../assets/banners/produtos.jpg';
+import { alternarNaUrl, opcoesDe } from '../utils/listing.js';
 
 const POR_PAGINA = 12;
 
@@ -12,15 +13,6 @@ const ORDENS = [
   { valor: 'maior_preco', rotulo: 'Maior preço' },
   { valor: 'nome', rotulo: 'Nome (A–Z)' },
 ];
-
-/** Opções da sidebar: as que existem no banco (com quantidade) + as marcadas na URL que não existem mais. */
-const opcoesDe = (itens = [], selecionados, valorDe = (i) => i.nome) => {
-  const opcoes = itens.map((item) => ({ valor: valorDe(item), rotulo: `${item.nome} (${item.total})` }));
-  for (const marcado of selecionados) {
-    if (!opcoes.some((o) => o.valor === marcado)) opcoes.push({ valor: marcado, rotulo: marcado });
-  }
-  return opcoes;
-};
 
 /**
  * Os filtros ficam na URL (?categoria=camisetas&cor=Preto&tamanho=M&q=jaqueta&ordem=menor_preco):
@@ -105,19 +97,7 @@ export default function Products() {
     [facetas, chaveDosFiltros],
   );
 
-  const alternarFiltro = (nome, valor) => {
-    setParams(
-      (atual) => {
-        const proximo = new URLSearchParams(atual);
-        const lista = proximo.getAll(nome);
-        proximo.delete(nome);
-        const nova = lista.includes(valor) ? lista.filter((v) => v !== valor) : [...lista, valor];
-        nova.forEach((item) => proximo.append(nome, item));
-        return proximo;
-      },
-      { replace: true },
-    );
-  };
+  const alternarFiltro = (nome, valor) => alternarNaUrl(setParams, nome, valor);
 
   const mudarOrdem = (nova) => {
     setParams(
@@ -134,72 +114,22 @@ export default function Products() {
   const temMais = !loading && !error && lista.pagina < lista.paginas;
 
   return (
-    <div className="page-products">
-      <main>
-        <section className="hero">
-          <img src="https://placehold.co/1440x548/484848/ffffff?text=Banner" alt="hero" />
-        </section>
-
-        <section className="vitrine">
-          <h2 className="titulo-secao">{busca ? `Resultados para "${busca}"` : 'Lançamentos'}</h2>
-
-          <div className="vitrine-container">
-            <FilterSidebar grupos={grupos} onAlternar={alternarFiltro} />
-
-            <div className="conteudo-produtos">
-              <div className="barra-ordem">
-                <p aria-live="polite">
-                  {!loading && !error && `${lista.total} ${lista.total === 1 ? 'produto' : 'produtos'}`}
-                </p>
-                <label>
-                  Ordenar por{' '}
-                  <select value={ordem} onChange={(e) => mudarOrdem(e.target.value)}>
-                    {ORDENS.map((o) => (
-                      <option key={o.valor} value={o.valor}>
-                        {o.rotulo}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-
-              <div className="grade-produtos">
-                {loading && <p className="estado-vazio">Carregando produtos...</p>}
-
-                {error && (
-                  <div className="estado-erro-grade">
-                    <p>{error}</p>
-                    <button type="button" className="botao-padrao" onClick={() => setVersao((v) => v + 1)}>
-                      Tentar novamente
-                    </button>
-                  </div>
-                )}
-
-                {!loading && !error && lista.itens.length === 0 && (
-                  <p className="estado-vazio">Nenhum produto encontrado para os filtros selecionados.</p>
-                )}
-
-                {lista.itens.map((produto) => (
-                  <CatalogCard key={produto.id} produto={produto} />
-                ))}
-              </div>
-
-              {temMais && (
-                <div className="container-carregar-mais">
-                  <button
-                    type="button"
-                    className="botao-carregar-mais"
-                    disabled={carregandoMais}
-                    onClick={carregarMais}
-                  >
-                    {carregandoMais ? 'Carregando...' : 'Carregar mais produtos'}
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
+    <ProductListing
+      titulo={busca ? `Resultados para "${busca}"` : 'Lançamentos'}
+      banner={{ src: bannerProdutos, alt: 'Thempvs' }}
+      grupos={grupos}
+      onAlternar={alternarFiltro}
+      ordens={ORDENS}
+      ordem={ordem}
+      onOrdem={mudarOrdem}
+      total={lista.total}
+      loading={loading}
+      error={error}
+      onRetry={() => setVersao((v) => v + 1)}
+      itens={lista.itens}
+      temMais={temMais}
+      carregandoMais={carregandoMais}
+      onCarregarMais={carregarMais}
+    />
   );
 }

@@ -1,6 +1,7 @@
 .quemBanner
 {
-    height: 507px;
+    width: 100%;
+    height: clamp(260px, 35vw, 507px); /* largura total da tela, como os outros banners */
     background-color: var(--ContrastGrey);
 }
 
@@ -104,8 +105,16 @@
 
 .quemRedes svg
 {
-    width: 46px;
-    height: 46px;
+    width: 34px;
+    height: 34px;
+}
+
+.quemIconeData
+{
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.12em;
 }
 
 /* ---------- Mosaico ---------- */
@@ -378,8 +387,8 @@
 
     .quemRedes svg
     {
-        width: 36px;
-        height: 36px;
+        width: 28px;
+        height: 28px;
     }
 
     .quemMosaico

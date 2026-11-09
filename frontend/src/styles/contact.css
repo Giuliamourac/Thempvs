@@ -1,0 +1,115 @@
+/* Página Contato */
+
+.page-contact .contato-banner
+{
+    width: 100%;
+    height: 130px;
+    background-color: var(--ContrastGrey);
+}
+
+.page-contact .contato-banner img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 600px)
+{
+    .page-contact .contato-banner
+    {
+        height: 90px;
+    }
+}
+
+.page-contact .contato-conteudo
+{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+}
+
+.page-contact .contato-secao
+{
+    padding: 40px 0;
+    text-align: center;
+}
+
+.page-contact .contato-secao h1,
+.page-contact .contato-secao h2
+{
+    margin-bottom: 36px;
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 500;
+    color: #111;
+}
+
+.page-contact hr
+{
+    border: 0;
+    border-top: 1px solid #bdbdbd;
+}
+
+.page-contact .contato-lista
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px clamp(32px, 9vw, 110px);
+    list-style: none;
+}
+
+.page-contact .contato-canal
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 150px;
+    color: #2e435d;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.page-contact .contato-canal:hover,
+.page-contact .contato-canal:focus-visible
+{
+    opacity: 0.75;
+}
+
+.page-contact .contato-icone
+{
+    width: 46px;
+    height: 46px;
+    margin-bottom: 4px;
+    color: #1d2b3d;
+}
+
+.page-contact .contato-rotulo
+{
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111;
+}
+
+.page-contact .contato-valor
+{
+    font-size: 0.9rem;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px)
+{
+    .page-contact .contato-secao
+    {
+        padding: 28px 0;
+    }
+
+    .page-contact .contato-lista
+    {
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+    }
+}

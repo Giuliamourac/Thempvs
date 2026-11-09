@@ -1,3 +1,4 @@
+import bannerMini from '../assets/banners/produto-mini.jpg';
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { FRETE_GRATIS_MINIMO_CENTAVOS } from '../constants/catalog.js';
@@ -323,7 +324,7 @@ export default function ProductDetail() {
   return (
     <div className="page-detail">
       <section className="mini-banner">
-        <img src="https://placehold.co/1440x200/484848/ffffff?text=Mini+Banner" alt="" />
+        <img src={bannerMini} alt="" />
       </section>
 
       <main className="container-produto">

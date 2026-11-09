@@ -282,3 +282,17 @@
     font-weight: 600;
     color: #b3261e;
 }
+
+/* Sale e Movement: banner em faixa (mais baixo que o da listagem de Produtos) */
+.page-products .hero--faixa
+{
+    height: clamp(140px, 24vw, 340px);
+}
+
+@media (max-width: 850px)
+{
+    .page-products .vitrine-container
+    {
+        gap: 24px;
+    }
+}

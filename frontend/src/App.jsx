@@ -6,14 +6,17 @@ import AdminOrders from './pages/AdminOrders.jsx';
 import AdminProducts from './pages/AdminProducts.jsx';
 import Cart from './pages/Cart.jsx';
 import ComingSoon from './pages/ComingSoon.jsx';
+import Contact from './pages/Contact.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
+import Movement from './pages/Movement.jsx';
 import NotFound from './pages/NotFound.jsx';
 import OrderDetail from './pages/OrderDetail.jsx';
 import Orders from './pages/Orders.jsx';
 import ProductDetail from './pages/ProductDetail.jsx';
 import Products from './pages/Products.jsx';
 import Register from './pages/Register.jsx';
+import Sale from './pages/Sale.jsx';
 import WhoWears from './pages/WhoWears.jsx';
 
 export default function App() {
@@ -35,11 +38,12 @@ export default function App() {
         <Route path="admin/produtos" element={<RequireAuth admin><AdminProducts /></RequireAuth>} />
         <Route path="admin/pedidos" element={<RequireAuth admin><AdminOrders /></RequireAuth>} />
 
-        {/* Páginas que ainda estavam vazias no projeto original */}
-        <Route path="sale" element={<ComingSoon titulo="Sale" />} />
+        <Route path="sale" element={<Sale />} />
+        <Route path="contato" element={<Contact />} />
+        <Route path="movement" element={<Movement />} />
+
+        {/* Ainda vazia no projeto original */}
         <Route path="lojas" element={<ComingSoon titulo="Lojas" />} />
-        <Route path="contato" element={<ComingSoon titulo="Contato" />} />
-        <Route path="movement" element={<ComingSoon titulo="Movement" />} />
 
         <Route path="*" element={<NotFound />} />
       </Route>

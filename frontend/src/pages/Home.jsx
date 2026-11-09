@@ -1,18 +1,31 @@
 import { Link } from 'react-router-dom';
-import { useCatalogo } from '../context/CatalogContext.jsx';
-import { useProducts } from '../hooks/useProducts.js';
+import { ICONE_REDE } from '../components/Icons.jsx';
 import ProductCarousel from '../components/ProductCarousel.jsx';
-
-const REDES = [
-  { rotulo: 'Instagram', sigla: 'IG' },
-  { rotulo: 'Facebook', sigla: 'FB' },
-  { rotulo: 'Tiktok', sigla: 'TK' },
-];
+import { REDES_SOCIAIS } from '../constants/contact.js';
+import { useProducts } from '../hooks/useProducts.js';
+import { emPromocao } from '../utils/listing.js';
+import bannerHome from '../assets/banners/home.svg';
+import bannerConheca from '../assets/banners/conheca.jpg';
+import imgDanca from '../assets/banners/categoria-danca.jpg';
+import imgCamisetas from '../assets/banners/categoria-camisetas.jpg';
+import imgConjuntos from '../assets/banners/categoria-conjuntos.jpg';
+import imgCalcas from '../assets/banners/categoria-calcas.jpg';
+import imgAcessorios from '../assets/banners/categoria-acessorios.jpg';
 
 const POR_VITRINE = 8;
-const PARAMS_HOME = { limite: POR_VITRINE * 2 }; // 16 mais recentes: 8 em Lançamentos + 8 em Destaques
+const PARAMS_HOME = { limite: 2 * POR_VITRINE }; // os produtos mais recentes cadastrados (alimentam as duas vitrines)
 
-function Vitrines({ products, loading, error, reload }) {
+// Categorias fixas da Home (design). Os slugs são os mesmos usados nos filtros de /produtos.
+const CATEGORIAS = [
+  { rotulo: 'Dança', to: '/produtos', imagem: imgDanca },
+  { rotulo: 'Camisetas', to: '/produtos?categoria=camisetas', imagem: imgCamisetas },
+  { rotulo: 'Conjuntos', to: '/produtos?categoria=conjuntos', imagem: imgConjuntos },
+  { rotulo: 'Calças', to: '/produtos?categoria=calcas', imagem: imgCalcas },
+  { rotulo: 'Acessórios', to: '/produtos?categoria=acessorios', imagem: imgAcessorios },
+];
+
+/** Lançamentos: os produtos cadastrados mais recentemente (a API já devolve do mais novo ao mais antigo). */
+function Lancamentos({ products, loading, error, reload }) {
   if (loading) {
     return <p className="estado-pagina">Carregando produtos...</p>;
   }
@@ -28,47 +41,35 @@ function Vitrines({ products, loading, error, reload }) {
     );
   }
 
-  // A tabela products não tem um campo "destaque": os mais recentes entram em
-  // "Lançamentos" e os seguintes em "Destaques".
-  const lancamentos = products.slice(0, POR_VITRINE);
-  const destaques = products.slice(POR_VITRINE, POR_VITRINE * 2);
-
-  if (lancamentos.length === 0) {
+  if (products.length === 0) {
     return <p className="estado-pagina">Nenhum produto cadastrado ainda.</p>;
   }
 
-  return (
-    <>
-      <ProductCarousel titulo="Lançamentos" produtos={lancamentos} />
-      <Categorias />
-      {destaques.length > 0 && <ProductCarousel titulo="Destaques" produtos={destaques} />}
-    </>
-  );
+  return <ProductCarousel titulo="Lançamentos" produtos={products.slice(0, POR_VITRINE)} />;
+}
+
+/**
+ * Destaques: a tabela produtos não tem um campo "destaque", então entram primeiro os produtos em
+ * promoção e, depois, os mais recentes. Só aparece quando há produtos (o aviso de carregando/erro
+ * já é mostrado pela seção de Lançamentos, acima das categorias).
+ */
+function Destaques({ products }) {
+  if (products.length === 0) return null;
+
+  const emDestaque = [...products.filter(emPromocao), ...products.filter((p) => !emPromocao(p))];
+
+  return <ProductCarousel titulo="Destaques" produtos={emDestaque.slice(0, POR_VITRINE)} />;
 }
 
 function Categorias() {
-  const { categorias } = useCatalogo();
-  // "Dança" é a identidade da marca inteira, então leva para a listagem completa;
-  // as demais vêm do banco (só as que têm produtos).
-  const itens = [
-    { rotulo: 'Dança', to: '/produtos' },
-    ...categorias
-      .filter((c) => c.total_produtos > 0)
-      .slice(0, 4)
-      .map((c) => ({ rotulo: c.nome, to: `/produtos?categoria=${encodeURIComponent(c.slug)}` })),
-  ];
-
   return (
     <section className="categorias">
       <h2>Categorias</h2>
       <ul>
-        {itens.map(({ rotulo, to }) => (
+        {CATEGORIAS.map(({ rotulo, to, imagem }) => (
           <li key={rotulo}>
             <Link to={to}>
-              <img
-                src="https://placehold.co/470x450/4a4a4a/ffffff?text=Categoria"
-                alt=""
-              />
+              <img src={imagem} alt="" />
               <h3>{rotulo}</h3>
             </Link>
           </li>
@@ -85,14 +86,18 @@ export default function Home() {
     <div className="page-home">
       <main>
         <section className="hero">
-          <img src="https://placehold.co/1440x548/484848/ffffff?text=Banner" alt="hero" />
+          <img src={bannerHome} alt="Thempvs" />
         </section>
 
-        <Vitrines products={products} loading={loading} error={error} reload={reload} />
+        <Lancamentos products={products} loading={loading} error={error} reload={reload} />
+
+        <Categorias />
+
+        <Destaques products={products} />
 
         <section className="sobre">
           <img
-            src="https://placehold.co/1280x440/e8e8e8/484848?text=Banner+Thempvs"
+            src={bannerConheca}
             alt="Equipe Thempvs"
           />
 
@@ -115,13 +120,16 @@ export default function Home() {
           </p>
 
           <ul className="redesSociais">
-            {REDES.map(({ rotulo, sigla }) => (
-              <li key={rotulo}>
-                <a href="#" aria-label={rotulo}>
-                  <img src={`https://placehold.co/60x60/3b2a20/ffffff?text=${sigla}`} alt="" />
-                </a>
-              </li>
-            ))}
+            {REDES_SOCIAIS.map(({ id, rotulo, url }) => {
+              const Icone = ICONE_REDE[id];
+              return (
+                <li key={id}>
+                  <a href={url} target="_blank" rel="noopener noreferrer" aria-label={rotulo}>
+                    <Icone />
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </section>
       </main>
