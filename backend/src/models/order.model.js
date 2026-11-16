@@ -32,7 +32,7 @@ async function detalhesDasVariacoes(db, ids) {
   if (ids.length === 0) return new Map();
   const [linhas] = await db.query(
     `SELECT v.id_variacao AS variacao_id, v.estoque, p.id_produto AS produto_id, p.nm_produto AS nome,
-            COALESCE(p.preco_promocional, p.preco) AS preco, p.peso_gramas, p.imagem_url, t.sg_tamanho AS tamanho, c.nm_cor AS cor
+            COALESCE(p.preco_promocional, p.preco) AS preco, p.peso_gramas, p.imagem_url, p.ativo, t.sg_tamanho AS tamanho, c.nm_cor AS cor
        FROM produto_variacao v
        JOIN produtos p ON p.id_produto = v.id_produto
        JOIN tamanho t ON t.id_tamanho = v.id_tamanho
@@ -54,7 +54,8 @@ export async function quote({ itens, uf }) {
   let peso = 0;
   const linhas = mesclados.map(({ variacao_id, quantidade }) => {
     const d = detalhes.get(variacao_id);
-    if (!d) return { variacao_id, quantidade, disponivel: false, problema: 'Este item não está mais à venda.' };
+    // Produto desativado no painel não se vende mais, mesmo que ainda esteja num carrinho antigo.
+    if (!d || !d.ativo) return { variacao_id, quantidade, disponivel: false, problema: 'Este item não está mais à venda.' };
 
     subtotal += centavos(d.preco) * quantidade;
     peso += d.peso_gramas * quantidade;
@@ -184,7 +185,7 @@ export function create(userId, { itens, endereco_id, frete_servico, metodo_pagam
     const problemas = [];
     for (const { variacao_id, quantidade } of mesclados) {
       const d = detalhes.get(variacao_id);
-      if (!d || !estoque.has(variacao_id)) {
+      if (!d || !d.ativo || !estoque.has(variacao_id)) {
         problemas.push({ variacao_id, mensagem: 'Um item do carrinho não está mais à venda.' });
       } else if (quantidade > estoque.get(variacao_id)) {
         const restam = estoque.get(variacao_id);

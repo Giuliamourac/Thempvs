@@ -13,6 +13,7 @@
     "start": "node src/server.js",
     "db:init": "node scripts/init-db.js",
     "admin:create": "node scripts/create-admin.js",
+    "seed:movement": "node scripts/seed-movement.js",
     "gen:secret": "node scripts/gen-secret.js",
     "uploads:clean": "node scripts/clean-uploads.js",
     "storage:test": "node scripts/test-storage.js"

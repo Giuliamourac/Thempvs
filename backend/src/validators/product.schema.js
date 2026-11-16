@@ -174,6 +174,15 @@ export const productSchema = z
   // Galeria: a PRIMEIRA imagem é a capa.
   imagens: z.array(urlImagem, campo('Imagens')).max(8, 'No máximo 8 imagens por produto.').default([]),
 
+  // Produto à venda? Omitido = não muda (na edição) / ativo (no cadastro).
+  ativo: z.boolean(campo('Ativo')).optional(),
+
+  // Fotos de cada cor ({ "Preto": [url, ...] }): a loja mostra a galeria da cor escolhida.
+  // `imagens` (acima) são as fotos gerais, usadas por quem não tem foto própria.
+  imagens_por_cor: z
+    .record(z.string(), z.array(urlImagem, campo('Imagens da cor')).max(8, 'No máximo 8 imagens por cor.'))
+    .default({}),
+
   // Campo antigo (uma imagem só): continua aceito e vira a primeira da galeria.
   imagem_url: imagemUrl,
   })
@@ -201,6 +210,12 @@ export const productSchema = z
       tamanhosMedidos.add(chave);
     });
 
+    Object.keys(dados.imagens_por_cor).forEach((nomeCor) => {
+      if (!cores.has(nomeCor.toLowerCase())) {
+        ctx.addIssue({ code: 'custom', path: ['imagens_por_cor', nomeCor], message: `Imagens: a cor "${nomeCor}" não está na lista de cores do produto.` });
+      }
+    });
+
     dados.variacoes.forEach((item, indice) => {
       const erro = (campoErro, message) => ctx.addIssue({ code: 'custom', path: ['variacoes', indice, campoErro], message });
 
@@ -222,7 +237,15 @@ export const productSchema = z
     // Compatibilidade: sem galeria mas com o campo antigo imagem_url → a galeria é só essa imagem.
     const { imagem_url: antiga, ...resto } = dados;
     const imagens = [...new Set(resto.imagens.length ? resto.imagens : antiga ? [antiga] : [])];
-    return { ...resto, imagens };
+
+    // Fotos por cor: chaves com a grafia da lista de cores do produto, na ordem dela, sem listas vazias.
+    const imagensPorCor = {};
+    for (const cor of resto.cores) {
+      const chave = Object.keys(resto.imagens_por_cor).find((k) => k.toLowerCase() === cor.toLowerCase());
+      const urls = chave ? [...new Set(resto.imagens_por_cor[chave])] : [];
+      if (urls.length) imagensPorCor[cor] = urls;
+    }
+    return { ...resto, imagens, imagens_por_cor: imagensPorCor };
   });
 
 /** Parâmetro :id — inteiro positivo. */
@@ -249,6 +272,11 @@ export const listProductsQuery = z.object({
   q: z.string().trim().max(100).optional(),
   ordem: z.enum(ORDENS, { error: `ordem deve ser: ${ORDENS.join(', ')}.` }).default('recentes'),
   em_estoque: z
+    .enum(['1', 'true', '0', 'false'])
+    .optional()
+    .transform((valor) => valor === '1' || valor === 'true'),
+  // Só administradores (a rota exige login quando isto vem ligado): inclui produtos desativados.
+  inativos: z
     .enum(['1', 'true', '0', 'false'])
     .optional()
     .transform((valor) => valor === '1' || valor === 'true'),

@@ -158,16 +158,25 @@ async function gravarMedidas(db, produtoId, tamanhos, medidas) {
  * copiada em produtos.imagem_url). Devolve as URLs que SAÍRAM da galeria, para apagar os arquivos
  * depois que a transação der certo.
  */
-async function gravarImagens(db, produtoId, urls) {
+async function gravarImagens(db, produtoId, data, cores) {
+  const gerais = data.imagens;
+  // [id da cor, urls] na ordem das cores do produto (já validado: toda chave é uma cor do produto).
+  const porCor = Object.entries(data.imagens_por_cor ?? {}).map(([nome, urls]) => [cores.idPorNome.get(nome.toLowerCase()), urls]);
+
+  const linhas = [
+    ...gerais.map((url, ordem) => [produtoId, url, ordem, null]),
+    ...porCor.flatMap(([idCor, urls]) => urls.map((url, ordem) => [produtoId, url, ordem, idCor])),
+  ];
+  const todas = linhas.map((linha) => linha[1]);
+
   const [antigas] = await db.query('SELECT url FROM produto_imagem WHERE id_produto = ?', [produtoId]);
   await db.query('DELETE FROM produto_imagem WHERE id_produto = ?', [produtoId]);
-  if (urls.length) {
-    await db.query('INSERT INTO produto_imagem (id_produto, url, ordem) VALUES ?', [
-      urls.map((url, ordem) => [produtoId, url, ordem]),
-    ]);
-  }
-  await db.query('UPDATE produtos SET imagem_url = ? WHERE id_produto = ?', [urls[0] ?? null, produtoId]);
-  return antigas.map((linha) => linha.url).filter((url) => !urls.includes(url));
+  if (linhas.length) await db.query('INSERT INTO produto_imagem (id_produto, url, ordem, id_cor) VALUES ?', [linhas]);
+
+  // Capa da listagem: a primeira foto geral; sem fotos gerais, a primeira foto da primeira cor que tem foto.
+  const capa = gerais[0] ?? porCor[0]?.[1][0] ?? null;
+  await db.query('UPDATE produtos SET imagem_url = ? WHERE id_produto = ?', [capa, produtoId]);
+  return antigas.map((linha) => linha.url).filter((url) => !todas.includes(url));
 }
 
 async function idDaColecao(db, slug) {
@@ -184,7 +193,7 @@ async function gravarOpcoes(db, produtoId, data) {
   const cores = await gravarCores(db, produtoId, data.cores);
   await gravarVariacoes(db, produtoId, tamanhos, cores, data.variacoes);
   await gravarMedidas(db, produtoId, tamanhos, data.medidas);
-  return gravarImagens(db, produtoId, data.imagens);
+  return gravarImagens(db, produtoId, data, cores);
 }
 
 /**
@@ -238,7 +247,8 @@ const SELECT_PRODUTOS = `
          col.slug AS colecao_slug,
          col.nm_colecao AS colecao_nome,
          p.imagem_url,
-         p.peso_gramas
+         p.peso_gramas,
+         p.ativo
   ${FROM_PRODUTOS}`;
 
 /** { id_produto => ['P', 'M', ...] } na ordem escolhida no painel. */
@@ -285,18 +295,22 @@ async function variacoesDe(db, ids) {
   return porProduto;
 }
 
-/** { id_produto => [url, ...] } na ordem da galeria. */
+/** { id_produto => { gerais: [url, ...], por_cor: { Cor: [url, ...] } } } na ordem de cada galeria. */
 async function imagensDe(db, ids) {
   const porProduto = new Map();
   if (ids.length === 0) return porProduto;
 
   const [linhas] = await db.query(
-    'SELECT id_produto AS produto, url FROM produto_imagem WHERE id_produto IN (?) ORDER BY id_produto, ordem, id_imagem',
+    `SELECT i.id_produto AS produto, i.url, c.nm_cor AS cor
+       FROM produto_imagem i LEFT JOIN cores c ON c.id_cor = i.id_cor
+      WHERE i.id_produto IN (?) ORDER BY i.id_produto, i.ordem, i.id_imagem`,
     [ids],
   );
-  for (const { produto, url } of linhas) {
-    if (!porProduto.has(produto)) porProduto.set(produto, []);
-    porProduto.get(produto).push(url);
+  for (const { produto, url, cor } of linhas) {
+    if (!porProduto.has(produto)) porProduto.set(produto, { gerais: [], por_cor: {} });
+    const galerias = porProduto.get(produto);
+    if (cor === null) galerias.gerais.push(url);
+    else (galerias.por_cor[cor] ??= []).push(url);
   }
   return porProduto;
 }
@@ -335,7 +349,11 @@ async function montarProdutos(db, linhas) {
   return linhas.map((linha) => {
     const preco = Number(linha.preco);
     const promocional = linha.preco_promocional === null ? null : Number(linha.preco_promocional);
-    const galeria = imagens.get(linha.id) ?? [];
+    const galerias = imagens.get(linha.id) ?? { gerais: [], por_cor: {} };
+    const coresDoProduto = cores.get(linha.id) ?? [];
+    // Fotos por cor na ordem das cores do produto.
+    const porCor = {};
+    for (const cor of coresDoProduto) if (galerias.por_cor[cor]?.length) porCor[cor] = galerias.por_cor[cor];
 
     return {
       id: linha.id,
@@ -348,13 +366,15 @@ async function montarProdutos(db, linhas) {
       categoria: linha.categoria,
       colecao: linha.colecao_slug ? { slug: linha.colecao_slug, nome: linha.colecao_nome } : null,
       tamanhos: tamanhos.get(linha.id) ?? [],
-      cores: cores.get(linha.id) ?? [],
+      cores: coresDoProduto,
       variacoes: variacoes.get(linha.id) ?? [],
       estoque: (variacoes.get(linha.id) ?? []).reduce((soma, v) => soma + v.estoque, 0), // total (soma das variações)
       medidas: medidas.get(linha.id) ?? [],
-      imagens: galeria,
-      imagem_url: galeria[0] ?? linha.imagem_url, // capa
+      imagens: galerias.gerais, // fotos gerais (valem para todas as cores)
+      imagens_por_cor: porCor, // { Cor: [url, ...] } — a loja mostra a galeria da cor escolhida
+      imagem_url: galerias.gerais[0] ?? Object.values(porCor)[0]?.[0] ?? linha.imagem_url, // capa
       peso_gramas: linha.peso_gramas,
+      ativo: Boolean(linha.ativo), // false = fora da loja (só o painel enxerga)
     };
   });
 }
@@ -364,10 +384,13 @@ async function buscarPorId(db, id) {
   return linhas.length ? (await montarProdutos(db, linhas))[0] : null;
 }
 
-/** Aceita o id numérico (/produtos/12, links antigos) ou o slug (/produtos/camiseta-preta). Slug tem prioridade. */
+/**
+ * Aceita o id numérico (/produtos/12, links antigos) ou o slug (/produtos/camiseta-preta). Slug tem prioridade.
+ * Produto desativado não existe para a loja (404).
+ */
 export async function findByRef(ref) {
   const [linhas] = await pool.query(
-    `${SELECT_PRODUTOS} WHERE p.slug = ? OR p.id_produto = ? ORDER BY p.slug = ? DESC LIMIT 1`,
+    `${SELECT_PRODUTOS} WHERE (p.slug = ? OR p.id_produto = ?) AND p.ativo = TRUE ORDER BY p.slug = ? DESC LIMIT 1`,
     [ref, /^\d+$/.test(ref) ? Number(ref) : -1, ref],
   );
   return linhas.length ? (await montarProdutos(pool, linhas))[0] : null;
@@ -385,9 +408,12 @@ const ORDEM_SQL = {
 /** Escapa % e _ para o texto digitado ser buscado literalmente no LIKE. */
 const literalParaLike = (texto) => texto.replace(/[\\%_]/g, (c) => `\\${c}`);
 
-function montarFiltros({ categoria, cor, tamanho, colecao, q, em_estoque: emEstoque }) {
+function montarFiltros({ categoria, cor, tamanho, colecao, q, em_estoque: emEstoque, inativos }) {
   const onde = [];
   const valores = [];
+
+  // A vitrine só mostra produtos ativos; o painel (admin) pede ?inativos=1 para ver todos.
+  if (!inativos) onde.push('p.ativo = TRUE');
 
   if (categoria.length) {
     onde.push(`${SLUG_CATEGORIA} IN (?)`);
@@ -446,17 +472,19 @@ export async function list(filtros) {
 export async function facets() {
   const [categorias] = await pool.query(
     `SELECT ${SLUG_CATEGORIA} AS slug, c.nm_categoria AS nome, COUNT(p.id_produto) AS total
-       FROM categorias c JOIN produtos p ON p.id_categoria = c.id_categoria
+       FROM categorias c JOIN produtos p ON p.id_categoria = c.id_categoria AND p.ativo = TRUE
       GROUP BY c.id_categoria ORDER BY c.nm_categoria`,
   );
   const [cores] = await pool.query(
     `SELECT co.nm_cor AS nome, COUNT(DISTINCT pc.id_produto) AS total
        FROM produto_cor pc JOIN cores co ON co.id_cor = pc.id_cor
+       JOIN produtos p ON p.id_produto = pc.id_produto AND p.ativo = TRUE
       GROUP BY co.id_cor ORDER BY co.nm_cor`,
   );
   const [tamanhos] = await pool.query(
     `SELECT t.sg_tamanho AS nome, COUNT(DISTINCT pt.id_produto) AS total
        FROM produto_tamanho pt JOIN tamanho t ON t.id_tamanho = pt.id_tamanho
+       JOIN produtos p ON p.id_produto = pt.id_produto AND p.ativo = TRUE
       GROUP BY t.id_tamanho ORDER BY t.id_tamanho`,
   );
   const num = (linhas) => linhas.map((l) => ({ ...l, total: Number(l.total) }));
@@ -471,17 +499,18 @@ export async function create(data) {
       return await comTransacao(async (db) => {
         const [resultado] = await db.query(
           `INSERT INTO produtos
-             (id_categoria, id_colecao, nm_produto, slug, descricao, preco, preco_promocional, peso_gramas)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+             (id_categoria, id_colecao, nm_produto, slug, descricao, preco, preco_promocional, peso_gramas, ativo)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             await idDaCategoria(db, data.categoria),
             await idDaColecao(db, data.colecao),
             data.nome,
-            await slugUnico(db, data.nome),
+            data.slug ?? (await slugUnico(db, data.nome)), // `slug` só vem de scripts (seed); a API sempre gera
             data.descricao || null,
             data.preco,
             data.preco_promocional,
             data.peso_gramas,
+            data.ativo ?? true,
           ],
         );
 
@@ -507,7 +536,7 @@ export async function update(id, data) {
     await db.query(
       `UPDATE produtos
           SET id_categoria = ?, id_colecao = ?, nm_produto = ?, descricao = ?, preco = ?,
-              preco_promocional = ?, peso_gramas = ?
+              preco_promocional = ?, peso_gramas = ?, ativo = COALESCE(?, ativo)
         WHERE id_produto = ?`,
       [
         await idDaCategoria(db, data.categoria),
@@ -517,6 +546,7 @@ export async function update(id, data) {
         data.preco,
         data.preco_promocional,
         data.peso_gramas,
+        data.ativo ?? null,
         id,
       ],
     );

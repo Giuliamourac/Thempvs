@@ -44,3 +44,14 @@ const exigirAdmin = (req, _res, next) => {
 
 /** Use como middleware de rota: já inclui o login. */
 export const requireAdmin = [requireAuth, exigirAdmin];
+
+/**
+ * Para rotas públicas que ganham um recurso de administrador quando `precisaAdmin(req)` é verdadeiro
+ * (ex.: GET /api/products?inativos=1 — o painel enxerga também os produtos desativados).
+ * Sem o parâmetro, a rota continua pública e nada é exigido.
+ */
+export const adminSe = (precisaAdmin) => async (req, res, next) => {
+  if (!precisaAdmin(req)) return next();
+  await requireAuth(req, res, () => {});
+  exigirAdmin(req, res, next);
+};

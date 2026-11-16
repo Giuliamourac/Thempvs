@@ -18,6 +18,9 @@
 --             a primeira é a capa e fica copiada em produtos.imagem_url)
 --   AJUSTE 8  medidas_produto      + id_tamanho  (uma linha de medidas POR TAMANHO; NULL = medidas gerais)
 --   AJUSTE 9  medidas_produto      + id_medida   (chave primária; MySQL em nuvem recusa tabela sem ela)
+--   AJUSTE 11 produto_imagem       + id_cor      (foto de uma cor específica; NULL = foto geral, vale para todas as cores)
+--   AJUSTE 10 produtos             + ativo       (o admin liga/desliga o produto na loja; inativo some da vitrine
+--             e não pode ser comprado, mas continua no painel e nos pedidos antigos)
 --
 -- Se as tabelas já existem no seu MySQL (criadas por uma versão anterior),
 -- rode `npm run db:init` na pasta backend: ele aplica os AJUSTES nelas e
@@ -84,6 +87,7 @@ CREATE TABLE IF NOT EXISTS produtos (
     preco_promocional DECIMAL(10,2),
     peso_gramas INT NOT NULL,
     imagem_url VARCHAR(500) NULL,                                 -- AJUSTE 2
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,                          -- AJUSTE 10
     CONSTRAINT PK_id_produto PRIMARY KEY (id_produto),
     CONSTRAINT FK_id_categoria_produtos FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria),
     CONSTRAINT FK_id_colecao_produtos FOREIGN KEY (id_colecao) REFERENCES colecao(id_colecao)
@@ -158,8 +162,10 @@ CREATE TABLE IF NOT EXISTS produto_imagem (
     id_produto INT NOT NULL,
     url VARCHAR(500) NOT NULL,
     ordem SMALLINT NOT NULL DEFAULT 0,
+    id_cor INT NULL,                                              -- AJUSTE 11
     CONSTRAINT PK_id_imagem PRIMARY KEY (id_imagem),
     CONSTRAINT FK_imagem_produto FOREIGN KEY (id_produto) REFERENCES produtos(id_produto) ON DELETE CASCADE,
+    CONSTRAINT FK_imagem_cor FOREIGN KEY (id_cor) REFERENCES cores(id_cor) ON DELETE CASCADE,
     INDEX idx_imagem_produto (id_produto, ordem)
 ) ENGINE=InnoDB;
 

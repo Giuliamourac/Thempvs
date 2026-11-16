@@ -139,6 +139,17 @@ try {
   // AJUSTE 2
   await adicionarColunaSeFaltar('produtos', 'imagem_url', 'VARCHAR(500) NULL');
 
+  // AJUSTE 10 — produto ativo/inativo (os produtos que já existem continuam ativos)
+  await adicionarColunaSeFaltar('produtos', 'ativo', 'BOOLEAN NOT NULL DEFAULT TRUE');
+
+  // AJUSTE 11 — fotos por cor (id_cor NULL = foto geral; as galerias que já existem continuam gerais)
+  await adicionarColunaSeFaltar('produto_imagem', 'id_cor', 'INT NULL');
+  await adicionarFkSeFaltar(
+    'produto_imagem',
+    'FK_imagem_cor',
+    'FOREIGN KEY (id_cor) REFERENCES cores(id_cor) ON DELETE CASCADE',
+  );
+
   // AJUSTE 5
   await adicionarColunaSeFaltar('pedido', 'dt_pedido', 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
 
