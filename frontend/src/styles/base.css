@@ -325,3 +325,15 @@ header nav ul a.active
 {
     background-color: #1e2c3d;
 }
+
+
+/* Cor da peça nos cartões (produtos de uma cor só cujo nome não diz a cor) */
+
+.cor-produto
+{
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: #666;
+}
+

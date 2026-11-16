@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Preco from './Preco.jsx';
 import ProductImage from './ProductImage.jsx';
 import OptionPicker from './OptionPicker.jsx';
+import { corNoCartao } from '../utils/listing.js';
 
 /** Cartão de produto da home e das seções "Você também pode gostar" / "Lançamentos". */
 export default function ProductCard({ produto }) {
@@ -15,6 +16,7 @@ export default function ProductCard({ produto }) {
       <Link to={`/produtos/${produto.slug}`}>
         <ProductImage src={produto.imagem_url} alt={produto.nome} />
         <h3>{produto.nome}</h3>
+        {corNoCartao(produto) && <span className="cor-produto">{corNoCartao(produto)}</span>}
         <p>
           <Preco produto={produto} />
         </p>

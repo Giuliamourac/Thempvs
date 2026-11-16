@@ -88,14 +88,14 @@ export default function Products() {
     }
   }, [filtros, lista.pagina]);
 
-  const grupos = useMemo(
-    () => [
-      { nome: 'categoria', titulo: 'Peça', opcoes: opcoesDe(facetas?.categorias, categorias, (i) => i.slug), selecionados: categorias },
-      { nome: 'cor', titulo: 'Cor', opcoes: opcoesDe(facetas?.cores, cores), selecionados: cores },
-      { nome: 'tamanho', titulo: 'Tamanho', opcoes: opcoesDe(facetas?.tamanhos, tamanhos), selecionados: tamanhos },
-    ],
-    [facetas, chaveDosFiltros],
-  );
+  const grupos = useMemo(() => {
+    const opcoes = facetas ?? {};
+    return [
+      { nome: 'categoria', titulo: 'Peça', opcoes: opcoesDe(opcoes.categorias, categorias, (i) => i.slug), selecionados: categorias },
+      { nome: 'cor', titulo: 'Cor', opcoes: opcoesDe(opcoes.cores, cores), selecionados: cores },
+      { nome: 'tamanho', titulo: 'Tamanho', opcoes: opcoesDe(opcoes.tamanhos, tamanhos), selecionados: tamanhos },
+    ];
+  }, [facetas, chaveDosFiltros]);
 
   const alternarFiltro = (nome, valor) => alternarNaUrl(setParams, nome, valor);
 

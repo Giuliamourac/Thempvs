@@ -395,3 +395,31 @@ textarea.admin-input
         padding: 16px;
     }
 }
+
+/* produto ativo na loja */
+.admin-checkbox
+{
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.admin-checkbox small
+{
+    color: #666;
+}
+
+/* estoque ainda não informado: precisa de atenção antes de vender */
+.admin-aviso-estoque
+{
+    margin: 0 0 16px 0;
+    padding: 12px 14px;
+    border: 1px solid #e0b400;
+    border-left-width: 4px;
+    background-color: #fff8db;
+    color: #4a3b00;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}

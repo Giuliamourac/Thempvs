@@ -332,3 +332,43 @@
     font-weight: 600;
     color: #222;
 }
+
+
+/* Outras cores da mesma peça */
+
+.cores-irmas
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.cores-irmas a
+{
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid #222;
+    font-size: 0.85rem;
+    color: #222;
+    text-decoration: none;
+}
+
+.cores-irmas a:hover
+{
+    background-color: #222;
+    color: #fff;
+}
+
+/* Fotos de roupa em pé (retrato): mostra a peça inteira em vez de cortar o topo e os pés */
+.imagem-destaque--retrato
+{
+    background-color: #f5f5f5;
+}
+
+.imagem-destaque--retrato img
+{
+    object-fit: contain;
+}

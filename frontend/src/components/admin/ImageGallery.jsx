@@ -8,7 +8,7 @@ const MAXIMO = 8;
  * A PRIMEIRA imagem é a capa (a que aparece nas listagens).
  * `imagens` = lista de URLs; `onChange(novaLista)`; `onEnviar(file)` devolve a URL salva (ou lança).
  */
-export default function ImageGallery({ imagens, onChange, onEnviar, onErro, erro }) {
+export default function ImageGallery({ imagens, onChange, onEnviar, onErro, erro, titulo = 'Imagens', idRotulo = 'adm-galeria-rotulo', mostrarCapa = true }) {
   const arquivoRef = useRef(null);
   const [enviando, setEnviando] = useState(0);
   const [url, setUrl] = useState('');
@@ -59,17 +59,17 @@ export default function ImageGallery({ imagens, onChange, onEnviar, onErro, erro
 
   return (
     <div className="admin-campo">
-      <span className="admin-rotulo" id="adm-galeria-rotulo">
-        Imagens ({imagens.length}/{MAXIMO})
+      <span className="admin-rotulo" id={idRotulo}>
+        {titulo} ({imagens.length}/{MAXIMO})
       </span>
 
       {imagens.length > 0 && (
-        <ul className="admin-galeria" aria-labelledby="adm-galeria-rotulo">
+        <ul className="admin-galeria" aria-labelledby={idRotulo}>
           {imagens.map((src, indice) => (
             <li key={src} className="admin-galeria-item">
               <div className="admin-galeria-img">
                 <ProductImage src={src} alt={`Imagem ${indice + 1}`} />
-                {indice === 0 && <span className="admin-galeria-capa">Capa</span>}
+                {mostrarCapa && indice === 0 && <span className="admin-galeria-capa">Capa</span>}
               </div>
               <div className="admin-galeria-acoes">
                 <button type="button" className="admin-botao pequeno secundario" disabled={indice === 0}
@@ -98,7 +98,7 @@ export default function ImageGallery({ imagens, onChange, onEnviar, onErro, erro
           accept="image/jpeg,image/png,image/webp,image/gif"
           className="sr-only"
           tabIndex={-1}
-          aria-label="Escolher arquivos de imagem"
+          aria-label={`Escolher arquivos de imagem (${titulo})`}
           onChange={aoEscolher}
         />
         <button type="button" className="admin-botao secundario" disabled={cheia || enviando > 0}
@@ -110,7 +110,7 @@ export default function ImageGallery({ imagens, onChange, onEnviar, onErro, erro
           type="url"
           className="admin-input"
           placeholder="ou cole uma URL (https://...)"
-          aria-label="URL de uma imagem"
+          aria-label={`URL de uma imagem (${titulo})`}
           value={url}
           disabled={cheia}
           onChange={(e) => setUrl(e.target.value)}
@@ -127,7 +127,7 @@ export default function ImageGallery({ imagens, onChange, onEnviar, onErro, erro
       </div>
 
       <p className="admin-dica">
-        JPG, PNG, WebP ou GIF, até 5 MB cada. As imagens são reduzidas e otimizadas automaticamente. A primeira é a capa.
+        JPG, PNG, WebP ou GIF, até 5 MB cada. As imagens são reduzidas e otimizadas automaticamente.{mostrarCapa ? ' A primeira é a capa.' : ''}
       </p>
       {erro && (
         <p className="admin-erro-campo" role="alert">

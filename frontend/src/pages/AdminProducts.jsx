@@ -51,6 +51,7 @@ function validar(valores) {
 
 const paraFormulario = (produto) => ({
   nome: produto.nome,
+  ativo: produto.ativo !== false,
   descricao: produto.descricao ?? '',
   preco: String(produto.preco),
   preco_promocional: produto.preco_promocional === null ? '' : String(produto.preco_promocional),
@@ -58,6 +59,7 @@ const paraFormulario = (produto) => ({
   colecao: produto.colecao?.slug ?? '',
   peso_gramas: String(produto.peso_gramas ?? ''),
   imagens: produto.imagens ?? [],
+  imagens_por_cor: produto.imagens_por_cor ?? {},
   medidas: Object.fromEntries(
     (produto.medidas ?? []).map(({ tamanho, ...resto }) => [
       tamanho,
@@ -99,6 +101,7 @@ const montarMedidas = (valores) =>
 
 const paraPayload = (valores) => ({
   nome: valores.nome.trim(),
+  ativo: valores.ativo,
   descricao: valores.descricao.trim(),
   preco: Number(valores.preco),
   preco_promocional: valores.preco_promocional === '' ? null : Number(valores.preco_promocional),
@@ -106,6 +109,10 @@ const paraPayload = (valores) => ({
   colecao: valores.colecao || null,
   peso_gramas: Number(valores.peso_gramas),
   imagens: valores.imagens,
+  // só as cores que continuam no produto (tirar uma cor descarta as fotos dela)
+  imagens_por_cor: Object.fromEntries(
+    valores.cores.map((cor) => [cor, valores.imagens_por_cor?.[cor] ?? []]).filter(([, urls]) => urls.length > 0),
+  ),
   medidas: montarMedidas(valores),
   tamanhos: valores.tamanhos,
   cores: valores.cores,
@@ -116,7 +123,8 @@ export default function AdminProducts() {
   const [busca, setBusca] = useState('');
   const [buscaAplicada, setBuscaAplicada] = useState('');
   const [pagina, setPagina] = useState(1);
-  const params = useMemo(() => ({ q: buscaAplicada, pagina, limite: POR_PAGINA }), [buscaAplicada, pagina]);
+  // inativos: 1 → o painel vê também os produtos desativados (a loja não).
+  const params = useMemo(() => ({ q: buscaAplicada, pagina, limite: POR_PAGINA, inativos: 1 }), [buscaAplicada, pagina]);
   const { products, total, paginas, loading, error: erroLista, reload } = useProducts(params);
 
   // A busca espera o usuário parar de digitar (300 ms) e volta para a página 1.
@@ -128,11 +136,14 @@ export default function AdminProducts() {
     return () => clearTimeout(timer);
   }, [busca]);
 
+  const semEstoqueNaPagina = products.filter((p) => p.estoque === 0).length;
+
   const [valores, setValores] = useState(FORMULARIO_VAZIO);
   const [erros, setErros] = useState({});
   const [editandoId, setEditandoId] = useState(null);
   const [salvando, setSalvando] = useState(false);
   const [excluindoId, setExcluindoId] = useState(null);
+  const [alternandoId, setAlternandoId] = useState(null);
   const [alerta, setAlerta] = useState(null); // { tipo: 'sucesso' | 'erro', texto }
   const formularioRef = useRef(null);
 
@@ -222,6 +233,23 @@ export default function AdminProducts() {
     formularioRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  /** Liga/desliga o produto na loja (reenvia o produto como está, só trocando `ativo`). */
+  const aoAlternarAtivo = async (produto) => {
+    setAlternandoId(produto.id);
+    setAlerta(null);
+    try {
+      const ativo = produto.ativo === false;
+      await updateProduct(produto.id, { ...paraPayload(paraFormulario(produto)), ativo });
+      if (editandoId === produto.id) setValores((atuais) => ({ ...atuais, ativo }));
+      setAlerta({ tipo: 'sucesso', texto: `"${produto.nome}" ${ativo ? 'ativado: já aparece na loja' : 'desativado: saiu da loja'}.` });
+      reload();
+    } catch (erro) {
+      setAlerta({ tipo: 'erro', texto: getErrorMessage(erro) });
+    } finally {
+      setAlternandoId(null);
+    }
+  };
+
   const aoExcluir = async (produto) => {
     if (!window.confirm(`Excluir "${produto.nome}"? Esta ação não pode ser desfeita.`)) return;
 
@@ -283,6 +311,14 @@ export default function AdminProducts() {
           onChange={(e) => setBusca(e.target.value)}
         />
 
+        {!loading && !erroLista && semEstoqueNaPagina > 0 && (
+          <p className="admin-aviso-estoque" role="note">
+            <strong>Estoque pendente:</strong> {semEstoqueNaPagina} produto(s) desta página estão com estoque 0 em todos os
+            tamanhos e aparecem como &quot;Esgotado&quot; na loja. Clique em <em>Editar</em> e informe as quantidades reais de cada
+            tamanho em &quot;Estoque por variação&quot; antes de liberar as vendas.
+          </p>
+        )}
+
         {loading && <p className="admin-estado">Carregando produtos...</p>}
 
         {erroLista && (
@@ -305,8 +341,10 @@ export default function AdminProducts() {
             produtos={products}
             editandoId={editandoId}
             excluindoId={excluindoId}
+            alternandoId={alternandoId}
             onEditar={aoEditar}
             onExcluir={aoExcluir}
+            onAlternarAtivo={aoAlternarAtivo}
           />
         )}
 

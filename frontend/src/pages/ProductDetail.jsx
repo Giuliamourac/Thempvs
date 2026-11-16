@@ -7,6 +7,7 @@ import { useCatalogo } from '../context/CatalogContext.jsx';
 import { useProducts } from '../hooks/useProducts.js';
 import { getErrorMessage, getProduct, isCancel } from '../services/api.js';
 import { formatarCentavos, formatarMoeda, paraCentavos } from '../utils/format.js';
+import { corInicial, fotoEmRetrato, imagensDaCor } from '../utils/listing.js';
 import OptionPicker from '../components/OptionPicker.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import Preco from '../components/Preco.jsx';
@@ -69,9 +70,9 @@ function TabelaMedidas({ medidas }) {
   );
 }
 
-/** Imagem grande + miniaturas clicáveis (a primeira é a capa). */
-function Galeria({ produto }) {
-  const imagens = produto.imagens.length ? produto.imagens : [produto.imagem_url];
+/** Imagem grande + miniaturas clicáveis das fotos da cor escolhida (o pai remonta a galeria ao trocar de cor). */
+function Galeria({ produto, cor }) {
+  const imagens = imagensDaCor(produto, cor);
   const [indice, setIndice] = useState(0);
   const atual = Math.min(indice, imagens.length - 1);
 
@@ -94,14 +95,14 @@ function Galeria({ produto }) {
         </div>
       )}
 
-      <div className="imagem-destaque">
+      <div className={`imagem-destaque${fotoEmRetrato(produto) ? ' imagem-destaque--retrato' : ''}`}>
         <ProductImage src={imagens[atual]} alt={produto.nome} loading="eager" />
       </div>
     </div>
   );
 }
 
-function ProdutoInfo({ produto }) {
+function ProdutoInfo({ produto, cor, onCorChange }) {
   const { adicionar } = useCart();
   const { nomeDaCategoria } = useCatalogo();
   const variacoes = produto.variacoes ?? [];
@@ -111,7 +112,6 @@ function ProdutoInfo({ produto }) {
   const estoqueDe = (t, c) =>
     variacoes.find((v) => v.tamanho === t && (!temCores || v.cor === c))?.estoque ?? 0;
 
-  const [cor, setCor] = useState(() => produto.cores.find((c) => produto.tamanhos.some((t) => estoqueDe(t, c) > 0)) ?? produto.cores[0] ?? '');
   const [tamanho, setTamanho] = useState(() => {
     const unico = produto.tamanhos.length === 1 ? produto.tamanhos[0] : '';
     return unico && estoqueDe(unico, produto.cores.find((c) => estoqueDe(unico, c) > 0) ?? produto.cores[0] ?? '') > 0 ? unico : '';
@@ -124,7 +124,7 @@ function ProdutoInfo({ produto }) {
   const semEstoqueNaEscolha = estoqueEscolhido === 0;
 
   const aoEscolherCor = (nova) => {
-    setCor(nova);
+    onCorChange(nova);
     setAviso({ tipo: '', texto: '' });
     // Se o tamanho escolhido não existe nessa cor, desmarca.
     if (tamanho && estoqueDe(tamanho, nova) === 0) setTamanho('');
@@ -143,7 +143,7 @@ function ProdutoInfo({ produto }) {
       precoCentavos: paraCentavos(produto.preco_final), // estimativa; o servidor recalcula
       cor,
       tamanho,
-      imagem: produto.imagem_url ?? '',
+      imagem: imagensDaCor(produto, cor)[0] ?? '', // foto da cor escolhida
       estoque: variacao.estoque,
       quantidade: 1,
     });
@@ -182,8 +182,15 @@ function ProdutoInfo({ produto }) {
             value={cor}
             onChange={aoEscolherCor}
             label="Cores"
-            isDisabled={(c) => !produto.tamanhos.some((t) => estoqueDe(t, c) > 0)}
+            // Produto sem estoque nenhum: deixa trocar de cor mesmo assim (as fotos mudam); senão só libera cores com estoque.
+            isDisabled={(c) => !esgotado && !produto.tamanhos.some((t) => estoqueDe(t, c) > 0)}
           />
+        </div>
+      )}
+
+      {produto.cores.length === 1 && (
+        <div className="seletor-cor">
+          <p className="seletor-rotulo">Cor: {produto.cores[0]}</p>
         </div>
       )}
 
@@ -257,6 +264,18 @@ function ProdutoInfo({ produto }) {
   );
 }
 
+/** Galeria + compra lado a lado; a cor escolhida troca as fotos e vai para o carrinho. */
+function DetalheProduto({ produto }) {
+  const [cor, setCor] = useState(() => corInicial(produto));
+
+  return (
+    <section className="detalhe-produto">
+      <Galeria key={cor} produto={produto} cor={cor} />
+      <ProdutoInfo produto={produto} cor={cor} onCorChange={setCor} />
+    </section>
+  );
+}
+
 function Secao({ titulo, produtos }) {
   if (produtos.length === 0) return null;
   return (
@@ -311,15 +330,16 @@ export default function ProductDetail() {
     );
   }
 
-  const { produto } = estado;
+  const produto = estado.produto;
 
   // Link antigo (/produtos/12): vai para o endereço bonito (/produtos/camiseta-preta).
   if (ref !== produto.slug) return <Navigate to={`/produtos/${produto.slug}`} replace />;
 
-  const outros = products.filter((p) => p.id !== produto.id);
+  const todos = products; // sugestões: os produtos mais recentes da loja
+  const outros = todos.filter((p) => p.id !== produto.id);
   const mesmaCategoria = outros.filter((p) => p.categoria === produto.categoria);
   const recomendados = [...mesmaCategoria, ...outros.filter((p) => p.categoria !== produto.categoria)].slice(0, 4);
-  const lancamentos = products.slice(0, 4);
+  const lancamentos = todos.slice(0, 4);
 
   return (
     <div className="page-detail">
@@ -328,11 +348,7 @@ export default function ProductDetail() {
       </section>
 
       <main className="container-produto">
-        <section className="detalhe-produto">
-          <Galeria key={`galeria-${produto.id}`} produto={produto} />
-
-          <ProdutoInfo key={`info-${produto.id}`} produto={produto} />
-        </section>
+        <DetalheProduto key={produto.id} produto={produto} />
 
         <Secao titulo="Você também pode gostar!" produtos={recomendados} />
         <Secao titulo="Lançamentos" produtos={lancamentos} />

@@ -24,39 +24,46 @@ const CATEGORIAS = [
   { rotulo: 'Acessórios', to: '/produtos?categoria=acessorios', imagem: imgAcessorios },
 ];
 
-/** Lançamentos: os produtos cadastrados mais recentemente (a API já devolve do mais novo ao mais antigo). */
-function Lancamentos({ products, loading, error, reload }) {
-  if (loading) {
-    return <p className="estado-pagina">Carregando produtos...</p>;
+/**
+ * Lançamentos: os produtos cadastrados mais recentemente (a API já devolve do mais novo ao mais antigo).
+ * Se a API falhar, o aviso de erro com "Tentar novamente" aparece no lugar.
+ */
+function Lancamentos({ itens, loading, error, reload }) {
+  if (itens.length === 0) {
+    if (loading) return <p className="estado-pagina">Carregando produtos...</p>;
+    if (!error) return <p className="estado-pagina">Nenhum produto cadastrado ainda.</p>;
   }
 
-  if (error) {
-    return (
-      <div className="estado-pagina">
-        <p className="estado-erro">{error}</p>
-        <button type="button" className="botao-padrao" onClick={reload}>
-          Tentar novamente
-        </button>
-      </div>
-    );
-  }
+  return (
+    <>
+      {itens.length > 0 && <ProductCarousel titulo="Lançamentos" produtos={itens.slice(0, POR_VITRINE)} />}
 
-  if (products.length === 0) {
-    return <p className="estado-pagina">Nenhum produto cadastrado ainda.</p>;
-  }
-
-  return <ProductCarousel titulo="Lançamentos" produtos={products.slice(0, POR_VITRINE)} />;
+      {error && (
+        <div className="estado-pagina">
+          <p className="estado-erro">{error}</p>
+          <button type="button" className="botao-padrao" onClick={reload}>
+            Tentar novamente
+          </button>
+        </div>
+      )}
+    </>
+  );
 }
 
 /**
  * Destaques: a tabela produtos não tem um campo "destaque", então entram primeiro os produtos em
- * promoção e, depois, os mais recentes. Só aparece quando há produtos (o aviso de carregando/erro
- * já é mostrado pela seção de Lançamentos, acima das categorias).
+ * promoção e, depois, os que não aparecem em Lançamentos. Só aparece quando há produtos (o aviso de
+ * carregando/erro já é mostrado pela seção de Lançamentos, acima das categorias).
  */
-function Destaques({ products }) {
-  if (products.length === 0) return null;
+function Destaques({ itens }) {
+  if (itens.length === 0) return null;
 
-  const emDestaque = [...products.filter(emPromocao), ...products.filter((p) => !emPromocao(p))];
+  // Promoções primeiro; depois o que NÃO está em Lançamentos (para as duas vitrines não repetirem
+  // as mesmas peças); por fim o que sobrar.
+  const emLancamentos = new Set(itens.slice(0, POR_VITRINE).map((p) => p.id));
+  const promocoes = itens.filter(emPromocao);
+  const outros = itens.filter((p) => !emPromocao(p));
+  const emDestaque = [...promocoes, ...outros.filter((p) => !emLancamentos.has(p.id)), ...outros.filter((p) => emLancamentos.has(p.id))];
 
   return <ProductCarousel titulo="Destaques" produtos={emDestaque.slice(0, POR_VITRINE)} />;
 }
@@ -81,6 +88,7 @@ function Categorias() {
 
 export default function Home() {
   const { products, loading, error, reload } = useProducts(PARAMS_HOME);
+  const itens = products; // os mais recentes cadastrados no banco
 
   return (
     <div className="page-home">
@@ -89,11 +97,11 @@ export default function Home() {
           <img src={bannerHome} alt="Thempvs" />
         </section>
 
-        <Lancamentos products={products} loading={loading} error={error} reload={reload} />
+        <Lancamentos itens={itens} loading={loading} error={error} reload={reload} />
 
         <Categorias />
 
-        <Destaques products={products} />
+        <Destaques itens={itens} />
 
         <section className="sobre">
           <img
