@@ -2,7 +2,7 @@
  * Catálogo ESTÁTICO da Thempvs: peças cadastradas direto no frontend, com as fotos do projeto.
  * Não vem do banco nem da API, então aparece mesmo com o servidor desligado.
  *
- * Para cadastrar outra peça: importe a foto, copie um bloco de BRUTOS e preencha.
+ * Para cadastrar outra peça: imasdasporte a foto, copie um bloco de BRUTOS e preencha.
  *  - id            → único e sem espaços (também vira o endereço: /produtos/<id>)
  *  - cor           → "Branco", "Preto" ou "Cinza" (é o que o filtro de cor usa)
  *  - categoria     → slug de categoria (os filtros "Peça" usam o mesmo slug do resto do site)

@@ -17,13 +17,27 @@ if (env.storage === 's3') {
   }
 }
 
-try {
-  await checkConnection();
-  console.log(`MySQL conectado em ${env.db.host}:${env.db.port}/${env.db.database}`);
-} catch (error) {
-  console.error('\nNão foi possível conectar ao MySQL:', error.code ?? error.message);
-  console.error('Confira o arquivo backend/.env, se o MySQL está rodando e se o banco foi criado (npm run db:init).\n');
-  process.exit(1);
+// O banco pode estar acordando (Aiven/Render grátis) ou o DNS pode falhar por um instante:
+// tenta algumas vezes antes de desistir, em vez de encerrar na primeira falha.
+const TENTATIVAS_BANCO = 8;
+const ESPERA_BANCO_MS = 5000;
+const esperar = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+for (let tentativa = 1; ; tentativa += 1) {
+  try {
+    await checkConnection();
+    console.log(`MySQL conectado em ${env.db.host}:${env.db.port}/${env.db.database}`);
+    break;
+  } catch (error) {
+    const motivo = error.code ?? error.message;
+    if (tentativa >= TENTATIVAS_BANCO) {
+      console.error('\nNão foi possível conectar ao MySQL:', motivo);
+      console.error('Confira o arquivo backend/.env, se o MySQL está rodando (no Aiven: serviço "Running") e se o banco foi criado (npm run db:init).\n');
+      process.exit(1);
+    }
+    console.warn(`MySQL indisponível (${motivo}). Tentativa ${tentativa}/${TENTATIVAS_BANCO}; nova tentativa em ${ESPERA_BANCO_MS / 1000}s...`);
+    await esperar(ESPERA_BANCO_MS);
+  }
 }
 
 const server = app.listen(env.port, () => {

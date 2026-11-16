@@ -32,15 +32,48 @@ const lerToken = () => tokenEmMemoria ?? tokenSalvo.ler();
 /** Disparado quando o servidor recusa o token (sessão expirada): o AuthContext limpa o usuário. */
 export const EVENTO_SESSAO_EXPIRADA = 'thempvs:sessao-expirada';
 
+// 60 s: no Render grátis a API "dorme" e leva cerca de 50 s para acordar na primeira requisição.
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api',
-  timeout: 10000,
+  timeout: 60000,
   headers: { 'Content-Type': 'application/json' },
 });
+
+/**
+ * Aviso de "servidor acordando": se uma requisição passa de ATRASO_AVISO_MS sem resposta, dispara
+ * EVENTO_API_LENTA com { detail: true }; quando todas as lentas terminam, dispara com { detail: false }.
+ * (O componente AvisoServidor escuta esse evento.)
+ */
+export const EVENTO_API_LENTA = 'thempvs:api-lenta';
+const ATRASO_AVISO_MS = 4000;
+let lentasEmAndamento = 0;
+const avisarLenta = () => window.dispatchEvent(new CustomEvent(EVENTO_API_LENTA, { detail: lentasEmAndamento > 0 }));
+
+function monitorarDemora(config) {
+  const monitor = { lenta: false };
+  monitor.timer = setTimeout(() => {
+    monitor.lenta = true;
+    lentasEmAndamento += 1;
+    avisarLenta();
+  }, ATRASO_AVISO_MS);
+  config.__monitor = monitor;
+}
+
+function encerrarMonitor(config) {
+  const monitor = config?.__monitor;
+  if (!monitor) return;
+  config.__monitor = undefined;
+  clearTimeout(monitor.timer);
+  if (monitor.lenta) {
+    lentasEmAndamento = Math.max(0, lentasEmAndamento - 1);
+    avisarLenta();
+  }
+}
 
 api.interceptors.request.use((config) => {
   const token = lerToken();
   if (token) config.headers.Authorization = `Bearer ${token}`;
+  monitorarDemora(config);
   return config;
 });
 
@@ -50,8 +83,12 @@ api.interceptors.request.use((config) => {
  *   error.fieldErrors  → [{ campo, mensagem }] vindos da validação do backend
  */
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    encerrarMonitor(response.config);
+    return response;
+  },
   (error) => {
+    encerrarMonitor(error.config);
     if (axios.isCancel(error)) return Promise.reject(error);
 
     const data = error.response?.data;
@@ -64,7 +101,9 @@ api.interceptors.response.use(
 
     error.fieldErrors = Array.isArray(data?.details) ? data.details : [];
 
-    if (!error.response) {
+    if (error.code === 'ECONNABORTED') {
+      error.userMessage = 'O servidor demorou demais para responder. Tente novamente em alguns instantes.';
+    } else if (!error.response) {
       error.userMessage =
         'Não foi possível se conectar ao servidor. Verifique se o backend está rodando.';
     } else if (error.fieldErrors.length > 0) {

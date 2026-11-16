@@ -337,3 +337,15 @@ header nav ul a.active
     color: #666;
 }
 
+
+/* Faixa "acordando o servidor" (aparece só quando a API demora mais de 4 s) */
+.aviso-servidor {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: #111;
+  color: #fff;
+  text-align: center;
+  font-size: 0.9rem;
+}

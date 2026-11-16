@@ -293,18 +293,21 @@ function Secao({ titulo, produtos }) {
 export default function ProductDetail() {
   const { ref } = useParams();
   const { products } = useProducts(PARAMS_RECOMENDADOS);
-  const [estado, setEstado] = useState({ status: 'carregando', produto: null, erro: '' });
+  // `ref` guarda de qual endereço é este resultado: ao clicar em outro produto o `ref` muda ANTES do efeito
+  // rodar, e sem essa checagem o produto antigo ainda em memória faria o <Navigate> abaixo voltar para ele.
+  const [estado, setEstado] = useState({ ref: null, status: 'carregando', produto: null, erro: '' });
 
   useEffect(() => {
     const controller = new AbortController();
-    setEstado({ status: 'carregando', produto: null, erro: '' });
+    setEstado({ ref, status: 'carregando', produto: null, erro: '' });
 
     getProduct(ref, { signal: controller.signal })
-      .then((produto) => setEstado({ status: 'ok', produto, erro: '' }))
+      .then((produto) => setEstado({ ref, status: 'ok', produto, erro: '' }))
       .catch((erro) => {
         if (isCancel(erro)) return;
         const naoEncontrado = erro.response?.status === 404 || erro.response?.status === 400;
         setEstado({
+          ref,
           status: naoEncontrado ? 'nao-encontrado' : 'erro',
           produto: null,
           erro: getErrorMessage(erro),
@@ -314,7 +317,7 @@ export default function ProductDetail() {
     return () => controller.abort();
   }, [ref]);
 
-  if (estado.status === 'carregando') {
+  if (estado.ref !== ref || estado.status === 'carregando') {
     return <p className="estado-pagina">Carregando produto...</p>;
   }
 
