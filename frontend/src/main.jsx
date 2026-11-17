@@ -13,6 +13,7 @@ import './styles/products.css';
 import './styles/product-detail.css';
 import './styles/checkout.css';
 import './styles/who-wears.css';
+import './styles/event-profile.css';
 import './styles/admin.css';
 import './styles/account.css';
 import './styles/contact.css';

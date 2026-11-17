@@ -44,3 +44,15 @@ export const IconeCalendario = (props) => (
 );
 
 export const ICONE_REDE = { instagram: IconeInstagram, facebook: IconeFacebook, tiktok: IconeTiktok };
+
+export const IconeRelogio = (props) => (
+  <svg {...base} {...props}>
+    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm-1 3v5.4l3.3 3.3 1.4-1.4-2.7-2.7V7h-2Z" />
+  </svg>
+);
+
+export const IconePino = (props) => (
+  <svg {...base} {...props}>
+    <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
+  </svg>
+);

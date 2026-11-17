@@ -18,6 +18,7 @@ import Products from './pages/Products.jsx';
 import Register from './pages/Register.jsx';
 import Sale from './pages/Sale.jsx';
 import WhoWears from './pages/WhoWears.jsx';
+import EventProfile from './pages/EventProfile.jsx';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="produtos/:ref" element={<ProductDetail />} />
         <Route path="carrinho" element={<Cart />} />
         <Route path="quem-usa" element={<WhoWears />} />
+        <Route path="quem-usa/evento/:slug" element={<EventProfile />} />
 
         <Route path="entrar" element={<Login />} />
         <Route path="cadastrar" element={<Register />} />

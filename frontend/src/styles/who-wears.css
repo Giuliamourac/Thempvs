@@ -66,6 +66,24 @@
     text-align: right;
 }
 
+.quemModeloNome
+{
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 32px;
+    color: #1f1f1f;
+}
+
+.quemModeloFuncao
+{
+    display: block;
+    margin-bottom: 14px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #666;
+}
+
 .quemRedes
 {
     display: flex;
@@ -366,6 +384,12 @@
     {
         font-size: 24px;
         line-height: 30px;
+    }
+
+    .quemModeloNome
+    {
+        font-size: 22px;
+        line-height: 28px;
     }
 
     .quemTexto p

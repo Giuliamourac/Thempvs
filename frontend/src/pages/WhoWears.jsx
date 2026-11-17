@@ -10,34 +10,21 @@ import historia1 from '../assets/quem-usa/historia-1.jpg';
 import historia2 from '../assets/quem-usa/historia-2.jpg';
 import bannerQuemUsa from '../assets/banners/quem-usa.jpg';
 import { Link } from 'react-router-dom';
-import { IconeCalendario, ICONE_REDE } from '../components/Icons.jsx';
+import { IconeCalendario, IconePino, IconeRelogio, ICONE_REDE } from '../components/Icons.jsx';
+import { EVENTOS } from '../data/events.js';
 import { REDES_SOCIAIS } from '../constants/contact.js';
 import logo from '../assets/Logo1.png';
 
-const TEXTO_LOREM =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi iaculis velit nec velit dapibus feugiat. Nam convallis, urna sit amet hendrerit semper, tellus lacus ornare sem, quis lacinia nisi massa vel eros. Integer ultricies iaculis orci. Quisque bibendum aliquam ultrices. Nunc convallis, nulla in faucibus congue, dolor neque tempor ante, scelerisque rhoncus neque turpis sit amet lectus. Quisque vitae posuere ex. Pellentesque pretium lobortis purus eget suscipit. Sed purus elit, blandit vel sagittis nec, dignissim in tellus. Nam id mattis felis, vitae viverra mauris. Donec in nisi risus. Duis neque tortor, placerat quis ultricies eu, rutrum eget lectus. Proin faucibus tortor in urna eleifend, id semper mauris ullamcorper. Nunc imperdiet ante viverra, feugiat nibh nec, venenatis eros.';
+// Nomes e biografias fictícios dos dois modelos (amigos). Troque pelos dados reais quando houver.
+const NOME_MODELO_1 = 'Rafael Lima';
+const NOME_MODELO_2 = 'Matheus Costa';
+const FUNCAO_MODELO = 'Modelo Thempus Wear';
 
-const EVENTOS = [
-  {
-    alt: 'Pessoas participando de um evento de dança de rua',
-    alternado: false,
-  },
-  {
-    alt: 'Pessoas dançando em um evento de cultura urbana',
-    alternado: true,
-  },
-].map((evento) => ({
-  ...evento,
-  titulo: 'Código de rua',
-  data: '14/12/2026',
-  paragrafos: [
-    'Mais do que um evento, uma conexão entre ritmos, histórias e vivências que nascem nas ruas. O Código de Rua celebra a essência do hip-hop, dando voz à expressão, à arte e à resistência por meio da dança, do breaking, do graffiti e dos beats que movimentam a cultura urbana.',
-    'Um espaço de atitude, criatividade e liberdade, onde cada rima carrega uma mensagem, cada batida conta uma história e cada pessoa faz parte do movimento.',
-  ],
-}));
+const BIO_MODELO_1 =
+  'Sempre fui apaixonado por moda, estilo e fotografia, e foi nas peças da Thempus Wear que encontrei um jeito de mostrar quem eu sou. Hoje participo dos ensaios e das divulgações da marca, e cada clique é uma chance de contar um pouco da minha personalidade, sem pose forçada, do meu jeito.';
 
-const placeholder = (largura, altura, cor, texto = 'Foto') =>
-  `https://placehold.co/${largura}x${altura}/${cor}/ffffff?text=${texto}`;
+const BIO_MODELO_2 =
+  'Moda e estilo sempre fizeram parte da minha rotina, mas foi por causa de um grande amigo, que já era modelo da Thempus Wear, que o convite chegou até mim. Topei na hora, gostei do clima leve dos bastidores e, desde então, estou nas campanhas e divulgações da marca, sempre ao lado dele.';
 
 /** Instagram + Facebook (links do projeto em constants/contact.js). */
 function Redes() {
@@ -72,7 +59,9 @@ export default function WhoWears() {
           <img className="quemFotoRedonda" src={historia1} alt="" />
 
           <div className="quemTexto quemTextoDireita">
-            <p>{TEXTO_LOREM}</p>
+            <h2 className="quemModeloNome">{NOME_MODELO_1}</h2>
+            <span className="quemModeloFuncao">{FUNCAO_MODELO}</span>
+            <p>{BIO_MODELO_1}</p>
 
             <Redes />
           </div>
@@ -99,7 +88,9 @@ export default function WhoWears() {
         {/* Segundo bloco: texto à esquerda, foto à direita */}
         <section className="quemBloco quemBlocoInvertido">
           <div className="quemTexto">
-            <p>{TEXTO_LOREM}</p>
+            <h2 className="quemModeloNome">{NOME_MODELO_2}</h2>
+            <span className="quemModeloFuncao">{FUNCAO_MODELO}</span>
+            <p>{BIO_MODELO_2}</p>
 
             <Redes />
           </div>
@@ -116,22 +107,31 @@ export default function WhoWears() {
 
           <div className="quemEventos">
             {EVENTOS.map((evento) => (
-              <article
-                key={evento.alt}
-                className={`quemEvento${evento.alternado ? ' quemEventoAlternado' : ''}`}
+              <Link
+                key={evento.slug}
+                to={`/quem-usa/evento/${evento.slug}`}
+                className="quemEvento quemEventoLink"
+                aria-label={`Ver o perfil do evento ${evento.titulo}`}
               >
-                <img src={placeholder(240, 160, '777777', 'Codigo+de+rua')} alt={evento.alt} />
+                <img src={evento.banner} alt={evento.altBanner} />
                 <div className="quemEventoConteudo">
+                  <span className="quemEventoTag">{evento.categoria}</span>
                   <h3>{evento.titulo}</h3>
-                  <p className="quemEventoData">Data: {evento.data} <IconeCalendario className="quemIconeData" /></p>
-                  {evento.paragrafos.map((paragrafo) => (
-                    <p key={paragrafo}>{paragrafo}</p>
-                  ))}
+                  <ul className="quemEventoMeta">
+                    <li>
+                      <IconeCalendario className="quemIconeData" /> {evento.data}
+                    </li>
+                    <li>
+                      <IconeRelogio className="quemIconeData" /> {evento.horario}
+                    </li>
+                    <li>
+                      <IconePino className="quemIconeData" /> {evento.local}
+                    </li>
+                  </ul>
+                  <p>{evento.descricaoCurta}</p>
                 </div>
-                <Link className="quemEventoBotao" to="/movement">
-                  Saber mais
-                </Link>
-              </article>
+                <span className="quemEventoBotao">Ver evento →</span>
+              </Link>
             ))}
           </div>
         </section>
