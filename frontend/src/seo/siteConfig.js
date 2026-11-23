@@ -19,7 +19,7 @@ export const SITE_URL = (doAmbiente || 'https://thempvs-frontend.vercel.app').re
  * (ex.: 'AbC123...') ou defina VITE_GOOGLE_SITE_VERIFICATION na Vercel. O build coloca a tag em todas as páginas.
  */
 export const GOOGLE_SITE_VERIFICATION =
-  (typeof process !== 'undefined' && process.env?.VITE_GOOGLE_SITE_VERIFICATION) || '';
+  (typeof process !== 'undefined' && process.env?.VITE_GOOGLE_SITE_VERIFICATION) || 'ReBq95sgtFy48ZRHP-8WMxQ6npFZ1CwNn9YkleNhUpU';
 
 export const SITE_NAME = 'THEMPVS';
 export const DEFAULT_TITLE = 'THEMPVS | Moda e Estilo';
