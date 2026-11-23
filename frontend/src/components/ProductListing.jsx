@@ -41,7 +41,7 @@ export default function ProductListing({
         </section>
 
         <section className="vitrine">
-          <h2 className="titulo-secao">{titulo}</h2>
+          <h1 className="titulo-secao">{titulo}</h1>
 
           <div className="vitrine-container">
             <FilterSidebar grupos={grupos} onAlternar={onAlternar} />

@@ -1,0 +1,15 @@
+# robots.txt – THEMPVS (https://thempvs-frontend.vercel.app)
+# Libera o site público para o Google e bloqueia só as áreas privadas da loja.
+User-agent: *
+Allow: /
+
+# Áreas privadas / sem valor para busca
+Disallow: /admin
+Disallow: /carrinho
+Disallow: /entrar
+Disallow: /cadastrar
+Disallow: /perfil
+Disallow: /pedidos
+Disallow: /lojas
+
+Sitemap: https://thempvs-frontend.vercel.app/sitemap.xml

@@ -3,7 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thempvs</title>
+
+    <!--
+      SEO: tudo entre "seo:start" e "seo:end" é SUBSTITUÍDO no build por scripts/postbuild-seo.mjs
+      (um HTML por página pública, com título, descrição, canonical, Open Graph e JSON-LD próprios).
+      Os valores abaixo são o padrão da Home e valem no `npm run dev`. Os textos oficiais ficam em src/seo/siteConfig.js.
+    -->
+    <!--seo:start-->
+    <title>THEMPVS | Moda e Estilo</title>
+    <meta name="description" content="Conheça a THEMPVS, uma loja de moda feminina com peças para diferentes estilos e ocasiões." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://thempvs-frontend.vercel.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="THEMPVS" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="THEMPVS | Moda e Estilo" />
+    <meta property="og:description" content="Conheça a THEMPVS, uma loja de moda feminina com peças para diferentes estilos e ocasiões." />
+    <meta property="og:url" content="https://thempvs-frontend.vercel.app/" />
+    <meta property="og:image" content="https://thempvs-frontend.vercel.app/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="THEMPVS | Moda e Estilo" />
+    <meta name="twitter:description" content="Conheça a THEMPVS, uma loja de moda feminina com peças para diferentes estilos e ocasiões." />
+    <meta name="twitter:image" content="https://thempvs-frontend.vercel.app/og-image.jpg" />
+    <!--seo:end-->
+
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" href="/favicon-48.png" sizes="48x48" />
+    <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,6 +42,7 @@
   </head>
   <body>
     <div id="root"></div>
+    <!--seo:noscript-->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

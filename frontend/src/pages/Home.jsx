@@ -93,8 +93,10 @@ export default function Home() {
   return (
     <div className="page-home">
       <main>
+        <h1 className="sr-only">THEMPVS | Moda e Estilo – loja de moda feminina</h1>
+
         <section className="hero">
-          <img src={bannerHome} alt="Thempvs" />
+          <img src={bannerHome} alt="THEMPVS – moda feminina e estilo" />
         </section>
 
         <Lancamentos itens={itens} loading={loading} error={error} reload={reload} />
@@ -106,7 +108,7 @@ export default function Home() {
         <section className="sobre">
           <img
             src={bannerConheca}
-            alt="Equipe Thempvs"
+            alt="Equipe THEMPVS"
           />
 
           <h2>Conheça a Thempvs</h2>

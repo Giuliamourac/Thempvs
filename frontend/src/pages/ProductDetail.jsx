@@ -13,6 +13,8 @@ import ProductCard from '../components/ProductCard.jsx';
 import Preco from '../components/Preco.jsx';
 import ProductImage from '../components/ProductImage.jsx';
 import { COLUNAS_MEDIDAS } from '../components/admin/MeasuresMatrix.jsx';
+import Seo from '../seo/Seo.jsx';
+import { jsonLdDoProduto, metaDoProduto } from '../seo/structuredData.js';
 
 const LIMITE_DESCRICAO = 160;
 const PARAMS_RECOMENDADOS = { limite: 12 }; // os 12 mais recentes bastam para as seções de sugestão
@@ -292,6 +294,7 @@ function Secao({ titulo, produtos }) {
 
 export default function ProductDetail() {
   const { ref } = useParams();
+  const { nomeDaCategoria } = useCatalogo();
   const { products } = useProducts(PARAMS_RECOMENDADOS);
   // `ref` guarda de qual endereço é este resultado: ao clicar em outro produto o `ref` muda ANTES do efeito
   // rodar, e sem essa checagem o produto antigo ainda em memória faria o <Navigate> abaixo voltar para ele.
@@ -324,6 +327,10 @@ export default function ProductDetail() {
   if (estado.status !== 'ok') {
     return (
       <main className="estado-pagina">
+        {/* Só "não encontrado" recebe noindex; num erro de rede nada é alterado (evita desindexar por falha temporária). */}
+        {estado.status === 'nao-encontrado' && (
+          <Seo title="Produto não encontrado | THEMPVS" path={null} noindex />
+        )}
         <h1>{estado.status === 'nao-encontrado' ? 'Produto não encontrado' : 'Algo deu errado'}</h1>
         {estado.status === 'erro' && <p className="estado-erro">{estado.erro}</p>}
         <p>
@@ -344,8 +351,20 @@ export default function ProductDetail() {
   const recomendados = [...mesmaCategoria, ...outros.filter((p) => p.categoria !== produto.categoria)].slice(0, 4);
   const lancamentos = todos.slice(0, 4);
 
+  const metaSeo = metaDoProduto(produto);
+  const imagemSeo = produto.imagens?.find((src) => !String(src).startsWith('data:')) ?? produto.imagem_url;
+
   return (
     <div className="page-detail">
+      <Seo
+        title={metaSeo.title}
+        description={metaSeo.description}
+        path={metaSeo.path}
+        image={imagemSeo && !String(imagemSeo).startsWith('data:') ? imagemSeo : undefined}
+        imageAlt={produto.nome}
+        type="product"
+        jsonLd={jsonLdDoProduto(produto, nomeDaCategoria(produto.categoria))}
+      />
       <section className="mini-banner">
         <img src={bannerMini} alt="" />
       </section>

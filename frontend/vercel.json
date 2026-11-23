@@ -3,11 +3,38 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/produtos/:ref", "destination": "/app.html" },
+    { "source": "/quem-usa/evento/:slug", "destination": "/app.html" },
+
+    { "source": "/carrinho", "destination": "/private.html" },
+    { "source": "/entrar", "destination": "/private.html" },
+    { "source": "/cadastrar", "destination": "/private.html" },
+    { "source": "/perfil", "destination": "/private.html" },
+    { "source": "/pedidos", "destination": "/private.html" },
+    { "source": "/pedidos/:id", "destination": "/private.html" },
+    { "source": "/admin/produtos", "destination": "/private.html" },
+    { "source": "/admin/pedidos", "destination": "/private.html" },
+    { "source": "/lojas", "destination": "/private.html" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/(carrinho|entrar|cadastrar|perfil|pedidos|lojas|admin/produtos|admin/pedidos)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/pedidos/:id",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/(app|private|404)(.html)?",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
   ]
 }

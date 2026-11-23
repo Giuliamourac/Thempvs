@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header.jsx';
 import Footer from './Footer.jsx';
 import AvisoServidor from './AvisoServidor.jsx';
+import { RotaSeo } from '../seo/Seo.jsx';
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -14,6 +15,7 @@ export default function Layout() {
 
   return (
     <>
+      <RotaSeo />
       <AvisoServidor />
       <Header />
       <Outlet />
